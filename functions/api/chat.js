@@ -1,5 +1,6 @@
 // Cloudflare Pages Function: proxy seguro entre la Guía Cósmica de Nébula y la API de Gemini.
 // La API key vive solo en el entorno del servidor (env.GEMINI_API_KEY), nunca en el navegador.
+// Modelo vigente: gemini-3.6-flash (verificado agosto 2026).
 
 const GEMINI_MODEL = "gemini-3.6-flash";
 const SYSTEM_INSTRUCTION =
