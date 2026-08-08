@@ -1,7 +1,7 @@
 // Cloudflare Pages Function: proxy seguro entre la Guía Cósmica de Nébula y la API de Gemini.
 // La API key vive solo en el entorno del servidor (env.GEMINI_API_KEY), nunca en el navegador.
 
-const GEMINI_MODEL = "gemini-2.0-flash";
+const GEMINI_MODEL = "gemini-2.0-flash-lite";
 const SYSTEM_INSTRUCTION =
   "Eres la guía cósmica de Nébula, un observatorio digital educativo sobre astronomía y el universo. " +
   "Responde siempre en español, de forma breve (máximo 4-5 frases), clara y entusiasta, con un tono cálido. " +
@@ -56,6 +56,9 @@ export async function onRequestPost({ request, env }) {
 
     if (!apiRes.ok) {
       console.error("Gemini API error", apiRes.status, await apiRes.text().catch(() => ""));
+      if (apiRes.status === 429) {
+        return jsonResponse({ error: "La guía cósmica está muy solicitada ahora mismo. Espera un minuto e intenta de nuevo." }, 429);
+      }
       return jsonResponse({ error: "La IA no respondió correctamente" }, 502);
     }
 
