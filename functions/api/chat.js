@@ -50,7 +50,11 @@ export async function onRequestPost({ request, env }) {
   const payload = {
     contents: [{ role: "user", parts: [{ text: message }] }],
     systemInstruction: { parts: [{ text: SYSTEM_INSTRUCTION }] },
-    generationConfig: { maxOutputTokens: 400, temperature: 0.8 },
+    generationConfig: {
+      maxOutputTokens: 1024,
+      temperature: 0.8,
+      thinkingConfig: { thinkingLevel: "LOW" },
+    },
   };
 
   try {
