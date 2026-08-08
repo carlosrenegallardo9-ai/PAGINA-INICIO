@@ -68,6 +68,7 @@ html.nal-lock-scroll,html.nal-lock-scroll body{overflow:hidden}
 @media(max-width:640px){.nal-bar-greeting{display:none}.nal-bar{right:var(--space-3);padding:.4rem}}
 .nal-tooltip{position:fixed;z-index:var(--nal-z-tooltip);max-width:240px;background:var(--cosmic-indigo);border:1px solid var(--nebula-violet-soft);border-radius:var(--radius-md);padding:.6rem .8rem;font-size:.76rem;line-height:1.4;color:var(--estelar-mist);box-shadow:var(--shadow-glow-violet);opacity:0;transform:translateY(6px);transition:opacity var(--dur-fast) var(--ease-out),transform var(--dur-fast) var(--ease-out);pointer-events:none}
 .nal-tooltip.is-visible{opacity:1;transform:none}
+.ai-typing{opacity:.65;font-style:italic}
 .nal-help-badge{display:none;align-items:center;justify-content:center;width:22px;height:22px;margin-left:var(--space-3);border-radius:50%;border:1px solid var(--nebula-violet-soft);color:var(--nebula-violet-soft);font-family:var(--font-mono);font-size:.7rem;font-weight:700;vertical-align:middle;flex-shrink:0;cursor:help;transition:background var(--dur-fast),color var(--dur-fast)}
 .nal-help-badge:hover,.nal-help-badge:focus-visible{background:var(--nebula-violet-dim);color:var(--estelar-mist)}
 html[data-nivel="principiante"] .nal-help-badge{display:inline-flex}
@@ -1878,6 +1879,36 @@ html[data-nivel="principiante"] .section-head{border-left:2px solid var(--nebula
   function p() {
     (c("¿Qué te atrae más del cosmos?", "ai"), d(g));
   }
+  async function y(e) {
+    const w = document.createElement("div");
+    ((w.className = "ai-msg from-ai ai-typing"),
+      (w.textContent = "Pensando…"),
+      o.appendChild(w),
+      (o.scrollTop = o.scrollHeight));
+    try {
+      const j = await (
+        await fetch("/api/chat", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ message: e }),
+        })
+      ).json().catch(() => null);
+      (w.remove(),
+        j && j.reply
+          ? c(j.reply, "ai")
+          : c(
+              "No pude conectarme con la IA en este momento. Intenta de nuevo en unos segundos.",
+              "ai",
+            ));
+    } catch (k) {
+      (w.remove(),
+        c(
+          "No pude conectarme con la IA en este momento. Revisa tu conexión e intenta de nuevo.",
+          "ai",
+        ));
+    }
+    d(m);
+  }
   function b(e, a) {
     (c(a, "ai"),
       d([
@@ -1937,11 +1968,7 @@ html[data-nivel="principiante"] .section-head{border-left:2px solid var(--nebula
           { label: "Hacer otra pregunta", action: () => f() },
         ])
       );
-    (c(
-      "Aún estoy aprendiendo sobre eso. Puedo hablarte de cualquier planeta, agujeros negros, exoplanetas, la Vía Láctea o recomendarte algo a tu medida.",
-      "ai",
-    ),
-      d(m));
+    y(e);
   }
   function E() {
     (h && clearTimeout(h),
