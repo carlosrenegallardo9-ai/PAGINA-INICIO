@@ -1,7 +1,7 @@
 // Cloudflare Pages Function: proxy seguro entre la Guía Cósmica de Nébula y la API de Gemini.
 // La API key vive solo en el entorno del servidor (env.GEMINI_API_KEY), nunca en el navegador.
 
-const GEMINI_MODEL = "gemini-2.5-flash-lite";
+const GEMINI_MODEL = "gemini-3.6-flash";
 const SYSTEM_INSTRUCTION =
   "Eres la guía cósmica de Nébula, un observatorio digital educativo sobre astronomía y el universo. " +
   "Responde siempre en español, de forma breve (máximo 4-5 frases), clara y entusiasta, con un tono cálido. " +
