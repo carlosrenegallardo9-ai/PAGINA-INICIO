@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Vía Láctea: Meteor Run — Arcade Space Shooter</title>
+<meta name="description" content="Arcade 3D Space Shooter: viaja por la Vía Láctea entre planetas y estrellas destruyendo meteoritos." />
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='45' fill='%23070714'/%3E%3Ccircle cx='40' cy='40' r='6' fill='%2300f6ff'/%3E%3Ccircle cx='65' cy='60' r='3' fill='%23ff2e97'/%3E%3C/svg%3E" />
+<link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+<canvas id="game-canvas"></canvas>
+
+<!-- ============ HUD (in-game) ============ -->
+<div id="hud" class="hidden">
+  <div id="hud-top-left">
+    <div class="bar-label">CASCO</div>
+    <div class="bar hull-bar"><div id="hull-fill" class="bar-fill"></div></div>
+    <div class="bar-label">ESCUDO</div>
+    <div class="bar shield-bar"><div id="shield-fill" class="bar-fill"></div></div>
+  </div>
+
+  <div id="hud-top-right">
+    <div id="score-label">PUNTUACIÓN</div>
+    <div id="score-value">0</div>
+    <div id="combo-value">x1</div>
+  </div>
+
+  <div id="hud-bottom-left">
+    <div class="bar-label">VELOCIDAD / BOOST</div>
+    <div class="bar boost-bar"><div id="boost-fill" class="bar-fill"></div></div>
+    <div class="bar-label">ARMAS <span id="heat-warning" class="hidden">SOBRECALENTADO</span></div>
+    <div class="bar heat-bar"><div id="heat-fill" class="bar-fill"></div></div>
+  </div>
+
+  <div id="hud-bottom-right">
+    <div id="sector-label">SECTOR VÍA LÁCTEA</div>
+    <div id="distance-value">0 ly</div>
+  </div>
+
+  <div id="crosshair">
+    <div class="ch-line ch-h"></div>
+    <div class="ch-line ch-v"></div>
+    <div class="ch-ring"></div>
+  </div>
+
+  <div id="lock-markers"></div>
+
+  <div id="powerup-toast" class="hidden"></div>
+  <div id="damage-vignette"></div>
+</div>
+
+<!-- ============ MENÚ INICIO ============ -->
+<div id="menu-start" class="screen">
+  <div class="screen-inner">
+    <h1>VÍA LÁCTEA<span>METEOR RUN</span></h1>
+    <p class="tagline">Surca la galaxia. Esquiva. Dispara. Sobrevive.</p>
+    <div class="menu-buttons">
+      <button id="btn-start" class="btn-primary">INICIAR MISIÓN</button>
+      <button id="btn-settings" class="btn-secondary">AJUSTES</button>
+      <button id="btn-scores" class="btn-secondary">RÉCORDS</button>
+    </div>
+    <div class="controls-hint">
+      <strong>Controles:</strong> WASD / Flechas — mover · Ratón — apuntar · Click / Espacio — disparar ·
+      Shift — boost · C — cámara · P / Esc — pausa
+    </div>
+  </div>
+</div>
+
+<!-- ============ AJUSTES ============ -->
+<div id="menu-settings" class="screen hidden">
+  <div class="screen-inner">
+    <h2>AJUSTES</h2>
+    <label class="setting-row">
+      <span>Volumen Música</span>
+      <input type="range" id="opt-music" min="0" max="100" value="50" />
+    </label>
+    <label class="setting-row">
+      <span>Volumen SFX</span>
+      <input type="range" id="opt-sfx" min="0" max="100" value="70" />
+    </label>
+    <label class="setting-row">
+      <span>Sensibilidad Cámara</span>
+      <input type="range" id="opt-sens" min="10" max="100" value="50" />
+    </label>
+    <label class="setting-row">
+      <span>Disparo Automático (mantener)</span>
+      <input type="checkbox" id="opt-autofire" checked />
+    </label>
+    <div class="menu-buttons">
+      <button id="btn-settings-back" class="btn-primary">VOLVER</button>
+    </div>
+  </div>
+</div>
+
+<!-- ============ RÉCORDS ============ -->
+<div id="menu-scores" class="screen hidden">
+  <div class="screen-inner">
+    <h2>MEJORES PUNTUACIONES</h2>
+    <ol id="scores-list" class="scores-list"></ol>
+    <div class="menu-buttons">
+      <button id="btn-scores-back" class="btn-primary">VOLVER</button>
+    </div>
+  </div>
+</div>
+
+<!-- ============ PAUSA ============ -->
+<div id="menu-pause" class="screen hidden">
+  <div class="screen-inner">
+    <h2>PAUSA</h2>
+    <div class="menu-buttons">
+      <button id="btn-resume" class="btn-primary">CONTINUAR</button>
+      <button id="btn-quit" class="btn-secondary">SALIR A MENÚ</button>
+    </div>
+  </div>
+</div>
+
+<!-- ============ GAME OVER ============ -->
+<div id="menu-gameover" class="screen hidden">
+  <div class="screen-inner">
+    <h2 class="gameover-title">NAVE DESTRUIDA</h2>
+    <div class="stats-grid">
+      <div class="stat"><span class="stat-label">Puntuación Final</span><span id="go-score" class="stat-value">0</span></div>
+      <div class="stat"><span class="stat-label">Meteoritos Destruidos</span><span id="go-kills" class="stat-value">0</span></div>
+      <div class="stat"><span class="stat-label">Tiempo Sobrevivido</span><span id="go-time" class="stat-value">0s</span></div>
+      <div class="stat"><span class="stat-label">Combo Máximo</span><span id="go-combo" class="stat-value">x1</span></div>
+      <div class="stat"><span class="stat-label">Distancia Recorrida</span><span id="go-distance" class="stat-value">0 ly</span></div>
+    </div>
+    <div id="go-newrecord" class="hidden">¡NUEVO RÉCORD!</div>
+    <div class="menu-buttons">
+      <button id="btn-retry" class="btn-primary">REINTENTAR</button>
+      <button id="btn-menu" class="btn-secondary">MENÚ PRINCIPAL</button>
+    </div>
+  </div>
+</div>
+
+<div id="loading-screen">
+  <div class="loading-inner">
+    <div class="loading-ship"></div>
+    <div id="loading-text">Generando galaxia...</div>
+  </div>
+</div>
+
+<script type="importmap">
+{
+  "imports": {
+    "three": "./js/vendor/three.module.min.js"
+  }
+}
+</script>
+<script type="module" src="js/main.js"></script>
+</body>
+</html>
