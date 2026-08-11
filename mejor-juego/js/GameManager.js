@@ -3,6 +3,7 @@ import { InputManager } from './InputManager.js';
 import { AudioManager } from './AudioManager.js';
 import { FX } from './FX.js';
 import { Galaxy } from './Galaxy.js';
+import { SolarSystem } from './SolarSystem.js';
 import { PlayerController } from './PlayerController.js';
 import { WeaponSystem } from './Weapons.js';
 import { MeteorSpawner } from './MeteorSpawner.js';
@@ -29,6 +30,7 @@ export class GameManager {
     this.audio = new AudioManager();
     this.fx = new FX(this.scene);
     this.galaxy = new Galaxy(this.scene);
+    this.solarSystem = new SolarSystem(this.scene);
     this.player = new PlayerController(this.scene, this.camera, this.input);
     this.weapons = new WeaponSystem(this.scene, this.player, this.audio, this.fx);
     this.meteors = new MeteorSpawner(this.scene, this.fx, this.audio);
@@ -87,14 +89,14 @@ export class GameManager {
     // distant galaxy (planets, nebulae, starfield) the player is flying through.
     this.scene.fog = new THREE.Fog(0x05050f, 220, 900);
 
-    this.camera = new THREE.PerspectiveCamera(72, window.innerWidth / window.innerHeight, 0.1, 6000);
+    this.camera = new THREE.PerspectiveCamera(64, window.innerWidth / window.innerHeight, 0.1, 6000);
 
-    const hemi = new THREE.HemisphereLight(0x7799ff, 0x0a0a18, 0.85);
+    const hemi = new THREE.HemisphereLight(0x88aaff, 0x0a0a18, 1.15);
     this.scene.add(hemi);
-    const sun = new THREE.DirectionalLight(0xffffff, 1.6);
+    const sun = new THREE.DirectionalLight(0xffffff, 2.1);
     sun.position.set(120, 200, 100);
     this.scene.add(sun);
-    const fill = new THREE.DirectionalLight(0x4477ff, 0.35);
+    const fill = new THREE.DirectionalLight(0x4477ff, 0.5);
     fill.position.set(-100, -50, -150);
     this.scene.add(fill);
   }
@@ -126,6 +128,7 @@ export class GameManager {
     this.weapons.reset();
     this.meteors.reset();
     this.powerups.reset();
+    this.solarSystem.reset();
 
     this.score = 0;
     this.combo = 1;
@@ -204,6 +207,13 @@ export class GameManager {
     if (type === 'multiplier') this._scoreMultTimer = 10;
   }
 
+  _onArriveBody(name, idx) {
+    const bonus = 300 + idx * 150;
+    this.score += bonus;
+    this.ui.showPowerupToast(`¡LLEGASTE A ${name.toUpperCase()}! +${bonus}`);
+    this.audio.playPowerup();
+  }
+
   // ------------------------------------------------------------- LOOP ----
   _animate() {
     requestAnimationFrame(() => this._animate());
@@ -226,10 +236,13 @@ export class GameManager {
 
   _updatePlaying(dt) {
     this.elapsed += dt;
+    const shipZ = this.player.group.position.z;
 
-    // Difficulty ramps up over the first few minutes then plateaus.
+    // Difficulty ramps up over the first few minutes then plateaus; the
+    // asteroid belt between Mars and Jupiter spikes it further.
     const spawnRateMult = Math.min(3.2, 1 + this.elapsed * 0.018);
-    this.meteors.setDifficulty(1, spawnRateMult);
+    const beltMult = this.solarSystem.isInAsteroidBelt(shipZ) ? 1.9 : 1;
+    this.meteors.setDifficulty(1, spawnRateMult * beltMult);
 
     this.player.update(dt);
     this.weapons.update(dt);
@@ -241,7 +254,8 @@ export class GameManager {
       this._onPowerupCollect(type);
       this.ui.showPowerupToast(label);
     });
-    this.galaxy.update(dt, this.player.group.position.z);
+    this.galaxy.update(dt, shipZ);
+    this.solarSystem.update(dt, shipZ, (name, idx) => this._onArriveBody(name, idx));
     this.audio.setEngineIntensity(this.player.boosting);
 
     // thruster particle trail from both engines
@@ -268,6 +282,8 @@ export class GameManager {
       score: this.score,
       combo: this.combo,
       distanceLy: this.player.distanceTraveled * LY_PER_UNIT,
+      target: this.solarSystem.getNextTarget(shipZ),
+      journeyDone: this.solarSystem.finished,
     });
   }
 

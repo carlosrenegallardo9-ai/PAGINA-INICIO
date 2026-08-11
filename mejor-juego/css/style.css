@@ -111,7 +111,8 @@ html, body {
 }
 
 #sector-label { font-size: 11px; letter-spacing: 2px; color: var(--neon-purple); }
-#distance-value { font-size: 18px; color: #fff; }
+#distance-value { font-size: 18px; color: #fff; text-shadow: 0 0 8px var(--neon-purple); }
+#target-distance { font-size: 12px; color: #b7a6e6; margin-top: 2px; }
 
 #crosshair {
   position: absolute;

@@ -30,6 +30,7 @@ export class UIManager {
       scoreValue: $('score-value'),
       comboValue: $('combo-value'),
       distanceValue: $('distance-value'),
+      targetDistance: $('target-distance'),
       powerupToast: $('powerup-toast'),
       damageVignette: $('damage-vignette'),
       lockMarkers: $('lock-markers'),
@@ -108,7 +109,14 @@ export class UIManager {
 
     this.el.scoreValue.textContent = Math.floor(state.score).toLocaleString('es-ES');
     this.el.comboValue.textContent = `x${state.combo}`;
-    this.el.distanceValue.textContent = `${state.distanceLy.toFixed(2)} ly`;
+
+    if (state.journeyDone || !state.target) {
+      this.el.distanceValue.textContent = 'Espacio profundo';
+      this.el.targetDistance.textContent = `${state.distanceLy.toFixed(2)} ly recorridos`;
+    } else {
+      this.el.distanceValue.textContent = state.target.name;
+      this.el.targetDistance.textContent = `${Math.round(state.target.distance)} u`;
+    }
   }
 
   flashDamage() {

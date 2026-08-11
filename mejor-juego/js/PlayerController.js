@@ -230,15 +230,15 @@ export class PlayerController {
     if (this.cameraMode === 'third') {
       const desired = new THREE.Vector3(
         shipPos.x * 0.3,
-        shipPos.y * 0.3 + 5.5,
-        shipPos.z + 15.5
+        shipPos.y * 0.3 + 4,
+        shipPos.z + 10.5
       );
       this.camera.position.lerp(desired, lerpSpeed);
       const lookTarget = new THREE.Vector3(shipPos.x * 0.5, shipPos.y * 0.5, shipPos.z - 30);
       const m = new THREE.Matrix4().lookAt(this.camera.position, lookTarget, THREE.Object3D.DEFAULT_UP);
       const q = new THREE.Quaternion().setFromRotationMatrix(m);
       this.camera.quaternion.slerp(q, lerpSpeed);
-      this.camera.fov = THREE.MathUtils.lerp(this.camera.fov, this.boosting ? 82 : 72, lerpSpeed);
+      this.camera.fov = THREE.MathUtils.lerp(this.camera.fov, this.boosting ? 76 : 64, lerpSpeed);
       this.camera.updateProjectionMatrix();
     } else {
       const desired = new THREE.Vector3(shipPos.x, shipPos.y + 0.55, shipPos.z - 0.4);

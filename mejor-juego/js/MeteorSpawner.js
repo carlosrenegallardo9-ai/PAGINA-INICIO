@@ -9,9 +9,9 @@ import { ObjectPool } from './ObjectPool.js';
 // ---------------------------------------------------------------------------
 
 const SIZES = {
-  large: { radius: 5.2, hp: 3, points: 150, rotSpeed: 0.4, driftSpeed: 2.5, color: 0x6b5a4d },
-  medium: { radius: 2.6, hp: 2, points: 75, rotSpeed: 0.9, driftSpeed: 5, color: 0x7a6a5c },
-  small: { radius: 1.1, hp: 1, points: 30, rotSpeed: 1.8, driftSpeed: 9, color: 0x8a7a6c },
+  large: { radius: 5.2, hp: 3, points: 150, rotSpeed: 0.4, driftSpeed: 2.5, color: 0x9c8a78 },
+  medium: { radius: 2.6, hp: 2, points: 75, rotSpeed: 0.9, driftSpeed: 5, color: 0xac9a86 },
+  small: { radius: 1.1, hp: 1, points: 30, rotSpeed: 1.8, driftSpeed: 9, color: 0xbcaa94 },
 };
 
 function makeRockGeometry(radius, seed) {
@@ -58,8 +58,8 @@ export class MeteorSpawner {
         flatShading: true,
         roughness: 0.95,
         metalness: 0.05,
-        emissive: 0x1a0f08,
-        emissiveIntensity: 0.15,
+        emissive: 0x3a2414,
+        emissiveIntensity: 0.35,
       });
     }
     this._mats = sharedMats;
