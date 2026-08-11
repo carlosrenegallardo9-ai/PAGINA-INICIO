@@ -28,7 +28,7 @@ async function computeStreak(env, username, today) {
   const existing = await supabaseSelect(
     env,
     "nebula_progress",
-    `username=eq.${encodeURIComponent(username)}&select=streak,last_active_date`,
+    `username=eq.${encodeURIComponent(username)}&select=streak,last_active_date,unlocked_level`,
   );
   const priorRow = existing.ok && Array.isArray(existing.data) ? existing.data[0] : null;
 
@@ -38,6 +38,7 @@ async function computeStreak(env, username, today) {
     else if (isYesterday(priorRow.last_active_date, today)) streak = priorRow.streak + 1;
     else streak = 1;
   }
+  const unlockedLevel = priorRow && typeof priorRow.unlocked_level === "number" ? priorRow.unlocked_level : 1;
 
   const upsertResult = await supabaseUpsert(
     env,
@@ -47,7 +48,7 @@ async function computeStreak(env, username, today) {
   );
   if (!upsertResult.ok) console.error("Supabase progress upsert error", upsertResult.error);
 
-  return streak;
+  return { streak, unlockedLevel };
 }
 
 async function fetchRecentMessages(env, username) {
@@ -84,8 +85,8 @@ export async function onRequestPost({ request, env }) {
   const insertResult = await supabaseInsert(env, "nebula_sessions", { username, level });
   if (!insertResult.ok) console.error("Supabase session insert error", insertResult.error);
 
-  const streak = await computeStreak(env, username, todayUTC());
+  const { streak, unlockedLevel } = await computeStreak(env, username, todayUTC());
   const recentMessages = await fetchRecentMessages(env, username);
 
-  return jsonResponse({ ok: true, streak, recentMessages }, 200);
+  return jsonResponse({ ok: true, streak, unlockedLevel, recentMessages }, 200);
 }
