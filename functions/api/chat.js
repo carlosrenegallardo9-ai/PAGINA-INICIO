@@ -2,6 +2,8 @@
 // La API key vive solo en el entorno del servidor (env.GEMINI_API_KEY), nunca en el navegador.
 // Modelo vigente: gemini-3.6-flash (verificado agosto 2026).
 
+import { supabaseInsert } from "../_lib/supabase.js";
+
 const GEMINI_MODEL = "gemini-3.6-flash";
 const SYSTEM_INSTRUCTION =
   "Eres el Capitán Cósmico, el guía turístico espacial más sabio, carismático y alegre de toda la galaxia: " +
@@ -26,7 +28,7 @@ function jsonResponse(body, status) {
   });
 }
 
-export async function onRequestPost({ request, env }) {
+export async function onRequestPost({ request, env, waitUntil }) {
   const host = new URL(request.url).host;
   const origin = request.headers.get("Origin") || request.headers.get("Referer") || "";
   if (origin && !origin.includes(host)) {
@@ -41,6 +43,7 @@ export async function onRequestPost({ request, env }) {
   }
 
   const message = typeof body?.message === "string" ? body.message.trim() : "";
+  const username = typeof body?.username === "string" && body.username.trim() ? body.username.trim().slice(0, 40) : null;
   if (!message) return jsonResponse({ error: "Falta el mensaje" }, 400);
   if (message.length > 1000) return jsonResponse({ error: "Mensaje demasiado largo" }, 400);
 
@@ -85,6 +88,16 @@ export async function onRequestPost({ request, env }) {
       .trim();
 
     if (!reply) return jsonResponse({ error: "Respuesta vacía de la IA" }, 502);
+
+    waitUntil(
+      supabaseInsert(env, "nebula_chat_messages", {
+        username,
+        user_message: message,
+        ai_reply: reply,
+      }).then((r) => {
+        if (!r.ok) console.error("Supabase chat insert error", r.error);
+      }),
+    );
 
     return jsonResponse({ reply }, 200);
   } catch (err) {
