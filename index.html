@@ -191,7 +191,19 @@ html[data-nivel="principiante"] .section-head{border-left:2px solid var(--nebula
 .sky-bottom-bar{display:flex;flex-direction:column;align-items:center;gap:var(--space-3);padding:var(--space-6) var(--space-5)}
 .sky-start-btn{pointer-events:auto}
 .sky-debug{pointer-events:none;font-family:var(--font-mono);font-size:.62rem;color:rgba(255,255,255,.55);background:rgba(0,0,0,.5);border-radius:var(--radius-sm);padding:var(--space-2) var(--space-3);max-width:90vw;text-align:center;line-height:1.5}
-@media(max-width:560px){.sky-status{max-width:60%;font-size:.76rem}}
+.sky-search-wrap{position:relative;margin:0 var(--space-5);pointer-events:auto}
+.sky-search-input{width:100%;background:rgba(0,0,0,.6);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,.25);border-radius:var(--radius-pill);padding:.7rem 1.1rem;color:#fff;font-size:.88rem}
+.sky-search-input::placeholder{color:rgba(255,255,255,.5)}
+.sky-search-input:focus{outline:0;border-color:var(--solar-ember)}
+.sky-search-results{position:absolute;top:calc(100% + 6px);left:0;right:0;max-height:260px;overflow-y:auto;background:rgba(0,0,0,.88);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,.2);border-radius:var(--radius-md);z-index:2}
+.sky-search-result{display:flex;align-items:center;gap:var(--space-3);width:100%;padding:.7rem 1rem;color:#fff;font-size:.86rem;text-align:left}
+.sky-search-result:hover,.sky-search-result:focus-visible{background:rgba(255,255,255,.12)}
+.sky-search-result-emoji{font-size:1.05rem;width:1.4em;text-align:center;flex-shrink:0}
+.sky-target-box{position:absolute;top:calc(var(--space-8) + var(--space-2));right:var(--space-5);pointer-events:auto;text-align:right;background:rgba(0,0,0,.55);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,.25);border-radius:var(--radius-md);padding:var(--space-4);max-width:220px}
+.sky-target-close{position:absolute;top:-10px;right:-10px;width:26px;height:26px;border-radius:50%;background:rgba(0,0,0,.85);border:1px solid rgba(255,255,255,.3);color:#fff;font-size:.68rem;display:flex;align-items:center;justify-content:center}
+.sky-target-name{display:block;font-family:var(--font-display);font-size:.95rem;color:#fff;margin-bottom:var(--space-2)}
+.sky-target-coords{display:block;font-family:var(--font-mono);font-size:1.55rem;font-weight:700;color:var(--solar-ember-soft);line-height:1.25;text-shadow:0 2px 10px rgba(0,0,0,.8)}
+@media(max-width:560px){.sky-status{max-width:60%;font-size:.76rem}.sky-target-box{top:calc(var(--space-9) - var(--space-2));max-width:150px;padding:var(--space-3)}.sky-target-coords{font-size:1.25rem}}
 </style>
 
 </head> <body>
@@ -283,6 +295,15 @@ html[data-nivel="principiante"] .section-head{border-left:2px solid var(--nebula
 <div class="sky-status" id="skyStatus">Toca "Activar" para empezar.</div>
 <button type="button" class="sky-close" id="skyClose" aria-label="Cerrar Buscador Celeste">✕</button>
 </div>
+<div class="sky-search-wrap" id="skySearchWrap" hidden>
+<input type="text" id="skySearchInput" class="sky-search-input" placeholder="Buscar: Sol, Marte, Orión…" autocomplete="off">
+<div class="sky-search-results" id="skySearchResults" hidden></div>
+</div>
+<div class="sky-target-box" id="skyTargetBox" hidden>
+<button type="button" class="sky-target-close" id="skyTargetClose" aria-label="Quitar objetivo">✕</button>
+<span class="sky-target-name" id="skyTargetName"></span>
+<span class="sky-target-coords" id="skyTargetCoordsText"></span>
+</div>
 <div class="sky-reticle" id="skyReticle">
 <div class="sky-reticle-ring"></div>
 </div>
@@ -302,7 +323,7 @@ html[data-nivel="principiante"] .section-head{border-left:2px solid var(--nebula
 <span class="sky-cta-icon" aria-hidden="true">🔭</span>
 <span class="sky-cta-text">
 <strong>Buscador Celeste</strong>
-<small>Apunta la cámara de tu celular al cielo y descubre si estás viendo el Sol o la Luna</small>
+<small>Busca el Sol, la Luna, cualquier planeta o constelación y apunta tu cámara para encontrarlo</small>
 </span>
 <span class="sky-cta-arrow" aria-hidden="true">→</span>
 </button> </div> </section> <section class="section quiz-section reveal" id="quiz"> <div class="container"> <div class="section-head reveal"> <span class="eyebrow">Quiz</span> <h2>Pon a prueba lo que aprendiste</h2> <p>Cosmo Quiz — Rumbo a las Estrellas: trivia espacial por niveles de dificultad, en solitario o en sala con amigos.</p> </div> <a href="https://carlosrenegallardo9-ai.github.io/pagina-ia-espacio/cosmo-quiz.html" class="gallery-cta reveal" id="openQuizBtn"> <span class="gallery-cta-glow" aria-hidden="true"></span> <span class="gallery-cta-icon" aria-hidden="true"> <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l2.4 5.1 5.6.8-4 4 .9 5.6L12 14.9 6.9 17.5l.9-5.6-4-4 5.6-.8z"/></svg> </span> <span class="gallery-cta-text"> <strong>Cosmo Quiz</strong> <small>Rumbo a las Estrellas · trivia espacial por niveles</small> </span> <span class="gallery-cta-arrow" aria-hidden="true">→</span> </a> </div> </section> </main> <aside class="detail-panel" id="detailPanel" role="dialog" aria-modal="true" aria-hidden="true" aria-label="Detalle del cuerpo celeste" hidden inert> <button class="detail-panel-close" id="detailPanelClose" aria-label="Cerrar panel">✕</button> <div id="detailContent"></div> </aside> <div class="scrim" id="scrim"></div> <div class="k-modal-overlay" id="kModalOverlay" hidden aria-hidden="true"> <div class="k-modal" id="kModal" role="dialog" aria-modal="true" aria-labelledby="kModalTitle"> <button type="button" class="detail-panel-close" id="kModalClose" aria-label="Cerrar">✕</button> <div id="kModalContent"></div> </div> </div> <div class="bible-view" id="bibleView" hidden aria-hidden="true" role="dialog" aria-modal="true" aria-label="Aprendiendo con Jesús — Biblia Digital Educativa"> <canvas class="bible-stars" id="bibleStars" aria-hidden="true"></canvas> <div class="bible-nightstand" aria-hidden="true"> <div class="bible-lamp-glow"></div> <div class="bible-surface"></div> </div> <button type="button" class="bible-close" id="bibleClose" aria-label="Cerrar Biblia Digital">✕</button> <button type="button" class="bible-back-btn" id="bibleBackBtn" hidden>← Índice</button> <div class="bible-stage"> <div class="bible-book" id="bibleBook" data-state="closed"> <div class="book-cover" id="bookCover" tabindex="0" role="button" aria-label="Abrir la Biblia"> <div class="book-cover-spine" aria-hidden="true"></div> <div class="book-cover-face"> <span class="book-cover-cross" aria-hidden="true"></span> <span class="book-cover-rule" aria-hidden="true"></span> <h3 class="book-cover-title">Sagrada Biblia</h3> <p class="book-cover-sub">Aprendiendo con Jesús</p> <span class="book-cover-hint">Toca para abrir</span> </div> </div> <div class="book-spread" aria-hidden="true"> <div class="book-page book-page-left"> <div class="page-viewport" id="pageViewportLeft"> <div class="page-leaf" id="pageLeafLeft" data-key=""></div> </div> </div> <div class="book-page book-page-right"> <div class="page-viewport" id="pageViewport"> <div class="page-leaf" id="pageLeaf" data-key=""></div> </div> </div> </div> </div> </div> </div> <button class="ai-fab" id="aiFab" aria-haspopup="dialog" aria-expanded="false" aria-controls="aiPanel" aria-label="Abrir al Capitán Cósmico"> <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.6 4.4L18 9l-4.4 1.6L12 15l-1.6-4.4L6 9l4.4-1.6z"/><path d="M19 15l.8 2.2L22 18l-2.2.8L19 21l-.8-2.2L16 18l2.2-.8z"/></svg> </button> <section class="ai-panel" id="aiPanel" role="dialog" aria-modal="false" aria-labelledby="aiPanelTitle" aria-hidden="true" hidden inert> <div class="ai-panel-head"> <div> <span class="eyebrow">Capitán Cósmico · tour estelar en vivo</span> <h4 id="aiPanelTitle">¡Bienvenido a bordo, tripulante!</h4> </div> <button id="aiClose" aria-label="Cerrar al Capitán Cósmico">✕</button> </div> <div class="ai-log" id="aiLog"></div> <div class="ai-suggestions" id="aiSuggestions"></div> <form class="ai-form" id="aiForm"> <input id="aiInput" placeholder="Pregunta sobre el cosmos…" aria-label="Escribe tu pregunta" autocomplete="off"> <button type="submit" aria-label="Enviar pregunta"> <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12l16-8-6 16-3-6-7-2z"/></svg> </button> </form> </section> <footer class="site-footer"> <div class="container"> <div class="footer-grid"> <div class="footer-col"> <a class="brand" href="#inicio"> <svg class="brand-mark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><circle cx="12" cy="12" r="2.4" fill="currentColor" stroke="none"/><ellipse cx="12" cy="12" rx="10" ry="4.2" transform="rotate(-24 12 12)"/></svg> Nébula </a> <p style="margin-top:var(--space-4);max-width:280px;font-size:.9rem">Un observatorio digital abierto, pensado para crecer con nuevos planetas, módulos y herramientas.</p> </div> <div class="footer-col"> <h4>Explorar</h4> <ul> <li><a href="#explorador">Sistema solar</a></li> <li><a href="#escala">Escala cósmica</a></li> <li><a href="#aprender">Base de conocimiento</a></li> </ul> </div> <div class="footer-col"> <h4>Proyecto</h4> <ul> <li><a href="#recursos">Recursos</a></li> <li><a href="#" data-open-ai>Guía interactiva</a></li> <li><a href="#inicio">Inicio</a></li> </ul> </div> <div class="footer-col"> <h4>Enlaces oficiales</h4> <ul> <li><a href="https://www.nasa.gov" target="_blank" rel="noopener">NASA</a></li> <li><a href="https://www.esa.int" target="_blank" rel="noopener">ESA</a></li> <li><a href="https://stellarium-web.org" target="_blank" rel="noopener">Stellarium Web</a></li> </ul> </div> </div> <div class="footer-bottom"> <span>© <span id="year"></span> Nébula · Proyecto educativo</span> <span>Diseñado para escalar: nuevos módulos, planetas y enlaces sin rehacer el sistema</span> </div> </div> </footer> <script>
@@ -6736,6 +6757,7 @@ if(window.__nebulaProgress)applyProgress(window.__nebulaProgress);
 function rad(d){return d*Math.PI/180}
 function deg(r){return r*180/Math.PI}
 function norm360(d){d=d%360;return d<0?d+360:d}
+function normalizeText(s){return s.toLowerCase().normalize("NFD").replace(/\p{Diacritic}/gu,"")}
 
 function julianDate(date){return date.getTime()/86400000+2440587.5}
 
@@ -6748,6 +6770,13 @@ function sunEquatorial(date){
   var ra=deg(Math.atan2(Math.cos(epsilon)*Math.sin(lambda),Math.cos(lambda)));
   var dec=deg(Math.asin(Math.sin(epsilon)*Math.sin(lambda)));
   return{ra:norm360(ra),dec:dec};
+}
+function sunLonDist(n){
+  var L=norm360(280.460+0.9856474*n);
+  var g=rad(norm360(357.528+0.9856003*n));
+  var lambda=norm360(L+1.915*Math.sin(g)+0.020*Math.sin(2*g));
+  var Rs=1.00014-0.01671*Math.cos(g)-0.00014*Math.cos(2*g);
+  return{lon:lambda,dist:Rs};
 }
 
 function moonEquatorial(date){
@@ -6763,11 +6792,58 @@ function moonEquatorial(date){
   return{ra:norm360(ra),dec:dec};
 }
 
+var PLANET_ELEMENTS={
+  mercury:{N:[48.3313,3.24587e-5],i:[7.0047,5.00e-8],w:[29.1241,1.01444e-5],a:[0.387098,0],e:[0.205635,5.59e-10],M:[168.6562,4.0923344368]},
+  venus:{N:[76.6799,2.46590e-5],i:[3.3946,2.75e-8],w:[54.8910,1.38374e-5],a:[0.723330,0],e:[0.006773,-1.302e-9],M:[48.0052,1.6021302244]},
+  mars:{N:[49.5574,2.11081e-5],i:[1.8497,-1.78e-8],w:[286.5016,2.92961e-5],a:[1.523688,0],e:[0.093405,2.516e-9],M:[18.6021,0.5240207766]},
+  jupiter:{N:[100.4542,2.76854e-5],i:[1.3030,-1.557e-7],w:[273.8777,1.64505e-5],a:[5.20256,0],e:[0.048498,4.469e-9],M:[19.8950,0.0830853001]},
+  saturn:{N:[113.6634,2.38980e-5],i:[2.4886,-1.081e-7],w:[339.3939,2.97661e-5],a:[9.55475,0],e:[0.055546,-9.499e-9],M:[316.9670,0.0334442282]},
+  uranus:{N:[74.0005,1.3978e-5],i:[0.7733,1.9e-8],w:[96.6612,3.0565e-5],a:[19.18171,-1.55e-8],e:[0.047318,7.45e-9],M:[142.5905,0.011725806]},
+  neptune:{N:[131.7806,3.0173e-5],i:[1.7700,-2.55e-7],w:[272.8461,-6.027e-6],a:[30.05826,3.313e-8],e:[0.008606,2.15e-9],M:[260.2471,0.005995147]}
+};
+
+function planetHeliocentric(name,n){
+  var el=PLANET_ELEMENTS[name];
+  var N=rad(norm360(el.N[0]+el.N[1]*n));
+  var i=rad(el.i[0]+el.i[1]*n);
+  var w=rad(norm360(el.w[0]+el.w[1]*n));
+  var a=el.a[0]+el.a[1]*n;
+  var e=el.e[0]+el.e[1]*n;
+  var M=rad(norm360(el.M[0]+el.M[1]*n));
+  var E=M+e*Math.sin(M)*(1+e*Math.cos(M));
+  for(var k=0;k<6;k++){
+    var dE=(E-e*Math.sin(E)-M)/(1-e*Math.cos(E));
+    E-=dE;
+  }
+  var xv=a*(Math.cos(E)-e);
+  var yv=a*(Math.sqrt(1-e*e)*Math.sin(E));
+  var v=Math.atan2(yv,xv);
+  var r=Math.sqrt(xv*xv+yv*yv);
+  var xh=r*(Math.cos(N)*Math.cos(v+w)-Math.sin(N)*Math.sin(v+w)*Math.cos(i));
+  var yh=r*(Math.sin(N)*Math.cos(v+w)+Math.cos(N)*Math.sin(v+w)*Math.cos(i));
+  var zh=r*(Math.sin(v+w)*Math.sin(i));
+  return{x:xh,y:yh,z:zh};
+}
+
+function planetEquatorial(name,date){
+  var n=julianDate(date)-2451545.0;
+  var sun=sunLonDist(n);
+  var sunLonR=rad(sun.lon);
+  var xe=-sun.dist*Math.cos(sunLonR),ye=-sun.dist*Math.sin(sunLonR);
+  var p=planetHeliocentric(name,n);
+  var xg=p.x-xe,yg=p.y-ye,zg=p.z;
+  var lon=Math.atan2(yg,xg);
+  var lat=Math.atan2(zg,Math.sqrt(xg*xg+yg*yg));
+  var epsilon=rad(23.439-0.0000004*n);
+  var ra=deg(Math.atan2(Math.sin(lon)*Math.cos(epsilon)-Math.tan(lat)*Math.sin(epsilon),Math.cos(lon)));
+  var dec=deg(Math.asin(Math.sin(lat)*Math.cos(epsilon)+Math.cos(lat)*Math.sin(epsilon)*Math.sin(lon)));
+  return{ra:norm360(ra),dec:dec};
+}
+
 function gmstDegrees(date){
   var n=julianDate(date)-2451545.0;
   return norm360(280.46061837+360.98564736629*n);
 }
-
 function equatorialToHorizontal(ra,dec,lat,lon,date){
   var gmst=gmstDegrees(date);
   var lst=norm360(gmst+lon);
@@ -6781,11 +6857,58 @@ function equatorialToHorizontal(ra,dec,lat,lon,date){
   if(Math.sin(ha)>0)az=2*Math.PI-az;
   return{alt:deg(alt),az:deg(az)};
 }
-
 function angularSeparation(az1,alt1,az2,alt2){
   var a1=rad(alt1),a2=rad(alt2),dAz=rad(az1-az2);
   var cosSep=Math.sin(a1)*Math.sin(a2)+Math.cos(a1)*Math.cos(a2)*Math.cos(dAz);
   return deg(Math.acos(Math.max(-1,Math.min(1,cosSep))));
+}
+
+var CONSTELLATIONS=[
+  {key:"osa-mayor",name:"Osa Mayor",ra:165,dec:50},
+  {key:"osa-menor",name:"Osa Menor",ra:225,dec:75},
+  {key:"casiopea",name:"Casiopea",ra:15,dec:60},
+  {key:"orion",name:"Orión",ra:82.5,dec:5},
+  {key:"escorpio",name:"Escorpio",ra:247.5,dec:-30},
+  {key:"cruz-del-sur",name:"Cruz del Sur",ra:187.5,dec:-60},
+  {key:"tauro",name:"Tauro",ra:67.5,dec:15},
+  {key:"geminis",name:"Géminis",ra:105,dec:22},
+  {key:"leo",name:"Leo",ra:160,dec:15},
+  {key:"sagitario",name:"Sagitario",ra:285,dec:-25},
+  {key:"piscis",name:"Piscis",ra:7.5,dec:10},
+  {key:"acuario",name:"Acuario",ra:337.5,dec:-10},
+  {key:"cisne",name:"Cisne",ra:307.5,dec:40},
+  {key:"aguila",name:"Águila",ra:295,dec:3}
+];
+
+var ALL_TARGET_META=[
+  {key:"sun",name:"El Sol",emoji:"☀️",prep:"al Sol"},
+  {key:"moon",name:"La Luna",emoji:"🌙",prep:"a la Luna"},
+  {key:"mercury",name:"Mercurio",emoji:"☿",prep:"a Mercurio"},
+  {key:"venus",name:"Venus",emoji:"♀",prep:"a Venus"},
+  {key:"mars",name:"Marte",emoji:"♂",prep:"a Marte"},
+  {key:"jupiter",name:"Júpiter",emoji:"♃",prep:"a Júpiter"},
+  {key:"saturn",name:"Saturno",emoji:"♄",prep:"a Saturno"},
+  {key:"uranus",name:"Urano",emoji:"♅",prep:"a Urano"},
+  {key:"neptune",name:"Neptuno",emoji:"♆",prep:"a Neptuno"}
+].concat(CONSTELLATIONS.map(function(c){return{key:c.key,name:c.name,emoji:"✨",prep:"a "+c.name}}));
+
+function raDecFor(key,date){
+  if(key==="sun")return sunEquatorial(date);
+  if(key==="moon")return moonEquatorial(date);
+  if(PLANET_ELEMENTS[key])return planetEquatorial(key,date);
+  var c=CONSTELLATIONS.filter(function(x){return x.key===key})[0];
+  if(c)return{ra:c.ra,dec:c.dec};
+  return null;
+}
+function computeAllHorizontal(date,lat,lon){
+  var out=[];
+  ALL_TARGET_META.forEach(function(meta){
+    var eq=raDecFor(meta.key,date);
+    if(!eq)return;
+    var h=equatorialToHorizontal(eq.ra,eq.dec,lat,lon,date);
+    out.push({key:meta.key,name:meta.name,emoji:meta.emoji,prep:meta.prep,alt:h.alt,az:h.az});
+  });
+  return out;
 }
 
 var LOCK_TOLERANCE=15;
@@ -6800,11 +6923,18 @@ var label=document.getElementById("skyLabel");
 var labelEmoji=document.getElementById("skyLabelEmoji");
 var labelText=document.getElementById("skyLabelText");
 var debugEl=document.getElementById("skyDebug");
-if(!view||!video||!closeBtn||!startBtn||!statusEl)return;
+var searchWrap=document.getElementById("skySearchWrap");
+var searchInput=document.getElementById("skySearchInput");
+var resultsEl=document.getElementById("skySearchResults");
+var targetBox=document.getElementById("skyTargetBox");
+var targetClose=document.getElementById("skyTargetClose");
+var targetNameEl=document.getElementById("skyTargetName");
+var targetCoordsEl=document.getElementById("skyTargetCoordsText");
+if(!view||!video||!closeBtn||!startBtn||!statusEl||!searchWrap)return;
 
 var stream=null,scanInterval=null,orientationHandler=null;
 var lat=null,lon=null,heading=null,tilt=null;
-var sunTarget=null,moonTarget=null;
+var allTargetsCache=[],pinnedKey=null;
 
 function setStatus(msg){statusEl.textContent=msg}
 
@@ -6828,6 +6958,11 @@ function stopAll(){
     orientationHandler=null;
   }
   startBtn.hidden=false;
+  searchWrap.hidden=true;
+  targetBox.hidden=true;
+  pinnedKey=null;
+  searchInput.value="";
+  resultsEl.hidden=true;
   label.classList.remove("is-visible");
   reticle.classList.remove("is-locked");
   setStatus('Toca "Activar" para empezar.');
@@ -6846,14 +6981,12 @@ function requestOrientationPermission(){
   }
   return Promise.resolve(true);
 }
-
 function getPosition(){
   return new Promise(function(resolve,reject){
     if(!navigator.geolocation){reject(new Error("no geolocation"));return}
     navigator.geolocation.getCurrentPosition(resolve,reject,{enableHighAccuracy:true,timeout:10000});
   });
 }
-
 function startCamera(){
   return navigator.mediaDevices.getUserMedia({video:{facingMode:{ideal:"environment"}},audio:false}).then(function(s){
     stream=s;
@@ -6864,11 +6997,14 @@ function startCamera(){
 
 function updateTargets(){
   if(lat===null||lon===null)return;
-  var now=new Date();
-  var sun=sunEquatorial(now);
-  var moon=moonEquatorial(now);
-  sunTarget=equatorialToHorizontal(sun.ra,sun.dec,lat,lon,now);
-  moonTarget=equatorialToHorizontal(moon.ra,moon.dec,lat,lon,now);
+  allTargetsCache=computeAllHorizontal(new Date(),lat,lon);
+  if(pinnedKey){
+    var t=allTargetsCache.filter(function(x){return x.key===pinnedKey})[0];
+    if(t){
+      targetNameEl.textContent=t.emoji+" "+t.name;
+      targetCoordsEl.textContent="AZ "+t.az.toFixed(0)+"°  ALT "+t.alt.toFixed(0)+"°"+(t.alt<-2?" ⚠︎":"");
+    }
+  }
 }
 
 function onOrientation(e){
@@ -6884,40 +7020,68 @@ function onOrientation(e){
 }
 
 function updateReticle(){
-  if(heading===null||tilt===null||!sunTarget||!moonTarget)return;
-
-  var candidates=[
-    {key:"sun",emoji:"☀️",subject:"El Sol",prep:"al Sol",target:sunTarget},
-    {key:"moon",emoji:"🌙",subject:"La Luna",prep:"a la Luna",target:moonTarget}
-  ];
+  if(heading===null||tilt===null||!allTargetsCache.length)return;
+  var pool=pinnedKey?allTargetsCache.filter(function(t){return t.key===pinnedKey}):allTargetsCache;
   var best=null;
-  candidates.forEach(function(c){
-    var sep=angularSeparation(heading,tilt,c.target.az,c.target.alt);
-    if(!best||sep<best.sep)best={c:c,sep:sep};
+  pool.forEach(function(t){
+    var sep=angularSeparation(heading,tilt,t.az,t.alt);
+    if(!best||sep<best.sep)best={t:t,sep:sep};
   });
 
   if(debugEl){
     debugEl.hidden=false;
-    debugEl.textContent=
-      "Apuntando: az "+heading.toFixed(0)+"° alt "+tilt.toFixed(0)+"°  ·  "+
-      "☀️ az "+sunTarget.az.toFixed(0)+"° alt "+sunTarget.alt.toFixed(0)+"°  ·  "+
-      "🌙 az "+moonTarget.az.toFixed(0)+"° alt "+moonTarget.alt.toFixed(0)+"°";
+    var extra=pinnedKey&&best?" · objetivo "+best.t.emoji+" az "+best.t.az.toFixed(0)+"° alt "+best.t.alt.toFixed(0)+"°":"";
+    debugEl.textContent="Apuntando: az "+heading.toFixed(0)+"° alt "+tilt.toFixed(0)+"°"+extra;
   }
 
-  if(best&&best.sep<=LOCK_TOLERANCE&&best.c.target.alt>-2){
-    labelEmoji.textContent=best.c.emoji;
-    labelText.textContent="¡Estás apuntando "+best.c.prep+"!";
+  if(best&&best.sep<=LOCK_TOLERANCE&&best.t.alt>-2){
+    labelEmoji.textContent=best.t.emoji;
+    labelText.textContent="¡Estás apuntando "+best.t.prep+"!";
     label.classList.add("is-visible");
     reticle.classList.add("is-locked");
-    setStatus("¡Objetivo encontrado! "+best.c.emoji+" "+best.c.subject);
+    setStatus("¡Objetivo encontrado! "+best.t.emoji+" "+best.t.name);
   }else{
     label.classList.remove("is-visible");
     reticle.classList.remove("is-locked");
-    var sunUp=sunTarget.alt>-2,moonUp=moonTarget.alt>-2;
-    if(!sunUp&&!moonUp)setStatus("Ni el Sol ni la Luna están sobre el horizonte ahora mismo. Vuelve a intentarlo más tarde.");
-    else setStatus("Sigue moviendo el celular para descubrir qué hay en el cielo…");
+    if(pinnedKey&&best&&best.t.alt<=-2){
+      setStatus(best.t.name+" no está sobre el horizonte ahora mismo.");
+    }else{
+      setStatus("Sigue moviendo el celular para descubrir qué hay en el cielo…");
+    }
   }
 }
+
+function renderSearchResults(query){
+  var q=normalizeText(query.trim());
+  if(!q){resultsEl.hidden=true;resultsEl.innerHTML="";return}
+  var matches=ALL_TARGET_META.filter(function(m){return normalizeText(m.name).indexOf(q)!==-1});
+  if(!matches.length){resultsEl.hidden=true;resultsEl.innerHTML="";return}
+  resultsEl.innerHTML=matches.map(function(m){
+    return '<button type="button" class="sky-search-result" data-key="'+m.key+'"><span class="sky-search-result-emoji">'+m.emoji+'</span>'+m.name+'</button>';
+  }).join("");
+  resultsEl.hidden=false;
+  Array.prototype.forEach.call(resultsEl.querySelectorAll("[data-key]"),function(btn){
+    btn.addEventListener("click",function(){selectTarget(btn.getAttribute("data-key"))});
+  });
+}
+function selectTarget(key){
+  pinnedKey=key;
+  searchInput.value="";
+  resultsEl.hidden=true;
+  targetBox.hidden=false;
+  updateTargets();
+  updateReticle();
+}
+searchInput.addEventListener("input",function(){renderSearchResults(searchInput.value)});
+searchInput.addEventListener("focus",function(){if(searchInput.value)renderSearchResults(searchInput.value)});
+document.addEventListener("click",function(e){
+  if(!searchWrap.contains(e.target))resultsEl.hidden=true;
+});
+targetClose.addEventListener("click",function(){
+  pinnedKey=null;
+  targetBox.hidden=true;
+  updateReticle();
+});
 
 startBtn.addEventListener("click",function(){
   setStatus("Pidiendo permisos…");
@@ -6929,12 +7093,13 @@ startBtn.addEventListener("click",function(){
       return startCamera();
     }).then(function(){
       startBtn.hidden=true;
+      searchWrap.hidden=false;
       orientationHandler=onOrientation;
       window.addEventListener("deviceorientationabsolute",orientationHandler);
       window.addEventListener("deviceorientation",orientationHandler);
       updateTargets();
       scanInterval=setInterval(updateTargets,4000);
-      setStatus("Apunta el celular al cielo…");
+      setStatus("Apunta el celular al cielo, o busca algo específico arriba…");
     }).catch(function(err){
       console.error("[Buscador Celeste]",err);
       setStatus("No pude activar la cámara, la ubicación o los sensores. Revisa los permisos de tu navegador e intenta de nuevo.");
