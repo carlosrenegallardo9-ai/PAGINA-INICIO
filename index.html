@@ -1886,11 +1886,16 @@ html[data-nivel="principiante"] .section-head{border-left:2px solid var(--nebula
       o.appendChild(w),
       (o.scrollTop = o.scrollHeight));
     try {
+      const nalSession =
+        window.safeStorage && window.safeStorage.get("nebula:session");
       const j = await (
         await fetch("/api/chat", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ message: e }),
+          body: JSON.stringify({
+            message: e,
+            username: nalSession && nalSession.username ? nalSession.username : null,
+          }),
         })
       ).json().catch(() => null);
       (w.remove(),
@@ -5894,6 +5899,12 @@ function getSession(){
 
 function saveSession(session){storage.set(STORAGE_KEY,session)}
 
+function saveSessionRemote(session){
+  try{
+    fetch("/api/session",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(session)}).catch(function(){});
+  }catch(e){}
+}
+
 form.addEventListener("submit",function(evt){
   evt.preventDefault();
   clearError();
@@ -5905,6 +5916,7 @@ form.addEventListener("submit",function(evt){
   if(password.length<4){showError("La contraseña debe tener al menos 4 caracteres.");passwordInput.focus();return}
   var session={username:username,level:level};
   saveSession(session);
+  saveSessionRemote(session);
   applySession(session);
   closeModal();
 });
@@ -5924,6 +5936,7 @@ levelButtons.forEach(function(btn){
     if(!session)return;
     session.level=btn.dataset.level;
     saveSession(session);
+    saveSessionRemote(session);
     applySession(session);
   });
 });
