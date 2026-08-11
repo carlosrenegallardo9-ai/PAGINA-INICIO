@@ -94,15 +94,32 @@ html[data-nivel="principiante"] .section-head{border-left:2px solid var(--nebula
 @media(prefers-reduced-motion:reduce){.nal-backdrop,.nal-modal,.nal-modal-wrap,.nal-bar,.nal-tooltip{transition:opacity .15s linear!important;transform:none!important}}
 </style>
 
+
+
 <style id="rs-styles">
-/* Ruta Estelar — sección de aprendizaje por niveles (estilo Duolingo). Aislado, prefijo "rs-". */
+/* Ruta Estelar — vista de pantalla completa con unidades de 5 lecciones (estilo Duolingo). Aislado, prefijo "rs-". */
 .df-card{margin-top:var(--space-6);display:flex;align-items:flex-start;gap:var(--space-3);max-width:560px;padding:var(--space-4) var(--space-5);border:1px solid var(--cosmic-indigo-border);border-radius:var(--radius-md);background:var(--cosmic-indigo-light)}
 .df-card-icon{font-size:1.4rem;flex-shrink:0;line-height:1}
 .df-card-label{font-family:var(--font-mono);font-size:.64rem;letter-spacing:.1em;text-transform:uppercase;color:var(--dorado-celestial);margin-bottom:3px;display:block}
 .df-card-text{font-size:.86rem;color:var(--estelar-mist-dim);line-height:1.55}
-.rs-path{display:flex;flex-wrap:wrap;gap:var(--space-6) var(--space-5);margin-top:var(--space-3)}
-.rs-node{display:flex;flex-direction:column;align-items:center;gap:var(--space-2);width:112px;text-align:center;background:none;border:none;padding:0;font-family:var(--font-body)}
-.rs-node-circle{width:64px;height:64px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.7rem;background:var(--cosmic-indigo-light);border:2px solid var(--cosmic-indigo-border);transition:border-color var(--dur-fast),background var(--dur-fast),transform var(--dur-fast),box-shadow var(--dur-fast)}
+
+.rs-launch-btn{display:inline-flex;align-items:center;gap:.5rem}
+
+.rs-view{position:fixed;inset:0;z-index:9200;background:var(--deep-void);opacity:0;pointer-events:none;transition:opacity var(--dur-med) var(--ease-out);overflow-y:auto}
+.rs-view.is-open{opacity:1;pointer-events:auto}
+.rs-view-close{position:fixed;top:var(--space-5);right:var(--space-5);z-index:2;width:42px;height:42px;border-radius:50%;background:rgba(var(--void-rgb),.6);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);border:1px solid var(--cosmic-indigo-border);display:flex;align-items:center;justify-content:center;color:var(--estelar-mist);font-size:1.1rem}
+.rs-view-close:hover{border-color:var(--solar-ember);color:var(--solar-ember)}
+.rs-view-inner{max-width:720px;margin:0 auto;padding:calc(var(--space-8) + var(--space-4)) var(--space-6) var(--space-8)}
+.rs-view-eyebrow{font-family:var(--font-mono);font-size:.72rem;letter-spacing:.2em;text-transform:uppercase;color:var(--dorado-celestial);display:inline-flex;align-items:center;gap:var(--space-2);margin-bottom:var(--space-3)}
+.rs-view-eyebrow::before{content:'';width:16px;height:1px;background:var(--dorado-celestial)}
+.rs-view-inner h2{font-family:var(--font-display);font-size:clamp(1.6rem,3.4vw,2.2rem);color:var(--estelar-mist);margin-bottom:var(--space-3)}
+.rs-view-inner>p.rs-view-lead{color:var(--estelar-mist-dim);margin-bottom:var(--space-7);max-width:520px}
+.rs-back-btn{display:inline-flex;align-items:center;gap:.4rem;font-family:var(--font-mono);font-size:.76rem;color:var(--proton-silver);margin-bottom:var(--space-6)}
+.rs-back-btn:hover{color:var(--estelar-mist)}
+
+.rs-path{display:flex;flex-wrap:wrap;gap:var(--space-6) var(--space-5)}
+.rs-node{display:flex;flex-direction:column;align-items:center;gap:var(--space-2);width:120px;text-align:center;background:none;border:none;padding:0;font-family:var(--font-body)}
+.rs-node-circle{width:68px;height:68px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.8rem;background:var(--cosmic-indigo-light);border:2px solid var(--cosmic-indigo-border);transition:border-color var(--dur-fast),background var(--dur-fast),transform var(--dur-fast),box-shadow var(--dur-fast)}
 .rs-node[data-state="unlocked"]{cursor:pointer}
 .rs-node[data-state="unlocked"] .rs-node-circle{border-color:var(--solar-ember);box-shadow:0 0 0 4px var(--solar-ember-dim)}
 .rs-node[data-state="unlocked"]:hover .rs-node-circle,.rs-node[data-state="unlocked"]:focus-visible .rs-node-circle{transform:translateY(-3px)}
@@ -110,33 +127,34 @@ html[data-nivel="principiante"] .section-head{border-left:2px solid var(--nebula
 .rs-node[data-state="completed"] .rs-node-circle{border-color:var(--nebula-violet-soft);background:var(--nebula-violet-dim)}
 .rs-node[data-state="locked"]{cursor:not-allowed}
 .rs-node[data-state="locked"] .rs-node-circle{opacity:.4}
-.rs-node-title{font-size:.76rem;color:var(--estelar-mist-dim);line-height:1.3}
-.rs-node-badge{font-family:var(--font-mono);font-size:.62rem;color:var(--proton-silver);letter-spacing:.04em}
-.rs-lesson-overlay{position:fixed;inset:0;z-index:8600;display:flex;align-items:center;justify-content:center;padding:var(--space-5);background:rgba(var(--void-rgb),.72);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);opacity:0;pointer-events:none;transition:opacity var(--dur-med) var(--ease-out)}
-.rs-lesson-overlay.is-open{opacity:1;pointer-events:auto}
-.rs-lesson{position:relative;width:min(560px,100%);max-height:88vh;overflow-y:auto;background:var(--cosmic-indigo);border:1px solid var(--cosmic-indigo-border);border-radius:var(--radius-lg);box-shadow:0 40px 100px -30px rgba(0,0,0,.85),var(--shadow-glow-violet);padding:var(--space-7) var(--space-6);transform:scale(.94);opacity:0;transition:transform var(--dur-med) var(--ease-out),opacity var(--dur-med) var(--ease-out)}
-.rs-lesson-overlay.is-open .rs-lesson{transform:scale(1);opacity:1}
-.rs-lesson-close{position:absolute;top:var(--space-5);right:var(--space-5);width:36px;height:36px;border-radius:50%;border:1px solid var(--proton-silver-dim);display:flex;align-items:center;justify-content:center;color:var(--estelar-mist)}
-.rs-lesson-close:hover{border-color:var(--solar-ember);color:var(--solar-ember)}
-.rs-lesson-emoji{font-size:2.6rem;margin-bottom:var(--space-4)}
-.rs-lesson h3{font-family:var(--font-display);font-size:1.35rem;margin-bottom:var(--space-4);color:var(--estelar-mist)}
-.rs-lesson p{margin-bottom:var(--space-4);font-size:.94rem;line-height:1.65;color:var(--estelar-mist-dim)}
-.rs-quiz-progress{display:flex;gap:6px;margin-bottom:var(--space-5)}
-.rs-quiz-dot{flex:1;height:5px;border-radius:var(--radius-pill);background:var(--cosmic-indigo-light)}
-.rs-quiz-dot.is-done{background:var(--nebula-violet-soft)}
-.rs-quiz-dot.is-current{background:var(--solar-ember)}
-.rs-quiz-q{font-family:var(--font-display);font-size:1.1rem;margin-bottom:var(--space-5);color:var(--estelar-mist)}
-.rs-quiz-options{display:flex;flex-direction:column;gap:var(--space-3)}
-.rs-quiz-opt{text-align:left;padding:var(--space-3) var(--space-4);border-radius:var(--radius-md);border:1px solid var(--cosmic-indigo-border);background:var(--cosmic-indigo-light);color:var(--estelar-mist);font-size:.92rem;transition:border-color var(--dur-fast),background var(--dur-fast)}
+.rs-node-title{font-size:.78rem;color:var(--estelar-mist-dim);line-height:1.3}
+.rs-node-badge{font-family:var(--font-mono);font-size:.64rem;color:var(--proton-silver);letter-spacing:.04em}
+
+.rs-unit-emoji{font-size:2.8rem;margin-bottom:var(--space-4)}
+.rs-unit-meta{font-family:var(--font-mono);font-size:.76rem;color:var(--proton-silver);margin-bottom:var(--space-6)}
+
+.rs-lesson-progress{display:flex;gap:6px;margin-bottom:var(--space-6);max-width:400px}
+.rs-lesson-dot{flex:1;height:6px;border-radius:var(--radius-pill);background:var(--cosmic-indigo-light)}
+.rs-lesson-dot.is-done{background:var(--nebula-violet-soft)}
+.rs-lesson-dot.is-current{background:var(--solar-ember)}
+
+.rs-fact-card{background:var(--cosmic-indigo);border:1px solid var(--cosmic-indigo-border);border-radius:var(--radius-lg);padding:var(--space-6);margin-bottom:var(--space-6);max-width:560px;box-shadow:var(--shadow-card)}
+.rs-fact-card p{font-size:1rem;line-height:1.65;color:var(--estelar-mist)}
+
+.rs-quiz-q{font-family:var(--font-display);font-size:1.15rem;margin-bottom:var(--space-5);color:var(--estelar-mist);max-width:560px}
+.rs-quiz-options{display:flex;flex-direction:column;gap:var(--space-3);max-width:560px}
+.rs-quiz-opt{text-align:left;padding:var(--space-3) var(--space-4);border-radius:var(--radius-md);border:1px solid var(--cosmic-indigo-border);background:var(--cosmic-indigo-light);color:var(--estelar-mist);font-size:.94rem;transition:border-color var(--dur-fast),background var(--dur-fast)}
 .rs-quiz-opt:hover:not([disabled]),.rs-quiz-opt:focus-visible:not([disabled]){border-color:var(--nebula-violet-soft)}
 .rs-quiz-opt[disabled]{cursor:default}
 .rs-quiz-opt.is-correct{border-color:#4ADE80;background:rgba(74,222,128,.15)}
 .rs-quiz-opt.is-wrong{border-color:var(--solar-ember);background:var(--solar-ember-dim)}
-.rs-quiz-explain{margin-top:var(--space-4);padding-left:var(--space-4);border-left:2px solid var(--nebula-violet-soft);font-size:.86rem;color:var(--estelar-mist-dim)}
-.rs-quiz-next{margin-top:var(--space-5)}
-.rs-result-emoji{font-size:3rem;margin-bottom:var(--space-3)}
+.rs-quiz-explain{margin-top:var(--space-4);padding-left:var(--space-4);border-left:2px solid var(--nebula-violet-soft);font-size:.88rem;color:var(--estelar-mist-dim);max-width:560px}
+.rs-quiz-next{margin-top:var(--space-6)}
+
+.rs-result-emoji{font-size:3.4rem;margin-bottom:var(--space-3)}
 .rs-result-score{font-family:var(--font-mono);color:var(--proton-silver);margin-bottom:var(--space-4)}
-@media(max-width:560px){.rs-node{width:88px}.rs-node-circle{width:54px;height:54px;font-size:1.4rem}}
+
+@media(max-width:560px){.rs-node{width:92px}.rs-node-circle{width:56px;height:56px;font-size:1.5rem}.rs-view-inner{padding:calc(var(--space-8) + var(--space-2)) var(--space-4) var(--space-7)}}
 </style>
 
 </head> <body>
@@ -208,7 +226,7 @@ html[data-nivel="principiante"] .section-head{border-left:2px solid var(--nebula
 <div class="nal-tooltip" id="nalTooltip" role="status" hidden></div>
 </div>
 
- <noscript><style>.reveal{opacity:1!important;transform:none!important}</style></noscript> <a class="sr-only" href="#main">Saltar al contenido principal</a> <header class="nav"> <div class="container"> <a class="brand" href="#inicio"> <svg class="brand-mark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><circle cx="12" cy="12" r="2.4" fill="currentColor" stroke="none"/><ellipse cx="12" cy="12" rx="10" ry="4.2" transform="rotate(-24 12 12)"/></svg> Nébula </a> <div class="nav-actions"> <nav class="nav-links" id="navLinks" aria-label="Navegación principal"> <a href="#inicio">Inicio</a> <a href="#explorador">Explorador</a> <a href="#escala">Escala cósmica</a> <a href="#minijuego">Minijuego</a> <a href="#ruta-estelar">Ruta Estelar</a> <a href="#aprender">Aprender</a> <a href="#recursos">Recursos</a> <a href="#informacion">Información</a> <a href="https://carlosrenegallardo9-ai.github.io/pagina-ia-espacio/cosmo-quiz.html">Quiz</a> <a href="#" data-open-ai>Guía interactiva</a> </nav> <button id="observatoryToggle" class="btn-observatory" title="Modo Observatorio Nocturno"> <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"> <path d="M20.5 14.3A8.5 8.5 0 1110 3.2a7 7 0 0010.5 11.1z"></path> </svg> <span>Observatorio</span> </button> <button class="nav-toggle" id="navToggle" aria-label="Abrir menú" aria-expanded="false" aria-controls="navLinks"> <span></span><span></span><span></span> </button> </div> </div> </header> <main id="main"> <section class="hero" id="inicio"> <canvas id="starfield" aria-hidden="true"></canvas> <div class="container"> <div class="hero-inner"> <span class="eyebrow">Observatorio digital interactivo</span> <h1>Explora el <em>cosmos</em> a tu propio ritmo</h1> <p>Un observatorio interactivo para descubrir planetas, escalas cósmicas y fenómenos extremos del universo, con una guía interactiva que orienta tu recorrido según lo que eliges.</p> <div class="hero-actions"> <a class="btn btn-primary" href="#explorador">Iniciar exploración</a> <a class="hero-link-secondary" href="#aprender">Ver módulos de aprendizaje <span aria-hidden="true">→</span></a> </div> <div class="df-card" id="dfCard">
+ <noscript><style>.reveal{opacity:1!important;transform:none!important}</style></noscript> <a class="sr-only" href="#main">Saltar al contenido principal</a> <header class="nav"> <div class="container"> <a class="brand" href="#inicio"> <svg class="brand-mark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><circle cx="12" cy="12" r="2.4" fill="currentColor" stroke="none"/><ellipse cx="12" cy="12" rx="10" ry="4.2" transform="rotate(-24 12 12)"/></svg> Nébula </a> <div class="nav-actions"> <nav class="nav-links" id="navLinks" aria-label="Navegación principal"> <a href="#inicio">Inicio</a> <a href="#explorador">Explorador</a> <a href="#escala">Escala cósmica</a> <a href="#minijuego">Minijuego</a> <a href="#" data-open-ruta>Ruta Estelar</a> <a href="#aprender">Aprender</a> <a href="#recursos">Recursos</a> <a href="#informacion">Información</a> <a href="https://carlosrenegallardo9-ai.github.io/pagina-ia-espacio/cosmo-quiz.html">Quiz</a> <a href="#" data-open-ai>Guía interactiva</a> </nav> <button id="observatoryToggle" class="btn-observatory" title="Modo Observatorio Nocturno"> <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"> <path d="M20.5 14.3A8.5 8.5 0 1110 3.2a7 7 0 0010.5 11.1z"></path> </svg> <span>Observatorio</span> </button> <button class="nav-toggle" id="navToggle" aria-label="Abrir menú" aria-expanded="false" aria-controls="navLinks"> <span></span><span></span><span></span> </button> </div> </div> </header> <main id="main"> <section class="hero" id="inicio"> <canvas id="starfield" aria-hidden="true"></canvas> <div class="container"> <div class="hero-inner"> <span class="eyebrow">Observatorio digital interactivo</span> <h1>Explora el <em>cosmos</em> a tu propio ritmo</h1> <p>Un observatorio interactivo para descubrir planetas, escalas cósmicas y fenómenos extremos del universo, con una guía interactiva que orienta tu recorrido según lo que eliges.</p> <div class="hero-actions"> <a class="btn btn-primary" href="#explorador">Iniciar exploración</a> <a class="hero-link-secondary" href="#aprender">Ver módulos de aprendizaje <span aria-hidden="true">→</span></a> <button type="button" class="btn btn-ghost rs-launch-btn" id="rsLaunchBtn" data-open-ruta aria-haspopup="dialog" aria-controls="rsView"><span aria-hidden="true">🪐</span> Ruta Estelar</button> </div> <div class="df-card" id="dfCard">
 <span class="df-card-icon" aria-hidden="true">🌌</span>
 <span>
 <span class="df-card-label">Dato curioso del día</span>
@@ -216,22 +234,10 @@ html[data-nivel="principiante"] .section-head{border-left:2px solid var(--nebula
 </span>
 </div>
 
-<div class="telemetry"> <div><strong>8</strong>planetas explorables</div> <div><strong>6</strong>módulos educativos</div> <div><strong>1</strong>guía cósmica interactiva</div> <div><strong>∞</strong>posibilidades por descubrir</div> </div> </div> </div> </section> <section class="section explorer-section" id="explorador"> <div class="container"> <div class="section-head reveal"> <span class="eyebrow">Sistema solar interactivo 360°</span> <h2>Explora el sistema solar en 3D</h2> <p>Arrastra para orbitar la cámara, usa la rueda o pellizca para hacer zoom, y toca un planeta para revelar sus datos, curiosidades y enlaces oficiales.</p> <button type="button" class="continue-chip" id="explorerContinueChip" hidden>Continuar en <span id="explorerContinueLabel"></span> <span aria-hidden="true">→</span></button> </div> <div class="solar-system-3d" id="solarSystem3D"> <div class="s3d-loading" id="s3dLoading"> <span class="s3d-ring" aria-hidden="true"></span> <p id="s3dLoadingText">Cargando sistema solar…</p> </div> <canvas id="s3dCanvas" aria-label="Visualizador 3D del sistema solar" role="img"></canvas> <button type="button" class="s3d-peek-btn s3d-peek-planets" id="s3dLegendToggle" aria-expanded="false" aria-controls="s3dLegend" hidden>Planetas</button> <nav class="s3d-legend" id="s3dLegend" aria-label="Selector rápido de planetas" hidden> <p class="s3d-legend-title">Planetas</p> </nav> <button type="button" class="s3d-peek-btn s3d-peek-settings" id="s3dControlsToggle" aria-expanded="false" aria-controls="s3dControls" hidden>Controles</button> <div class="s3d-controls" id="s3dControls" hidden> <button type="button" class="s3d-btn is-active" id="s3dAutoRotate">Auto-rotar</button> <span class="s3d-divider" aria-hidden="true"></span> <button type="button" class="s3d-btn" id="s3dSpeedDown" aria-label="Reducir velocidad">−</button> <span class="s3d-speed" id="s3dSpeedLabel">1×</span> <button type="button" class="s3d-btn" id="s3dSpeedUp" aria-label="Aumentar velocidad">+</button> <span class="s3d-divider" aria-hidden="true"></span> <button type="button" class="s3d-btn" id="s3dReset">Reiniciar vista</button> <span class="s3d-divider" aria-hidden="true"></span> <button type="button" class="s3d-btn is-active" id="s3dNebula">Nebulosa</button> </div> <div class="s3d-tooltip" id="s3dTooltip" aria-hidden="true"></div> </div> <p class="explorer-hint">Arrastra para rotar la vista · rueda o pellizca para hacer zoom · toca un planeta para ver sus datos</p> </div> </section> <section class="section" id="escala"> <div class="container"> <div class="section-head reveal"> <span class="eyebrow">De la Tierra al universo observable</span> <h2>Explorador de escala cósmica</h2> <p>Desliza el control para viajar desde nuestro planeta hasta los límites del universo conocido.</p> </div> <div class="scale-module reveal"> <div class="scale-stage" id="scaleStage" aria-hidden="true"> <div class="scale-circle" id="scaleCircle"></div> </div> <div class="scale-info"> <span class="eyebrow">Nivel de escala</span> <h3 id="scaleLabel">Tierra</h3> <p id="scaleText" class="scale-text">Nuestro hogar: 12.742 km de diámetro, con un 71% de su superficie cubierta por agua líquida.</p> <button type="button" class="scale-text-toggle" id="scaleTextToggle" aria-expanded="false" aria-controls="scaleText" hidden>+ detalle</button> <div class="telemetry" style="border:none;padding-top:0;margin-top:var(--space-5)"> <div><strong id="scaleReadout">1 : 1</strong>escala relativa</div> </div> <input type="range" class="range-slider" id="scaleSlider" min="1" max="8" value="1" step="1" aria-label="Selector de escala cósmica"> <div class="scale-ticks"><span>Tierra</span><span>Universo</span></div> </div> </div> </div> </section> <section class="section" id="minijuego"> <div class="container"> <div class="section-head reveal"> <span class="eyebrow">Simulador estelar interactivo</span> <h2>Minijuego: Constelación Viva</h2> <p>Combina cuerpos celestes vecinos, desata fenómenos cósmicos y desbloquea datos astronómicos reales mientras juegas.</p> </div> <div class="m3-shell reveal"> <div class="m3-modes-row" role="tablist" aria-label="Modos de juego"> <button class="m3-mode-btn" type="button" role="tab" data-mode="energia">Colecta de Energía Estelar</button> <button class="m3-mode-btn" type="button" role="tab" data-mode="polvo">Despejar Polvo Cósmico</button> <button class="m3-mode-btn" type="button" role="tab" data-mode="sondas">Descenso de Sondas Espaciales</button> </div> <div class="m3-hud"> <div class="m3-telemetry"> <div class="m3-stat">Movimientos<strong id="m3Moves">0</strong></div> <div class="m3-stat">Objetivo<strong id="m3GoalReadout">0 / 0</strong></div> <div class="m3-progress"><div class="m3-progress-fill" id="m3ProgressFill"></div></div> </div> <button class="btn btn-sm btn-ghost" id="m3Restart" type="button">Reiniciar</button> </div> <p class="m3-goal-text" id="m3GoalText"></p> <div class="m3-stage"> <canvas class="m3-fx" id="m3Fx" aria-hidden="true"></canvas> <div class="m3-board" id="m3Board" role="grid" aria-label="Tablero de constelaciones"></div> <div class="dust-board" id="dustBoard" role="grid" aria-label="Campo de polvo cósmico" hidden></div> <div class="probe-board" id="probeBoard" role="application" aria-label="Carriles de descenso de sondas" hidden></div> <div class="m3-overlay" id="m3Overlay" hidden> <div class="m3-overlay-card" role="alertdialog" aria-labelledby="m3OverlayTitle" aria-describedby="m3OverlayText"> <span class="eyebrow" id="m3OverlayEyebrow">Misión</span> <h3 id="m3OverlayTitle">Resultado</h3> <p id="m3OverlayText"></p> <button class="btn btn-primary btn-sm" id="m3OverlayRestart" type="button">Jugar de nuevo</button> </div> </div> </div> <p class="explorer-hint" id="m3Hint">Selecciona una ficha y luego una vecina para intercambiarlas · funciona con teclado y ratón</p> </div> </div> </section> <section class="section rs-section" id="ruta-estelar">
-<div class="container">
-<div class="section-head reveal">
-<span class="eyebrow">Ruta Estelar · aprendizaje por niveles</span>
-<h2>Tu camino de aprendizaje espacial</h2>
-<p>Supera el mini quiz de cada nivel para desbloquear el siguiente, al estilo de tus apps de idiomas favoritas. Empieza en lo más básico y llega hasta la astrofísica avanzada.</p>
+<div class="telemetry"> <div><strong>8</strong>planetas explorables</div> <div><strong>6</strong>módulos educativos</div> <div><strong>1</strong>guía cósmica interactiva</div> <div><strong>∞</strong>posibilidades por descubrir</div> </div> </div> </div> </section> <section class="section explorer-section" id="explorador"> <div class="container"> <div class="section-head reveal"> <span class="eyebrow">Sistema solar interactivo 360°</span> <h2>Explora el sistema solar en 3D</h2> <p>Arrastra para orbitar la cámara, usa la rueda o pellizca para hacer zoom, y toca un planeta para revelar sus datos, curiosidades y enlaces oficiales.</p> <button type="button" class="continue-chip" id="explorerContinueChip" hidden>Continuar en <span id="explorerContinueLabel"></span> <span aria-hidden="true">→</span></button> </div> <div class="solar-system-3d" id="solarSystem3D"> <div class="s3d-loading" id="s3dLoading"> <span class="s3d-ring" aria-hidden="true"></span> <p id="s3dLoadingText">Cargando sistema solar…</p> </div> <canvas id="s3dCanvas" aria-label="Visualizador 3D del sistema solar" role="img"></canvas> <button type="button" class="s3d-peek-btn s3d-peek-planets" id="s3dLegendToggle" aria-expanded="false" aria-controls="s3dLegend" hidden>Planetas</button> <nav class="s3d-legend" id="s3dLegend" aria-label="Selector rápido de planetas" hidden> <p class="s3d-legend-title">Planetas</p> </nav> <button type="button" class="s3d-peek-btn s3d-peek-settings" id="s3dControlsToggle" aria-expanded="false" aria-controls="s3dControls" hidden>Controles</button> <div class="s3d-controls" id="s3dControls" hidden> <button type="button" class="s3d-btn is-active" id="s3dAutoRotate">Auto-rotar</button> <span class="s3d-divider" aria-hidden="true"></span> <button type="button" class="s3d-btn" id="s3dSpeedDown" aria-label="Reducir velocidad">−</button> <span class="s3d-speed" id="s3dSpeedLabel">1×</span> <button type="button" class="s3d-btn" id="s3dSpeedUp" aria-label="Aumentar velocidad">+</button> <span class="s3d-divider" aria-hidden="true"></span> <button type="button" class="s3d-btn" id="s3dReset">Reiniciar vista</button> <span class="s3d-divider" aria-hidden="true"></span> <button type="button" class="s3d-btn is-active" id="s3dNebula">Nebulosa</button> </div> <div class="s3d-tooltip" id="s3dTooltip" aria-hidden="true"></div> </div> <p class="explorer-hint">Arrastra para rotar la vista · rueda o pellizca para hacer zoom · toca un planeta para ver sus datos</p> </div> </section> <section class="section" id="escala"> <div class="container"> <div class="section-head reveal"> <span class="eyebrow">De la Tierra al universo observable</span> <h2>Explorador de escala cósmica</h2> <p>Desliza el control para viajar desde nuestro planeta hasta los límites del universo conocido.</p> </div> <div class="scale-module reveal"> <div class="scale-stage" id="scaleStage" aria-hidden="true"> <div class="scale-circle" id="scaleCircle"></div> </div> <div class="scale-info"> <span class="eyebrow">Nivel de escala</span> <h3 id="scaleLabel">Tierra</h3> <p id="scaleText" class="scale-text">Nuestro hogar: 12.742 km de diámetro, con un 71% de su superficie cubierta por agua líquida.</p> <button type="button" class="scale-text-toggle" id="scaleTextToggle" aria-expanded="false" aria-controls="scaleText" hidden>+ detalle</button> <div class="telemetry" style="border:none;padding-top:0;margin-top:var(--space-5)"> <div><strong id="scaleReadout">1 : 1</strong>escala relativa</div> </div> <input type="range" class="range-slider" id="scaleSlider" min="1" max="8" value="1" step="1" aria-label="Selector de escala cósmica"> <div class="scale-ticks"><span>Tierra</span><span>Universo</span></div> </div> </div> </div> </section> <section class="section" id="minijuego"> <div class="container"> <div class="section-head reveal"> <span class="eyebrow">Simulador estelar interactivo</span> <h2>Minijuego: Constelación Viva</h2> <p>Combina cuerpos celestes vecinos, desata fenómenos cósmicos y desbloquea datos astronómicos reales mientras juegas.</p> </div> <div class="m3-shell reveal"> <div class="m3-modes-row" role="tablist" aria-label="Modos de juego"> <button class="m3-mode-btn" type="button" role="tab" data-mode="energia">Colecta de Energía Estelar</button> <button class="m3-mode-btn" type="button" role="tab" data-mode="polvo">Despejar Polvo Cósmico</button> <button class="m3-mode-btn" type="button" role="tab" data-mode="sondas">Descenso de Sondas Espaciales</button> </div> <div class="m3-hud"> <div class="m3-telemetry"> <div class="m3-stat">Movimientos<strong id="m3Moves">0</strong></div> <div class="m3-stat">Objetivo<strong id="m3GoalReadout">0 / 0</strong></div> <div class="m3-progress"><div class="m3-progress-fill" id="m3ProgressFill"></div></div> </div> <button class="btn btn-sm btn-ghost" id="m3Restart" type="button">Reiniciar</button> </div> <p class="m3-goal-text" id="m3GoalText"></p> <div class="m3-stage"> <canvas class="m3-fx" id="m3Fx" aria-hidden="true"></canvas> <div class="m3-board" id="m3Board" role="grid" aria-label="Tablero de constelaciones"></div> <div class="dust-board" id="dustBoard" role="grid" aria-label="Campo de polvo cósmico" hidden></div> <div class="probe-board" id="probeBoard" role="application" aria-label="Carriles de descenso de sondas" hidden></div> <div class="m3-overlay" id="m3Overlay" hidden> <div class="m3-overlay-card" role="alertdialog" aria-labelledby="m3OverlayTitle" aria-describedby="m3OverlayText"> <span class="eyebrow" id="m3OverlayEyebrow">Misión</span> <h3 id="m3OverlayTitle">Resultado</h3> <p id="m3OverlayText"></p> <button class="btn btn-primary btn-sm" id="m3OverlayRestart" type="button">Jugar de nuevo</button> </div> </div> </div> <p class="explorer-hint" id="m3Hint">Selecciona una ficha y luego una vecina para intercambiarlas · funciona con teclado y ratón</p> </div> </div> </section> <div class="rs-view" id="rsView" hidden aria-hidden="true" role="dialog" aria-modal="true" aria-label="Ruta Estelar — aprendizaje del universo por niveles">
+<button type="button" class="rs-view-close" id="rsViewClose" aria-label="Cerrar Ruta Estelar">✕</button>
+<div class="rs-view-inner" id="rsViewInner"></div>
 </div>
-<div class="rs-path" id="rsPath" role="list" aria-label="Niveles de la Ruta Estelar"></div>
-</div>
-<div class="rs-lesson-overlay" id="rsLessonOverlay" hidden aria-hidden="true">
-<div class="rs-lesson" id="rsLesson" role="dialog" aria-modal="true" aria-labelledby="rsLessonTitle">
-<button type="button" class="rs-lesson-close" id="rsLessonClose" aria-label="Cerrar lección">✕</button>
-<div id="rsLessonBody"></div>
-</div>
-</div>
-</section>
 
 <section class="section" id="aprender"> <div class="container"> <div class="section-head reveal"> <span class="eyebrow">Base de conocimiento</span> <h2>Fenómenos que definen el universo</h2> <p>Módulos breves para entender, desde lo esencial, los grandes misterios del cosmos.</p> </div> <div class="knowledge-grid" id="knowledgeGrid"></div> </div> </section> <section class="section" id="recursos"> <div class="container"> <div class="section-head reveal"> <span class="eyebrow">Explora más allá de Nébula</span> <h2>Recursos y enlaces recomendados</h2> <p>Herramientas y sitios oficiales para seguir explorando el universo.</p> </div> <div class="resources-grid" id="resourcesGrid"></div> <div class="roadmap-panel reveal"> <div class="section-head"> <span class="eyebrow">En construcción</span> <h2>Próximas expansiones</h2> <p>Nébula está pensado para crecer. Estos son los próximos módulos en camino.</p> </div> <div class="roadmap-grid" id="roadmapGrid"></div> </div> </div> </section> <section class="section" id="informacion"> <div class="container"> <div class="section-head reveal"> <span class="eyebrow">Información</span> <h2>Una mirada espiritual al cosmos</h2> <p>Una experiencia adicional de Nébula: contempla el origen del universo junto a las Escrituras, en un rincón íntimo y sereno.</p> </div> <button type="button" class="bible-cta reveal" id="openBibleBtn" aria-haspopup="dialog" aria-controls="bibleView"> <span class="bible-cta-glow" aria-hidden="true"></span> <span class="bible-cta-icon" aria-hidden="true"> <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5.5C4 4.67 4.67 4 5.5 4H12v16H5.5A1.5 1.5 0 014 18.5v-13z"/><path d="M20 5.5c0-.83-.67-1.5-1.5-1.5H12v16h6.5a1.5 1.5 0 001.5-1.5v-13z"/><path d="M12 4v16"/></svg> </span> <span class="bible-cta-text"> <strong>Aprendiendo con Jesús</strong> <small>Biblia Digital Educativa · La creación y el cosmos</small> </span> <span class="bible-cta-arrow" aria-hidden="true">→</span> </button> <button type="button" class="gallery-cta reveal" id="openGalleryBtn" aria-haspopup="dialog" aria-controls="galleryView"> <span class="gallery-cta-glow" aria-hidden="true"></span> <span class="gallery-cta-icon" aria-hidden="true"> <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2.5c-3.6 0-6.5 3.2-6.5 8 0 3.6 1.3 6.6 2.2 8.4.3.6.9 1 1.6 1h5.4c.7 0 1.3-.4 1.6-1 .9-1.8 2.2-4.8 2.2-8.4 0-4.8-2.9-8-6.5-8z"/><circle cx="12" cy="10.5" r="3.4"/><path d="M8.3 18.4c-.4 1.2-.4 2.4 0 3.1M15.7 18.4c.4 1.2.4 2.4 0 3.1"/></svg> </span> <span class="gallery-cta-text"> <strong>Galería Espacial</strong> <small>9 hitos que cambiaron la historia de la exploración espacial</small> </span> <span class="gallery-cta-arrow" aria-hidden="true">→</span> </button> </div> </section> <section class="section quiz-section reveal" id="quiz"> <div class="container"> <div class="section-head reveal"> <span class="eyebrow">Quiz</span> <h2>Pon a prueba lo que aprendiste</h2> <p>Cosmo Quiz — Rumbo a las Estrellas: trivia espacial por niveles de dificultad, en solitario o en sala con amigos.</p> </div> <a href="https://carlosrenegallardo9-ai.github.io/pagina-ia-espacio/cosmo-quiz.html" class="gallery-cta reveal" id="openQuizBtn"> <span class="gallery-cta-glow" aria-hidden="true"></span> <span class="gallery-cta-icon" aria-hidden="true"> <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l2.4 5.1 5.6.8-4 4 .9 5.6L12 14.9 6.9 17.5l.9-5.6-4-4 5.6-.8z"/></svg> </span> <span class="gallery-cta-text"> <strong>Cosmo Quiz</strong> <small>Rumbo a las Estrellas · trivia espacial por niveles</small> </span> <span class="gallery-cta-arrow" aria-hidden="true">→</span> </a> </div> </section> </main> <aside class="detail-panel" id="detailPanel" role="dialog" aria-modal="true" aria-hidden="true" aria-label="Detalle del cuerpo celeste" hidden inert> <button class="detail-panel-close" id="detailPanelClose" aria-label="Cerrar panel">✕</button> <div id="detailContent"></div> </aside> <div class="scrim" id="scrim"></div> <div class="k-modal-overlay" id="kModalOverlay" hidden aria-hidden="true"> <div class="k-modal" id="kModal" role="dialog" aria-modal="true" aria-labelledby="kModalTitle"> <button type="button" class="detail-panel-close" id="kModalClose" aria-label="Cerrar">✕</button> <div id="kModalContent"></div> </div> </div> <div class="bible-view" id="bibleView" hidden aria-hidden="true" role="dialog" aria-modal="true" aria-label="Aprendiendo con Jesús — Biblia Digital Educativa"> <canvas class="bible-stars" id="bibleStars" aria-hidden="true"></canvas> <div class="bible-nightstand" aria-hidden="true"> <div class="bible-lamp-glow"></div> <div class="bible-surface"></div> </div> <button type="button" class="bible-close" id="bibleClose" aria-label="Cerrar Biblia Digital">✕</button> <button type="button" class="bible-back-btn" id="bibleBackBtn" hidden>← Índice</button> <div class="bible-stage"> <div class="bible-book" id="bibleBook" data-state="closed"> <div class="book-cover" id="bookCover" tabindex="0" role="button" aria-label="Abrir la Biblia"> <div class="book-cover-spine" aria-hidden="true"></div> <div class="book-cover-face"> <span class="book-cover-cross" aria-hidden="true"></span> <span class="book-cover-rule" aria-hidden="true"></span> <h3 class="book-cover-title">Sagrada Biblia</h3> <p class="book-cover-sub">Aprendiendo con Jesús</p> <span class="book-cover-hint">Toca para abrir</span> </div> </div> <div class="book-spread" aria-hidden="true"> <div class="book-page book-page-left"> <div class="page-viewport" id="pageViewportLeft"> <div class="page-leaf" id="pageLeafLeft" data-key=""></div> </div> </div> <div class="book-page book-page-right"> <div class="page-viewport" id="pageViewport"> <div class="page-leaf" id="pageLeaf" data-key=""></div> </div> </div> </div> </div> </div> </div> <button class="ai-fab" id="aiFab" aria-haspopup="dialog" aria-expanded="false" aria-controls="aiPanel" aria-label="Abrir al Capitán Cósmico"> <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.6 4.4L18 9l-4.4 1.6L12 15l-1.6-4.4L6 9l4.4-1.6z"/><path d="M19 15l.8 2.2L22 18l-2.2.8L19 21l-.8-2.2L16 18l2.2-.8z"/></svg> </button> <section class="ai-panel" id="aiPanel" role="dialog" aria-modal="false" aria-labelledby="aiPanelTitle" aria-hidden="true" hidden inert> <div class="ai-panel-head"> <div> <span class="eyebrow">Capitán Cósmico · tour estelar en vivo</span> <h4 id="aiPanelTitle">¡Bienvenido a bordo, tripulante!</h4> </div> <button id="aiClose" aria-label="Cerrar al Capitán Cósmico">✕</button> </div> <div class="ai-log" id="aiLog"></div> <div class="ai-suggestions" id="aiSuggestions"></div> <form class="ai-form" id="aiForm"> <input id="aiInput" placeholder="Pregunta sobre el cosmos…" aria-label="Escribe tu pregunta" autocomplete="off"> <button type="submit" aria-label="Enviar pregunta"> <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12l16-8-6 16-3-6-7-2z"/></svg> </button> </form> </section> <footer class="site-footer"> <div class="container"> <div class="footer-grid"> <div class="footer-col"> <a class="brand" href="#inicio"> <svg class="brand-mark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><circle cx="12" cy="12" r="2.4" fill="currentColor" stroke="none"/><ellipse cx="12" cy="12" rx="10" ry="4.2" transform="rotate(-24 12 12)"/></svg> Nébula </a> <p style="margin-top:var(--space-4);max-width:280px;font-size:.9rem">Un observatorio digital abierto, pensado para crecer con nuevos planetas, módulos y herramientas.</p> </div> <div class="footer-col"> <h4>Explorar</h4> <ul> <li><a href="#explorador">Sistema solar</a></li> <li><a href="#escala">Escala cósmica</a></li> <li><a href="#aprender">Base de conocimiento</a></li> </ul> </div> <div class="footer-col"> <h4>Proyecto</h4> <ul> <li><a href="#recursos">Recursos</a></li> <li><a href="#" data-open-ai>Guía interactiva</a></li> <li><a href="#inicio">Inicio</a></li> </ul> </div> <div class="footer-col"> <h4>Enlaces oficiales</h4> <ul> <li><a href="https://www.nasa.gov" target="_blank" rel="noopener">NASA</a></li> <li><a href="https://www.esa.int" target="_blank" rel="noopener">ESA</a></li> <li><a href="https://stellarium-web.org" target="_blank" rel="noopener">Stellarium Web</a></li> </ul> </div> </div> <div class="footer-bottom"> <span>© <span id="year"></span> Nébula · Proyecto educativo</span> <span>Diseñado para escalar: nuevos módulos, planetas y enlaces sin rehacer el sistema</span> </div> </div> </footer> <script>
 ((window.SPACE = window.SPACE || {}),
@@ -6222,68 +6228,63 @@ el.textContent=FACTS[dayOfYear%FACTS.length];
 })();
 </script>
 
+
+
 <script id="rs-script">
 (function(){
 "use strict";
-var LEVELS=[
-{title:"El Sistema Solar",emoji:"☀️",theory:[
-  "Nuestro Sistema Solar está formado por el Sol —una estrella— y todo lo que gira a su alrededor: 8 planetas, decenas de lunas, asteroides y cometas.",
-  "El Sol contiene el 99.8% de toda la masa del sistema. Su gravedad es tan fuerte que mantiene a todo lo demás girando a su alrededor, desde Mercurio hasta Neptuno."
-],quiz:[
-  {type:"mcq",question:"¿Cuántos planetas orbitan alrededor del Sol?",options:["7","8","9","10"],answer:1,explain:"Son 8 planetas desde que Plutón se reclasificó como planeta enano en 2006."},
-  {type:"tf",question:"El Sol es un planeta.",answer:false,explain:"El Sol es una estrella: genera su propia luz y calor mediante fusión nuclear, algo que ningún planeta hace."},
-  {type:"mcq",question:"¿Qué planeta es el más cercano al Sol?",options:["Venus","Mercurio","Tierra","Marte"],answer:1,explain:"Mercurio es el planeta más cercano al Sol, a unos 58 millones de km."}
+var UNITS=[
+{title:"El Sistema Solar",emoji:"☀️",lessons:[
+  {fact:"El Sistema Solar está formado por el Sol y todo lo que orbita a su alrededor: 8 planetas, decenas de lunas, asteroides y cometas.",q:{type:"mcq",question:"¿Cuántos planetas orbitan alrededor del Sol?",options:["7","8","9","10"],answer:1,explain:"Son 8 planetas desde que Plutón se reclasificó como planeta enano en 2006."}},
+  {fact:"El Sol contiene el 99.8% de toda la masa del Sistema Solar; su gravedad mantiene a todo girando a su alrededor.",q:{type:"tf",question:"El Sol es un planeta.",answer:false,explain:"Es una estrella: genera su propia luz mediante fusión nuclear, algo que ningún planeta hace."}},
+  {fact:"Mercurio es el planeta más cercano al Sol y también el más pequeño de los 8 planetas.",q:{type:"mcq",question:"¿Cuál es el planeta más pequeño del Sistema Solar?",options:["Marte","Mercurio","Venus","Plutón"],answer:1,explain:"Mercurio es el más pequeño de los 8 planetas."}},
+  {fact:"La Tierra es, hasta ahora, el único planeta conocido con vida, gracias a su atmósfera y su distancia justa al Sol.",q:{type:"tf",question:"La Tierra es el planeta más cercano al Sol.",answer:false,explain:"Ese es Mercurio; la Tierra es el tercer planeta desde el Sol."}},
+  {fact:"Un 'año' en un planeta es el tiempo que tarda en dar una vuelta completa al Sol: en la Tierra son 365 días, en Neptuno son 165 años terrestres.",q:{type:"mcq",question:"¿Qué es un 'año' en un planeta?",options:["Un día completo","Una vuelta completa al Sol","Una fase lunar","Un eclipse"],answer:1,explain:"Un año es el tiempo que tarda un planeta en completar una órbita alrededor del Sol."}}
 ]},
-{title:"La Luna y sus fases",emoji:"🌙",theory:[
-  "La Luna es el único satélite natural de la Tierra y el objeto más brillante del cielo nocturno.",
-  "Tarda unos 27.3 días en dar una vuelta completa a la Tierra, pero las fases (nueva, creciente, llena, menguante) se repiten cada 29.5 días, porque mientras tanto la Tierra también avanza en su órbita alrededor del Sol."
-],quiz:[
-  {type:"mcq",question:"¿Cuánto dura aproximadamente un ciclo completo de fases lunares?",options:["7 días","14 días","29.5 días","365 días"],answer:2,explain:"El ciclo de fases (de luna nueva a luna nueva) dura unos 29.5 días."},
-  {type:"tf",question:"La Luna emite luz propia.",answer:false,explain:"La Luna no genera luz: solo refleja la luz del Sol que llega hasta ella."},
-  {type:"mcq",question:"¿Cómo se llama cuando la Luna se interpone entre la Tierra y el Sol?",options:["Eclipse lunar","Eclipse solar","Solsticio","Equinoccio"],answer:1,explain:"Eso es un eclipse solar: la Luna tapa parcial o totalmente al Sol visto desde la Tierra."}
+{title:"La Luna y sus fases",emoji:"🌙",lessons:[
+  {fact:"La Luna es el único satélite natural de la Tierra y el objeto más brillante del cielo nocturno.",q:{type:"tf",question:"La Luna emite luz propia.",answer:false,explain:"La Luna no genera luz: solo refleja la luz del Sol."}},
+  {fact:"La Luna tarda 27.3 días en dar una vuelta completa alrededor de la Tierra.",q:{type:"mcq",question:"¿Cuánto tarda la Luna en orbitar la Tierra?",options:["1 día","27.3 días","100 días","1 año"],answer:1,explain:"Su órbita completa dura unos 27.3 días."}},
+  {fact:"Las fases lunares —nueva, creciente, llena y menguante— se repiten cada 29.5 días.",q:{type:"mcq",question:"¿Cuántas fases lunares principales existen?",options:["2","4","6","8"],answer:1,explain:"Nueva, creciente, llena y menguante son las 4 fases principales."}},
+  {fact:"Un eclipse solar ocurre cuando la Luna se interpone entre la Tierra y el Sol, tapando su luz.",q:{type:"tf",question:"En un eclipse lunar, la Tierra se interpone entre el Sol y la Luna.",answer:true,explain:"Correcto: la sombra de la Tierra cae sobre la Luna, oscureciéndola."}},
+  {fact:"La Luna se aleja de la Tierra unos 3.8 cm cada año, por la energía que pierde nuestro planeta al frenarse levemente.",q:{type:"mcq",question:"¿La Luna se acerca o se aleja de la Tierra?",options:["Se acerca","Se aleja","Se queda igual","Depende del año"],answer:1,explain:"Se aleja, muy lentamente, unos 3.8 cm cada año."}}
 ]},
-{title:"Rocosos vs. gigantes gaseosos",emoji:"🪐",theory:[
-  "Los planetas del Sistema Solar se dividen en dos grandes familias: los rocosos (Mercurio, Venus, Tierra y Marte), pequeños y densos, con superficie sólida.",
-  "Y los gigantes gaseosos (Júpiter, Saturno, Urano y Neptuno): mucho más grandes, compuestos sobre todo de hidrógeno y helio, sin una superficie sólida real en la que aterrizar."
-],quiz:[
-  {type:"mcq",question:"¿Cuál de estos es un planeta rocoso?",options:["Júpiter","Marte","Saturno","Neptuno"],answer:1,explain:"Marte, junto con Mercurio, Venus y la Tierra, es uno de los 4 planetas rocosos."},
-  {type:"tf",question:"Saturno tiene una superficie sólida como la Tierra.",answer:false,explain:"Saturno es un gigante gaseoso: no tiene una superficie sólida donde pararse."},
-  {type:"mcq",question:"¿Cuál es el planeta más grande del Sistema Solar?",options:["Saturno","Neptuno","Júpiter","Urano"],answer:2,explain:"Júpiter es el más grande: podrían caber más de 1,300 Tierras dentro de él."}
+{title:"Rocosos vs. gigantes gaseosos",emoji:"🪐",lessons:[
+  {fact:"Los planetas rocosos —Mercurio, Venus, Tierra y Marte— son pequeños, densos y tienen superficie sólida.",q:{type:"mcq",question:"¿Cuál de estos es un planeta rocoso?",options:["Júpiter","Marte","Saturno","Neptuno"],answer:1,explain:"Marte, junto con Mercurio, Venus y la Tierra, es uno de los 4 planetas rocosos."}},
+  {fact:"Los gigantes gaseosos —Júpiter, Saturno, Urano y Neptuno— están hechos sobre todo de hidrógeno y helio, sin superficie sólida real.",q:{type:"tf",question:"Saturno tiene una superficie sólida como la Tierra.",answer:false,explain:"Saturno es un gigante gaseoso: no tiene una superficie sólida donde aterrizar."}},
+  {fact:"Júpiter es el planeta más grande del Sistema Solar: podrían caber más de 1,300 Tierras dentro de él.",q:{type:"mcq",question:"¿Cuál es el planeta más grande del Sistema Solar?",options:["Saturno","Júpiter","Urano","Neptuno"],answer:1,explain:"Júpiter es, por lejos, el planeta más grande."}},
+  {fact:"Saturno es tan poco denso que, si existiera una bañera lo bastante grande, flotaría en el agua.",q:{type:"tf",question:"Saturno es más denso que el agua.",answer:false,explain:"Es menos denso que el agua: flotaría."}},
+  {fact:"Urano y Neptuno se conocen como 'gigantes de hielo', porque además de gas tienen mucha agua, amoníaco y metano congelados.",q:{type:"mcq",question:"¿Cómo se les llama a Urano y Neptuno?",options:["Gigantes de hielo","Planetas enanos","Planetas rocosos","Cinturón de asteroides"],answer:0,explain:"Se les llama 'gigantes de hielo' por su composición helada."}}
 ]},
-{title:"Estrellas: nacimiento y muerte",emoji:"⭐",theory:[
-  "Las estrellas nacen en enormes nubes de gas y polvo llamadas nebulosas, donde la gravedad comprime el material hasta encender la fusión nuclear en su núcleo.",
-  "Durante millones o miles de millones de años brillan de forma estable. Al final de su vida, según su masa, terminan como enana blanca, estrella de neutrones, o —si eran gigantes— colapsan en un agujero negro."
-],quiz:[
-  {type:"mcq",question:"¿Dónde nacen las estrellas?",options:["En agujeros negros","En nebulosas","En cometas","En lunas"],answer:1,explain:"Nacen en nebulosas: nubes de gas y polvo que colapsan por gravedad."},
-  {type:"tf",question:"Todas las estrellas terminan convirtiéndose en agujeros negros.",answer:false,explain:"Solo las estrellas muy masivas colapsan en agujeros negros; las demás terminan como enanas blancas o estrellas de neutrones."},
-  {type:"mcq",question:"¿Qué proceso hace brillar a una estrella?",options:["Combustión química","Fusión nuclear","Reflejo de luz","Fricción"],answer:1,explain:"La fusión nuclear en su núcleo (fundir hidrógeno en helio) es lo que produce su luz y calor."}
+{title:"Estrellas: nacimiento y muerte",emoji:"⭐",lessons:[
+  {fact:"Las estrellas nacen en nebulosas: enormes nubes de gas y polvo que colapsan por su propia gravedad.",q:{type:"mcq",question:"¿Dónde nacen las estrellas?",options:["En agujeros negros","En nebulosas","En cometas","En lunas"],answer:1,explain:"Nacen en nebulosas, nubes de gas y polvo que colapsan por gravedad."}},
+  {fact:"Una estrella brilla porque en su núcleo funde hidrógeno en helio, liberando enormes cantidades de energía.",q:{type:"tf",question:"Las estrellas brillan por combustión química, como el fuego.",answer:false,explain:"Brillan por fusión nuclear en su núcleo, no por combustión química."}},
+  {fact:"Nuestro Sol es una estrella de tamaño mediano, con suficiente combustible para brillar unos 10,000 millones de años.",q:{type:"mcq",question:"¿Qué tipo de estrella es el Sol?",options:["Gigante roja","Mediana","Enana blanca","Estrella de neutrones"],answer:1,explain:"El Sol es una estrella de tamaño y brillo medianos."}},
+  {fact:"Al morir, una estrella como el Sol se convierte en una enana blanca; las muy masivas pueden colapsar en una estrella de neutrones o un agujero negro.",q:{type:"tf",question:"Todas las estrellas terminan convirtiéndose en agujeros negros.",answer:false,explain:"Solo las muy masivas; las demás terminan como enanas blancas o estrellas de neutrones."}},
+  {fact:"Una supernova es la explosión final de una estrella masiva, tan brillante que puede superar el brillo de toda su galaxia por semanas.",q:{type:"mcq",question:"¿Qué es una supernova?",options:["El nacimiento de un planeta","La explosión final de una estrella masiva","Una lluvia de meteoros","Una fase lunar"],answer:1,explain:"Es la explosión con la que termina la vida de una estrella masiva."}}
 ]},
-{title:"Agujeros negros",emoji:"🕳️",theory:[
-  "Un agujero negro es una región del espacio con una gravedad tan extrema que nada, ni siquiera la luz, puede escapar una vez cruza el llamado horizonte de eventos.",
-  "Se forman cuando estrellas muy masivas colapsan al final de su vida. En 2019, un equipo internacional logró capturar la primera imagen real de uno."
-],quiz:[
-  {type:"mcq",question:"¿Qué límite ni la luz puede cruzar hacia afuera de un agujero negro?",options:["Su núcleo","Su horizonte de eventos","Su atmósfera","Su corona"],answer:1,explain:"El horizonte de eventos es el punto sin retorno: nada que lo cruce hacia adentro puede volver a salir."},
-  {type:"tf",question:"En 2019 se tomó la primera fotografía real de un agujero negro.",answer:true,explain:"Así es: el Event Horizon Telescope capturó la sombra de un agujero negro supermasivo en la galaxia M87."},
-  {type:"mcq",question:"¿Cómo se forma típicamente un agujero negro estelar?",options:["Por la explosión de un cometa","Por el colapso de una estrella muy masiva","Por la unión de dos planetas","Por una tormenta solar"],answer:1,explain:"Cuando una estrella muy masiva agota su combustible, su núcleo colapsa bajo su propia gravedad."}
+{title:"Agujeros negros",emoji:"🕳️",lessons:[
+  {fact:"Un agujero negro tiene una gravedad tan extrema que ni la luz puede escapar de él una vez cruza el horizonte de eventos.",q:{type:"mcq",question:"¿Qué no puede escapar de un agujero negro?",options:["El sonido","La luz","El calor","Nada de lo anterior"],answer:1,explain:"Ni siquiera la luz puede escapar una vez cruza el horizonte de eventos."}},
+  {fact:"Los agujeros negros estelares se forman cuando una estrella muy masiva colapsa al final de su vida.",q:{type:"tf",question:"Cualquier estrella puede convertirse en agujero negro.",answer:false,explain:"Solo las estrellas muy masivas tienen suficiente gravedad para colapsar así."}},
+  {fact:"En 2019, el Event Horizon Telescope capturó la primera imagen real de un agujero negro, en la galaxia M87.",q:{type:"tf",question:"En 2019 se tomó la primera fotografía real de un agujero negro.",answer:true,explain:"Así es, un logro histórico de la astronomía."}},
+  {fact:"Casi todas las galaxias grandes, incluida la Vía Láctea, tienen un agujero negro supermasivo en su centro.",q:{type:"mcq",question:"¿Dónde suele estar el agujero negro supermasivo de una galaxia?",options:["En sus bordes","En el centro","No existen","Solo en galaxias pequeñas"],answer:1,explain:"Se ubica en el centro de la galaxia."}},
+  {fact:"El horizonte de eventos es el límite alrededor de un agujero negro a partir del cual ya no hay retorno posible.",q:{type:"mcq",question:"¿Cómo se llama el 'punto sin retorno' de un agujero negro?",options:["Núcleo","Horizonte de eventos","Corona","Órbita"],answer:1,explain:"El horizonte de eventos marca el límite sin retorno."}}
 ]},
-{title:"Materia y energía oscura",emoji:"🌌",theory:[
-  "La materia oscura es una forma de materia invisible que no emite ni refleja luz, pero cuya gravedad afecta el movimiento de galaxias enteras. Se estima que compone cerca del 27% del universo.",
-  "La energía oscura, aún más misteriosa, representa cerca del 68% y estaría acelerando la expansión del universo. La materia 'normal' que conocemos —planetas, estrellas, tú— es apenas el 5% de todo lo que existe."
-],quiz:[
-  {type:"mcq",question:"¿Aproximadamente qué porcentaje del universo es materia oscura?",options:["5%","27%","68%","95%"],answer:1,explain:"Se estima que la materia oscura compone cerca del 27% del contenido total del universo."},
-  {type:"tf",question:"La materia oscura se puede observar directamente con un telescopio normal.",answer:false,explain:"No emite ni refleja luz; se detecta indirectamente por sus efectos gravitacionales sobre galaxias y estrellas."},
-  {type:"mcq",question:"Según lo que sabemos, ¿qué efecto tiene la energía oscura sobre el universo?",options:["Frena su expansión","Acelera su expansión","No tiene ningún efecto","Crea agujeros negros"],answer:1,explain:"La energía oscura parece estar acelerando la expansión del universo, un descubrimiento que sorprendió a los científicos en 1998."}
+{title:"Materia y energía oscura",emoji:"🌌",lessons:[
+  {fact:"La materia oscura no emite ni refleja luz, pero su gravedad afecta el movimiento de galaxias enteras.",q:{type:"tf",question:"La materia oscura se puede ver con un telescopio normal.",answer:false,explain:"Se detecta solo por sus efectos gravitacionales, no directamente."}},
+  {fact:"Se estima que la materia oscura compone cerca del 27% de todo el universo.",q:{type:"mcq",question:"¿Qué porcentaje del universo es materia oscura, aproximadamente?",options:["5%","27%","68%","95%"],answer:1,explain:"Cerca del 27% del universo sería materia oscura."}},
+  {fact:"La energía oscura representa cerca del 68% del universo y parece estar acelerando su expansión.",q:{type:"tf",question:"La energía oscura frena la expansión del universo.",answer:false,explain:"La acelera, según las observaciones desde 1998."}},
+  {fact:"La materia 'normal' que conocemos —planetas, estrellas, tú— es apenas el 5% de todo lo que existe en el universo.",q:{type:"mcq",question:"¿Qué porcentaje del universo es materia 'normal' conocida?",options:["5%","27%","50%","68%"],answer:0,explain:"Solo el 5% del universo es la materia que conocemos bien."}},
+  {fact:"Aunque no sabemos exactamente qué son, la materia y energía oscura explican por qué las galaxias giran y se expanden como lo hacen.",q:{type:"mcq",question:"¿Por qué los científicos creen que existe la materia oscura?",options:["Por su color brillante","Por sus efectos gravitacionales observados","Por su temperatura","Por su sonido"],answer:1,explain:"Se infiere su existencia por sus efectos gravitacionales sobre lo que sí podemos ver."}}
 ]}
 ];
 
-var path=document.getElementById("rsPath");
-var overlay=document.getElementById("rsLessonOverlay");
-var lessonBody=document.getElementById("rsLessonBody");
-var closeBtn=document.getElementById("rsLessonClose");
-if(!path||!overlay||!lessonBody||!closeBtn)return;
+var view=document.getElementById("rsView");
+var inner=document.getElementById("rsViewInner");
+var closeBtn=document.getElementById("rsViewClose");
+if(!view||!inner||!closeBtn)return;
 
 var unlockedLevel=1;
-var currentQuiz=null;
+var current=null;
 
 function levelState(n){
   if(n<unlockedLevel)return"completed";
@@ -6291,82 +6292,100 @@ function levelState(n){
   return"locked";
 }
 
+function openView(){
+  view.hidden=false;
+  view.setAttribute("aria-hidden","false");
+  document.documentElement.classList.add("nal-lock-scroll");
+  requestAnimationFrame(function(){view.classList.add("is-open")});
+  renderPath();
+}
+function closeView(){
+  view.classList.remove("is-open");
+  view.setAttribute("aria-hidden","true");
+  document.documentElement.classList.remove("nal-lock-scroll");
+  setTimeout(function(){view.hidden=true},350);
+}
+closeBtn.addEventListener("click",closeView);
+document.addEventListener("keydown",function(e){
+  if(e.key==="Escape"&&view.classList.contains("is-open"))closeView();
+});
+document.querySelectorAll("[data-open-ruta]").forEach(function(el){
+  el.addEventListener("click",function(e){e.preventDefault();openView()});
+});
+
 function renderPath(){
-  path.innerHTML="";
-  LEVELS.forEach(function(lv,i){
+  var nodes=UNITS.map(function(u,i){
     var n=i+1;
     var state=levelState(n);
-    var btn=document.createElement("button");
-    btn.type="button";
-    btn.className="rs-node";
-    btn.setAttribute("data-state",state);
-    btn.setAttribute("role","listitem");
-    if(state==="locked")btn.disabled=true;
-    var badge=state==="completed"?"✓ Completado":state==="unlocked"?"Nivel "+n:"🔒 Bloqueado";
-    btn.innerHTML=
-      '<span class="rs-node-circle" aria-hidden="true">'+lv.emoji+'</span>'+
-      '<span class="rs-node-title">'+lv.title+'</span>'+
-      '<span class="rs-node-badge">'+badge+'</span>';
-    if(state!=="locked"){
-      btn.addEventListener("click",function(){openLesson(n)});
-    }
-    path.appendChild(btn);
+    var badge=state==="completed"?"✓ Completado":state==="unlocked"?"Unidad "+n:"🔒 Bloqueado";
+    var disabled=state==="locked"?" disabled":"";
+    return '<button type="button" class="rs-node" data-state="'+state+'" data-unit="'+n+'" role="listitem"'+disabled+'>'+
+      '<span class="rs-node-circle" aria-hidden="true">'+u.emoji+'</span>'+
+      '<span class="rs-node-title">'+u.title+'</span>'+
+      '<span class="rs-node-badge">'+badge+'</span>'+
+      '</button>';
+  }).join("");
+  inner.innerHTML=
+    '<span class="rs-view-eyebrow">Ruta Estelar · aprendizaje por niveles</span>'+
+    '<h2>Tu camino de aprendizaje espacial</h2>'+
+    '<p class="rs-view-lead">Completa las 5 lecciones de cada unidad para desbloquear la siguiente, al estilo de tus apps de idiomas favoritas.</p>'+
+    '<div class="rs-path" id="rsPath" role="list" aria-label="Unidades de la Ruta Estelar">'+nodes+'</div>';
+  inner.querySelectorAll(".rs-node[data-state]:not([data-state=\"locked\"])").forEach(function(btn){
+    btn.addEventListener("click",function(){openUnit(Number(btn.dataset.unit))});
   });
 }
 
-function openOverlay(){
-  overlay.hidden=false;
-  requestAnimationFrame(function(){overlay.classList.add("is-open")});
+function backBtnHtml(){
+  return '<button type="button" class="rs-back-btn" id="rsBackToPath">← Volver al mapa</button>';
 }
-function closeOverlay(){
-  overlay.classList.remove("is-open");
-  setTimeout(function(){overlay.hidden=true},350);
-}
-closeBtn.addEventListener("click",closeOverlay);
-overlay.addEventListener("click",function(e){if(e.target===overlay)closeOverlay()});
-
-function openLesson(n){
-  var lv=LEVELS[n-1];
-  lessonBody.innerHTML=
-    '<span class="rs-lesson-emoji" aria-hidden="true">'+lv.emoji+'</span>'+
-    '<h3 id="rsLessonTitle">Nivel '+n+': '+lv.title+'</h3>'+
-    lv.theory.map(function(p){return'<p>'+p+'</p>'}).join("")+
-    '<button type="button" class="btn btn-primary rs-lesson-start-btn" id="rsStartQuiz">Comenzar Quiz</button>';
-  document.getElementById("rsStartQuiz").addEventListener("click",function(){startQuiz(n)});
-  openOverlay();
+function bindBack(){
+  var b=document.getElementById("rsBackToPath");
+  if(b)b.addEventListener("click",renderPath);
 }
 
-function startQuiz(n){
-  currentQuiz={level:n,qIndex:0,score:0};
-  renderQuestion();
+function openUnit(n){
+  var u=UNITS[n-1];
+  inner.innerHTML=
+    backBtnHtml()+
+    '<span class="rs-unit-emoji" aria-hidden="true">'+u.emoji+'</span>'+
+    '<h2>Unidad '+n+': '+u.title+'</h2>'+
+    '<p class="rs-unit-meta">5 lecciones cortas</p>'+
+    '<button type="button" class="btn btn-primary" id="rsStartUnit">Comenzar</button>';
+  bindBack();
+  document.getElementById("rsStartUnit").addEventListener("click",function(){
+    current={unit:n,lessonIndex:0};
+    renderLesson();
+  });
 }
 
-function renderQuestion(){
-  var lv=LEVELS[currentQuiz.level-1];
-  var q=lv.quiz[currentQuiz.qIndex];
-  var dots=lv.quiz.map(function(_,i){
-    var cls=i<currentQuiz.qIndex?"is-done":i===currentQuiz.qIndex?"is-current":"";
-    return'<span class="rs-quiz-dot '+cls+'"></span>';
+function renderLesson(){
+  var u=UNITS[current.unit-1];
+  var lesson=u.lessons[current.lessonIndex];
+  var dots=u.lessons.map(function(_,i){
+    var cls=i<current.lessonIndex?"is-done":i===current.lessonIndex?"is-current":"";
+    return'<span class="rs-lesson-dot '+cls+'"></span>';
   }).join("");
-  var options=q.type==="tf"?["Verdadero","Falso"]:q.options;
-  lessonBody.innerHTML=
-    '<div class="rs-quiz-progress">'+dots+'</div>'+
-    '<p class="rs-quiz-q">'+q.question+'</p>'+
+  inner.innerHTML=
+    '<div class="rs-lesson-progress">'+dots+'</div>'+
+    '<div class="rs-fact-card"><p>'+lesson.fact+'</p></div>'+
+    '<p class="rs-quiz-q">'+lesson.q.question+'</p>'+
     '<div class="rs-quiz-options" id="rsQuizOptions"></div>';
+  var q=lesson.q;
+  var options=q.type==="tf"?["Verdadero","Falso"]:q.options;
   var optsWrap=document.getElementById("rsQuizOptions");
   options.forEach(function(label,i){
     var b=document.createElement("button");
     b.type="button";
     b.className="rs-quiz-opt";
     b.textContent=label;
-    b.addEventListener("click",function(){answerQuestion(i,optsWrap)});
+    b.addEventListener("click",function(){answerLesson(i,optsWrap)});
     optsWrap.appendChild(b);
   });
 }
 
-function answerQuestion(i,optsWrap){
-  var lv=LEVELS[currentQuiz.level-1];
-  var q=lv.quiz[currentQuiz.qIndex];
+function answerLesson(i,optsWrap){
+  var u=UNITS[current.unit-1];
+  var q=u.lessons[current.lessonIndex].q;
   var correctIndex=q.type==="tf"?(q.answer?0:1):q.answer;
   var buttons=optsWrap.querySelectorAll(".rs-quiz-opt");
   buttons.forEach(function(b,idx){
@@ -6375,35 +6394,30 @@ function answerQuestion(i,optsWrap){
     else if(idx===i)b.classList.add("is-wrong");
   });
   var correct=i===correctIndex;
-  if(correct)currentQuiz.score++;
 
   var explain=document.createElement("div");
   explain.className="rs-quiz-explain";
   explain.textContent=(correct?"¡Correcto! ":"No exactamente. ")+q.explain;
   optsWrap.parentNode.insertBefore(explain,optsWrap.nextSibling);
 
+  var isLast=current.lessonIndex>=u.lessons.length-1;
   var nextBtn=document.createElement("button");
   nextBtn.type="button";
   nextBtn.className="btn btn-primary rs-quiz-next";
-  nextBtn.textContent=currentQuiz.qIndex<lv.quiz.length-1?"Siguiente pregunta":"Ver resultado";
+  nextBtn.textContent=isLast?"Finalizar unidad":"Siguiente lección";
   nextBtn.addEventListener("click",function(){
-    if(currentQuiz.qIndex<lv.quiz.length-1){
-      currentQuiz.qIndex++;
-      renderQuestion();
-    }else{
-      renderResult();
-    }
+    if(isLast)finishUnit();
+    else{current.lessonIndex++;renderLesson()}
   });
   explain.parentNode.insertBefore(nextBtn,explain.nextSibling);
 }
 
-function renderResult(){
-  var lv=LEVELS[currentQuiz.level-1];
-  var passed=currentQuiz.score>=2;
-  var n=currentQuiz.level;
-  if(passed&&n===unlockedLevel){
-    unlockedLevel=Math.min(n+1,LEVELS.length+1);
-    renderPath();
+function finishUnit(){
+  var n=current.unit;
+  var u=UNITS[n-1];
+  var wasCurrent=n===unlockedLevel;
+  if(wasCurrent){
+    unlockedLevel=Math.min(n+1,UNITS.length+1);
     var nalSession=window.safeStorage&&window.safeStorage.get("nebula:session");
     var username=nalSession&&nalSession.username;
     if(username){
@@ -6414,27 +6428,21 @@ function renderResult(){
       }).catch(function(){});
     }
   }
-  lessonBody.innerHTML=
-    '<span class="rs-result-emoji" aria-hidden="true">'+(passed?"🎉":"🚀")+'</span>'+
-    '<h3>'+(passed?"¡Nivel superado!":"Sigue practicando")+'</h3>'+
-    '<p class="rs-result-score">Puntaje: '+currentQuiz.score+' / '+lv.quiz.length+'</p>'+
-    '<p>'+(passed
-        ?(n<LEVELS.length?"Desbloqueaste el Nivel "+(n+1)+". ¡Adelante, tripulante!":"¡Completaste toda la Ruta Estelar! Eres oficialmente un experto cósmico.")
-        :"Necesitas al menos 2 de "+lv.quiz.length+" correctas para avanzar. Repasa la teoría e inténtalo de nuevo.")+'</p>'+
-    '<button type="button" class="btn btn-primary" id="rsRetryOrClose">'+(passed?"Continuar":"Reintentar")+'</button>';
-  document.getElementById("rsRetryOrClose").addEventListener("click",function(){
-    if(passed)closeOverlay();
-    else openLesson(n);
-  });
+  inner.innerHTML=
+    '<span class="rs-result-emoji" aria-hidden="true">🎉</span>'+
+    '<h2>¡Unidad completada!</h2>'+
+    '<p class="rs-result-score">'+u.title+' · 5 / 5 lecciones</p>'+
+    '<p class="rs-view-lead">'+(n<UNITS.length?"Desbloqueaste la Unidad "+(n+1)+": "+UNITS[n].title+". ¡Adelante, tripulante!":"¡Completaste toda la Ruta Estelar! Eres oficialmente un experto cósmico.")+'</p>'+
+    '<button type="button" class="btn btn-primary" id="rsBackToPathFromResult">Volver al mapa</button>';
+  document.getElementById("rsBackToPathFromResult").addEventListener("click",renderPath);
 }
 
 function applyProgress(prog){
   var lvl=prog&&typeof prog.unlockedLevel==="number"?prog.unlockedLevel:1;
-  unlockedLevel=Math.max(1,Math.min(lvl,LEVELS.length+1));
-  renderPath();
+  unlockedLevel=Math.max(1,Math.min(lvl,UNITS.length+1));
+  if(!view.hidden)renderPath();
 }
 
-renderPath();
 window.addEventListener("nebula:progress",function(e){applyProgress(e.detail)});
 if(window.__nebulaProgress)applyProgress(window.__nebulaProgress);
 })();
