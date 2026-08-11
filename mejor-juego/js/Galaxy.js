@@ -33,6 +33,22 @@ function makeGlowSprite(size, colorInner, colorOuter) {
   });
 }
 
+// A tight, hard-cored point texture for stars/dust — unlike makeGlowSprite's
+// wide soft falloff (meant for big nebula clouds), this keeps a crisp bright
+// center so thousands of overlapping points read as pinpricks of light
+// instead of blurring together into a uniform haze.
+function makeStarSprite() {
+  return canvasTexture(32, (ctx, s) => {
+    const g = ctx.createRadialGradient(s / 2, s / 2, 0, s / 2, s / 2, s / 2);
+    g.addColorStop(0, 'rgba(255,255,255,1)');
+    g.addColorStop(0.12, 'rgba(255,255,255,0.95)');
+    g.addColorStop(0.3, 'rgba(255,255,255,0.35)');
+    g.addColorStop(1, 'rgba(255,255,255,0)');
+    ctx.fillStyle = g;
+    ctx.fillRect(0, 0, s, s);
+  });
+}
+
 function makePlanetTexture(baseHue, seed) {
   return canvasTexture(256, (ctx, s) => {
     let rnd = seed;
@@ -89,12 +105,13 @@ export class Galaxy {
     this._nextPlanetZ = -200;
     this._nextNebulaZ = -100;
 
+    this._starTexture = makeStarSprite();
     this._buildDeepSky();
     this._buildGalacticBand();
     this._buildStardust();
     this._ringTexture = makeRingTexture();
 
-    for (let i = 0; i < 3; i++) this._spawnNebula(-100 - i * 260);
+    for (let i = 0; i < 2; i++) this._spawnNebula(-300 - i * 700);
     for (let i = 0; i < 4; i++) this._spawnPlanet(-150 - i * 400);
   }
 
@@ -123,12 +140,12 @@ export class Galaxy {
     geo.setAttribute('position', new THREE.BufferAttribute(positions, 3));
     geo.setAttribute('color', new THREE.BufferAttribute(colors, 3));
     const mat = new THREE.PointsMaterial({
-      size: 6.5,
-      map: makeGlowSprite(32, 'rgba(255,255,255,1)', 'rgba(255,255,255,0.4)'),
+      size: 11,
+      map: this._starTexture,
       transparent: true,
       depthWrite: false,
       vertexColors: true,
-      sizeAttenuation: true,
+      sizeAttenuation: false, // fixed screen-space size so distant stars stay crisp pinpricks, not attenuated to nothing
       blending: THREE.AdditiveBlending,
       fog: false, // the deep backdrop must stay visible at any flight distance
     });
@@ -166,13 +183,13 @@ export class Galaxy {
     geo.setAttribute('position', new THREE.BufferAttribute(positions, 3));
     geo.setAttribute('color', new THREE.BufferAttribute(colors, 3));
     const mat = new THREE.PointsMaterial({
-      size: 3.2,
-      map: makeGlowSprite(32, 'rgba(255,255,255,1)', 'rgba(200,220,255,0.5)'),
+      size: 6,
+      map: this._starTexture,
       transparent: true,
-      opacity: 0.85,
+      opacity: 0.8,
       depthWrite: false,
       vertexColors: true,
-      sizeAttenuation: true,
+      sizeAttenuation: false,
       blending: THREE.AdditiveBlending,
       fog: false,
     });
@@ -195,12 +212,15 @@ export class Galaxy {
     const geo = new THREE.BufferGeometry();
     geo.setAttribute('position', new THREE.BufferAttribute(positions, 3));
     const mat = new THREE.PointsMaterial({
-      size: 1.6,
+      size: 5,
+      map: this._starTexture,
       color: 0xbfefff,
       transparent: true,
-      opacity: 0.75,
+      opacity: 0.8,
       depthWrite: false,
+      sizeAttenuation: false,
       blending: THREE.AdditiveBlending,
+      fog: false,
     });
     this.dust = new THREE.Points(geo, mat);
     this.scene.add(this.dust);
@@ -219,19 +239,28 @@ export class Galaxy {
     const mat = new THREE.SpriteMaterial({
       map: tex,
       transparent: true,
-      opacity: 0.5 + Math.random() * 0.3,
+      // Kept deliberately subtle — these are big soft sprites, and a handful
+      // of them at high opacity stacks into a hazy screen-filling wash
+      // rather than reading as distant colored clouds.
+      opacity: 0.18 + Math.random() * 0.16,
       depthWrite: false,
       blending: THREE.AdditiveBlending,
       fog: false,
     });
     const sprite = new THREE.Sprite(mat);
-    const scale = 900 + Math.random() * 1400;
-    sprite.scale.set(scale, scale, 1);
-    sprite.position.set(
-      (Math.random() - 0.5) * 2600,
-      (Math.random() - 0.5) * 1200,
-      z
-    );
+    const scale = 700 + Math.random() * 900;
+    let nx = (Math.random() - 0.5) * 2600;
+    let ny = (Math.random() - 0.5) * 1200;
+    // Keep clouds off the flight corridor so they never sit right in front
+    // of the camera and blot out the view.
+    const minDist = scale * 0.35 + 160;
+    const d = Math.hypot(nx, ny) || 1;
+    if (d < minDist) {
+      const s = minDist / d;
+      nx *= s;
+      ny *= s;
+    }
+    sprite.position.set(nx, ny, z);
     this.scene.add(sprite);
     this.nebulae.push(sprite);
   }
@@ -305,7 +334,7 @@ export class Galaxy {
     }
     while (this._nextNebulaZ > shipZ - 1200) {
       this._spawnNebula(this._nextNebulaZ);
-      this._nextNebulaZ -= 260 + Math.random() * 300;
+      this._nextNebulaZ -= 550 + Math.random() * 500;
     }
 
     // Despawn planets/nebulae well behind the ship.

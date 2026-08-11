@@ -76,8 +76,10 @@ export class GameManager {
     // Use the pre-r155 (non physically-based) light intensity scale — the
     // scene's light intensities below are tuned for that simpler model.
     this.renderer.useLegacyLights = true;
-    this.renderer.toneMapping = THREE.ACESFilmicToneMapping;
-    this.renderer.toneMappingExposure = 1.15;
+    // Filmic tone mapping desaturates/softens the additively-blended neon
+    // glows (lasers, thrusters, nebulae) into a washed grey haze — plain
+    // clamping keeps the accent colors punchy and the void properly black.
+    this.renderer.toneMapping = THREE.NoToneMapping;
 
     this.scene = new THREE.Scene();
     // Space has no atmosphere to scatter light, so only apply a very gentle
