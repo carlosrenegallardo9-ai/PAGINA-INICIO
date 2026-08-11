@@ -203,7 +203,7 @@ export async function onRequestPost({ request, env }) {
   });
   if (!insertResult.ok) {
     console.error("Supabase community insert error", insertResult.error);
-    return jsonResponse({ error: "No se pudo guardar la publicación" }, 502);
+    return jsonResponse({ error: "No se pudo guardar la publicación — " + insertResult.error }, 502);
   }
   return jsonResponse({ ok: true }, 200);
 }
