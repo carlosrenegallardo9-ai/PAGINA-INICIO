@@ -228,7 +228,7 @@ html[data-nivel="principiante"] .section-head{border-left:2px solid var(--nebula
 </style>
 
 <style id="cm-styles">
-/* Comunidad — muro estilo foro con moderación automática, en vista de pantalla completa. Aislado, prefijo "cm-". */
+/* Comunidad — muro estilo foro en vista de pantalla completa. Aislado, prefijo "cm-". */
 .cm-cta{position:relative;display:flex;align-items:center;gap:var(--space-5);width:100%;max-width:640px;margin-top:var(--space-4);padding:var(--space-6) var(--space-7);background:linear-gradient(135deg,var(--cosmic-indigo),var(--cosmic-indigo-light));border:1px solid var(--cosmic-indigo-border);border-radius:var(--radius-lg);overflow:hidden;text-align:left;cursor:pointer;transition:transform var(--dur-fast) var(--ease-out),border-color var(--dur-fast) var(--ease-out),box-shadow var(--dur-fast) var(--ease-out)}
 .cm-cta:hover{transform:translateY(-2px);border-color:var(--nebula-violet-soft);box-shadow:var(--shadow-card)}
 .cm-cta-glow{position:absolute;inset:-40% -10%;z-index:0;background:radial-gradient(circle,var(--solar-ember-dim),transparent 60%);opacity:.5;transition:opacity var(--dur-med);pointer-events:none}
@@ -431,7 +431,7 @@ html[data-nivel="principiante"] .section-head{border-left:2px solid var(--nebula
 <div class="section-head reveal">
 <span class="eyebrow">Comunidad Nébula</span>
 <h2>Comparte con la comunidad espacial</h2>
-<p>Sube una foto del cielo o haz una pregunta a otros exploradores. Todo pasa primero por una revisión automática para mantener la comunidad segura y agradable.</p>
+<p>Sube una foto del cielo o haz una pregunta a otros exploradores.</p>
 </div>
 <button type="button" class="cm-cta reveal" id="openComunidadBtn" aria-haspopup="dialog" aria-controls="cmView" data-open-comunidad>
 <span class="cm-cta-glow" aria-hidden="true"></span>
@@ -446,7 +446,7 @@ html[data-nivel="principiante"] .section-head{border-left:2px solid var(--nebula
 <div class="cm-view-inner">
 <span class="cm-view-eyebrow">Comunidad Nébula</span>
 <h2>Comparte con la comunidad espacial</h2>
-<p class="cm-view-lead">Sube una foto del cielo o haz una pregunta a otros exploradores. Todo pasa primero por una revisión automática con IA.</p>
+<p class="cm-view-lead">Sube una foto del cielo o haz una pregunta a otros exploradores.</p>
 <div class="cm-grid">
 <div class="cm-main">
 <div class="cm-composer">
@@ -485,7 +485,7 @@ html[data-nivel="principiante"] .section-head{border-left:2px solid var(--nebula
 <div class="cm-sidebar-rules">
 <div class="cm-sidebar-rule"><strong>1.</strong><span>Sé respetuoso con los demás exploradores.</span></div>
 <div class="cm-sidebar-rule"><strong>2.</strong><span>Comparte contenido relacionado con el espacio y la astronomía.</span></div>
-<div class="cm-sidebar-rule"><strong>3.</strong><span>Toda publicación pasa por una revisión automática con IA antes de mostrarse.</span></div>
+<div class="cm-sidebar-rule"><strong>3.</strong><span>No compartas datos personales ni contenido ofensivo.</span></div>
 </div>
 </div>
 </aside>
@@ -7591,7 +7591,7 @@ form.addEventListener("submit",function(evt){
     var text=textInput.value.trim();
     if(text.length<3){setStatus("Escribe una pregunta un poco más larga.","error");return}
     submitBtn.disabled=true;
-    setStatus("Enviando y revisando tu pregunta…","pending");
+    setStatus("Publicando tu pregunta…","pending");
     fetch("/api/community-posts",{
       method:"POST",
       headers:{"Content-Type":"application/json"},
@@ -7619,7 +7619,7 @@ form.addEventListener("submit",function(evt){
     fd.append("caption",captionInput.value.trim());
     fd.append("image",file);
     submitBtn.disabled=true;
-    setStatus("Subiendo y revisando tu foto…","pending");
+    setStatus("Subiendo tu foto…","pending");
     fetch("/api/community-posts",{method:"POST",body:fd})
       .then(function(r){return r.json().then(function(data){return{ok:r.ok,data:data}})})
       .then(function(res){
