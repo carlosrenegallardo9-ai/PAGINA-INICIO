@@ -190,8 +190,8 @@ html[data-nivel="principiante"] .section-head{border-left:2px solid var(--nebula
 .sky-label-text{margin-top:var(--space-2);font-family:var(--font-display);font-size:1.1rem;color:#fff;text-shadow:0 2px 10px rgba(0,0,0,.8)}
 .sky-bottom-bar{display:flex;flex-direction:column;align-items:center;gap:var(--space-3);padding:var(--space-6) var(--space-5)}
 .sky-start-btn{pointer-events:auto}
-.sky-debug{pointer-events:none;font-family:var(--font-mono);font-size:.62rem;color:rgba(255,255,255,.55);background:rgba(0,0,0,.5);border-radius:var(--radius-sm);padding:var(--space-2) var(--space-3);max-width:90vw;text-align:center;line-height:1.5}
-.sky-search-wrap{position:relative;margin:0 var(--space-5);pointer-events:auto}
+.sky-debug{pointer-events:none;font-family:var(--font-mono);font-size:.82rem;font-weight:700;color:rgba(255,255,255,.92);background:rgba(0,0,0,.65);border:1px solid rgba(255,255,255,.25);border-radius:var(--radius-md);padding:var(--space-3) var(--space-4);max-width:92vw;text-align:center;line-height:1.6}
+.sky-search-wrap{position:absolute;top:calc(var(--space-8) + var(--space-2));left:var(--space-5);width:min(280px,58vw);pointer-events:auto}
 .sky-search-input{width:100%;background:rgba(0,0,0,.6);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,.25);border-radius:var(--radius-pill);padding:.7rem 1.1rem;color:#fff;font-size:.88rem}
 .sky-search-input::placeholder{color:rgba(255,255,255,.5)}
 .sky-search-input:focus{outline:0;border-color:var(--solar-ember)}
@@ -203,7 +203,7 @@ html[data-nivel="principiante"] .section-head{border-left:2px solid var(--nebula
 .sky-target-close{position:absolute;top:-10px;right:-10px;width:26px;height:26px;border-radius:50%;background:rgba(0,0,0,.85);border:1px solid rgba(255,255,255,.3);color:#fff;font-size:.68rem;display:flex;align-items:center;justify-content:center}
 .sky-target-name{display:block;font-family:var(--font-display);font-size:.95rem;color:#fff;margin-bottom:var(--space-2)}
 .sky-target-coords{display:block;font-family:var(--font-mono);font-size:1.55rem;font-weight:700;color:var(--solar-ember-soft);line-height:1.25;text-shadow:0 2px 10px rgba(0,0,0,.8)}
-@media(max-width:560px){.sky-status{max-width:60%;font-size:.76rem}.sky-target-box{top:calc(var(--space-9) - var(--space-2));max-width:150px;padding:var(--space-3)}.sky-target-coords{font-size:1.25rem}}
+@media(max-width:560px){.sky-status{max-width:60%;font-size:.76rem}.sky-search-wrap{top:calc(var(--space-9) - var(--space-2));width:56vw}.sky-target-box{top:calc(var(--space-9) - var(--space-2));max-width:150px;padding:var(--space-3)}.sky-target-coords{font-size:1.25rem}}
 </style>
 
 </head> <body>
