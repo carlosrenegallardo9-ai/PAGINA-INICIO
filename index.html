@@ -206,6 +206,22 @@ html[data-nivel="principiante"] .section-head{border-left:2px solid var(--nebula
 @media(max-width:560px){.sky-status{max-width:60%;font-size:.76rem}.sky-search-wrap{top:calc(var(--space-9) - var(--space-2));width:56vw}.sky-target-box{top:calc(var(--space-9) - var(--space-2));max-width:150px;padding:var(--space-3)}.sky-target-coords{font-size:1.25rem}}
 </style>
 
+<style id="a11y-styles">
+/* Accesibilidad — botón desplegable con asistencia por voz guiada. Aislado, prefijo "a11y-". */
+.a11y-widget{position:fixed;left:var(--space-4);bottom:var(--space-4);z-index:8200;font-family:var(--font-body)}
+.a11y-toggle-btn{width:52px;height:52px;border-radius:50%;background:var(--cosmic-indigo);border:1px solid var(--cosmic-indigo-border);box-shadow:var(--shadow-card);display:flex;align-items:center;justify-content:center;font-size:1.4rem;color:var(--estelar-mist);transition:border-color var(--dur-fast),transform var(--dur-fast)}
+.a11y-toggle-btn:hover,.a11y-toggle-btn:focus-visible{border-color:var(--nebula-violet-soft);transform:translateY(-2px)}
+.a11y-toggle-btn.is-active{border-color:var(--solar-ember);box-shadow:0 0 0 3px var(--solar-ember-dim)}
+.a11y-panel{position:absolute;bottom:calc(100% + var(--space-3));left:0;width:min(280px,80vw);background:var(--cosmic-indigo);border:1px solid var(--cosmic-indigo-border);border-radius:var(--radius-lg);padding:var(--space-5);box-shadow:0 30px 70px -20px rgba(0,0,0,.85);opacity:0;transform:translateY(8px);pointer-events:none;transition:opacity var(--dur-fast) var(--ease-out),transform var(--dur-fast) var(--ease-out)}
+.a11y-panel.is-open{opacity:1;transform:none;pointer-events:auto}
+.a11y-panel-title{display:block;font-family:var(--font-display);font-size:1rem;color:var(--estelar-mist);margin-bottom:var(--space-4)}
+.a11y-panel-option{display:flex;align-items:center;gap:var(--space-3);cursor:pointer}
+.a11y-panel-option input{width:18px;height:18px;flex-shrink:0;accent-color:var(--solar-ember)}
+.a11y-panel-option span{font-size:.88rem;color:var(--estelar-mist)}
+.a11y-panel-hint{margin-top:var(--space-3);font-size:.76rem;color:var(--proton-silver);line-height:1.5}
+@media(max-width:480px){.a11y-widget{left:var(--space-3);bottom:var(--space-3)}}
+</style>
+
 </head> <body>
 <div class="nal-root" id="nalRoot">
 <div class="nal-backdrop" id="nalBackdrop" hidden></div>
@@ -315,6 +331,20 @@ html[data-nivel="principiante"] .section-head{border-left:2px solid var(--nebula
 <div class="sky-debug" id="skyDebug" hidden></div>
 <button type="button" class="btn btn-primary sky-start-btn" id="skyStartBtn">Activar Buscador Celeste</button>
 </div>
+</div>
+</div>
+
+<div class="a11y-widget" id="a11yWidget">
+<button type="button" class="a11y-toggle-btn" id="a11yToggleBtn" aria-expanded="false" aria-controls="a11yPanel" aria-label="Abrir opciones de accesibilidad">
+<span aria-hidden="true">♿</span>
+</button>
+<div class="a11y-panel" id="a11yPanel" role="dialog" aria-label="Accesibilidad">
+<span class="a11y-panel-title">Accesibilidad</span>
+<label class="a11y-panel-option">
+<input type="checkbox" id="a11yVoiceToggle">
+<span>Asistencia por voz guiada</span>
+</label>
+<p class="a11y-panel-hint">Lee en voz alta los mensajes del Capitán Cósmico, las lecciones de la Ruta Estelar y los avisos del Buscador Celeste.</p>
 </div>
 </div>
 
@@ -1949,6 +1979,7 @@ html[data-nivel="principiante"] .section-head{border-left:2px solid var(--nebula
       (t.textContent = e),
       o.appendChild(t),
       (o.scrollTop = o.scrollHeight));
+    if (a === "ai" && window.a11ySpeak) window.a11ySpeak(e);
   }
   function d(e) {
     ((n.innerHTML = ""),
@@ -6647,6 +6678,7 @@ function renderLessonIntro(){
     '<div class="rs-fact-card"><p>'+lesson.theory+'</p></div>'+
     '<button type="button" class="btn btn-primary" id="rsStartQuiz">Comenzar Quiz (5 preguntas)</button>';
   bindBack();
+  if(window.a11ySpeak)window.a11ySpeak(lesson.title+". "+lesson.theory);
   document.getElementById("rsStartQuiz").addEventListener("click",function(){
     current.qIndex=0;
     renderQuestion();
@@ -6665,6 +6697,7 @@ function renderQuestion(){
     '<p class="rs-quiz-q">'+q.question+'</p>'+
     '<div class="rs-quiz-options" id="rsQuizOptions"></div>';
   bindBack();
+  if(window.a11ySpeak)window.a11ySpeak(q.question+". Opciones: "+options.join(", "));
   var optsWrap=document.getElementById("rsQuizOptions");
   options.forEach(function(label,i){
     var b=document.createElement("button");
@@ -6693,6 +6726,7 @@ function answerQuestion(i,optsWrap){
   explain.className="rs-quiz-explain";
   explain.textContent=(correct?"¡Correcto! ":"No exactamente. ")+q.explain;
   optsWrap.parentNode.insertBefore(explain,optsWrap.nextSibling);
+  if(window.a11ySpeak)window.a11ySpeak(explain.textContent);
 
   var isLastQuestion=current.qIndex>=lesson.quiz.length-1;
   var isLastLesson=current.lessonIndex>=u.lessons.length-1;
@@ -6731,11 +6765,13 @@ function finishUnit(){
       }).catch(function(){});
     }
   }
+  var finishMsg=n<UNITS.length?"Desbloqueaste la Unidad "+(n+1)+": "+UNITS[n].title+". ¡Adelante, tripulante!":"¡Completaste toda la Ruta Estelar! Eres oficialmente un experto cósmico.";
+  if(window.a11ySpeak)window.a11ySpeak("¡Unidad completada! "+finishMsg);
   inner.innerHTML=
     '<span class="rs-result-emoji" aria-hidden="true">🎉</span>'+
     '<h2>¡Unidad completada!</h2>'+
     '<p class="rs-result-score">'+u.title+' · 5 / 5 lecciones · 25 preguntas respondidas</p>'+
-    '<p class="rs-view-lead">'+(n<UNITS.length?"Desbloqueaste la Unidad "+(n+1)+": "+UNITS[n].title+". ¡Adelante, tripulante!":"¡Completaste toda la Ruta Estelar! Eres oficialmente un experto cósmico.")+'</p>'+
+    '<p class="rs-view-lead">'+finishMsg+'</p>'+
     '<button type="button" class="btn btn-primary" id="rsBackToPathFromResult">Volver al mapa</button>';
   document.getElementById("rsBackToPathFromResult").addEventListener("click",renderPath);
 }
@@ -6934,7 +6970,7 @@ if(!view||!video||!closeBtn||!startBtn||!statusEl||!searchWrap)return;
 
 var stream=null,scanInterval=null,orientationHandler=null;
 var lat=null,lon=null,heading=null,tilt=null;
-var allTargetsCache=[],pinnedKey=null;
+var allTargetsCache=[],pinnedKey=null,lastSpokenKey=null;
 
 function setStatus(msg){statusEl.textContent=msg}
 
@@ -7040,9 +7076,14 @@ function updateReticle(){
     label.classList.add("is-visible");
     reticle.classList.add("is-locked");
     setStatus("¡Objetivo encontrado! "+best.t.emoji+" "+best.t.name);
+    if(window.a11ySpeak&&lastSpokenKey!==best.t.key){
+      window.a11ySpeak("Estás apuntando "+best.t.prep);
+      lastSpokenKey=best.t.key;
+    }
   }else{
     label.classList.remove("is-visible");
     reticle.classList.remove("is-locked");
+    lastSpokenKey=null;
     if(pinnedKey&&best&&best.t.alt<=-2){
       setStatus(best.t.name+" no está sobre el horizonte ahora mismo.");
     }else{
@@ -7105,6 +7146,58 @@ startBtn.addEventListener("click",function(){
       setStatus("No pude activar la cámara, la ubicación o los sensores. Revisa los permisos de tu navegador e intenta de nuevo.");
     });
   });
+});
+})();
+</script>
+
+<script id="a11y-script">
+(function(){
+"use strict";
+var widget=document.getElementById("a11yWidget");
+var toggleBtn=document.getElementById("a11yToggleBtn");
+var panel=document.getElementById("a11yPanel");
+var voiceCheckbox=document.getElementById("a11yVoiceToggle");
+if(!widget||!toggleBtn||!panel||!voiceCheckbox)return;
+
+var STORAGE_KEY="nebula:a11y-voice";
+var storage=window.safeStorage||{get:function(){return null},set:function(){},remove:function(){}};
+
+function setVoiceEnabled(on){
+  window.__a11yVoiceEnabled=on;
+  voiceCheckbox.checked=on;
+  toggleBtn.classList.toggle("is-active",on);
+  storage.set(STORAGE_KEY,on);
+}
+
+window.a11ySpeak=function(text){
+  if(!window.__a11yVoiceEnabled||!text)return;
+  if(!("speechSynthesis"in window))return;
+  try{
+    window.speechSynthesis.cancel();
+    var u=new SpeechSynthesisUtterance(text);
+    u.lang="es-ES";
+    u.rate=1;
+    window.speechSynthesis.speak(u);
+  }catch(e){}
+};
+
+var saved=storage.get(STORAGE_KEY);
+setVoiceEnabled(saved===true);
+
+toggleBtn.addEventListener("click",function(e){
+  e.stopPropagation();
+  var open=panel.classList.toggle("is-open");
+  toggleBtn.setAttribute("aria-expanded",String(open));
+});
+document.addEventListener("click",function(e){
+  if(!widget.contains(e.target)){
+    panel.classList.remove("is-open");
+    toggleBtn.setAttribute("aria-expanded","false");
+  }
+});
+voiceCheckbox.addEventListener("change",function(){
+  setVoiceEnabled(voiceCheckbox.checked);
+  if(voiceCheckbox.checked)window.a11ySpeak("Asistencia por voz guiada activada.");
 });
 })();
 </script>
