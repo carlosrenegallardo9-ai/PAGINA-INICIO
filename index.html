@@ -141,6 +141,7 @@ html[data-nivel="principiante"] .section-head{border-left:2px solid var(--nebula
 .rs-fact-card{background:var(--cosmic-indigo);border:1px solid var(--cosmic-indigo-border);border-radius:var(--radius-lg);padding:var(--space-6);margin-bottom:var(--space-6);max-width:560px;box-shadow:var(--shadow-card)}
 .rs-fact-card p{font-size:1rem;line-height:1.65;color:var(--estelar-mist)}
 
+.rs-quiz-meta{font-family:var(--font-mono);font-size:.7rem;letter-spacing:.06em;text-transform:uppercase;color:var(--proton-silver);margin-bottom:var(--space-3)}
 .rs-quiz-q{font-family:var(--font-display);font-size:1.15rem;margin-bottom:var(--space-5);color:var(--estelar-mist);max-width:560px}
 .rs-quiz-options{display:flex;flex-direction:column;gap:var(--space-3);max-width:560px}
 .rs-quiz-opt{text-align:left;padding:var(--space-3) var(--space-4);border-radius:var(--radius-md);border:1px solid var(--cosmic-indigo-border);background:var(--cosmic-indigo-light);color:var(--estelar-mist);font-size:.94rem;transition:border-color var(--dur-fast),background var(--dur-fast)}
@@ -6233,48 +6234,232 @@ el.textContent=FACTS[dayOfYear%FACTS.length];
 <script id="rs-script">
 (function(){
 "use strict";
+function mcq(question,options,answer,explain){return{type:"mcq",question:question,options:options,answer:answer,explain:explain}}
+function tf(question,answer,explain){return{type:"tf",question:question,answer:answer,explain:explain}}
+function lesson(title,theory,quiz){return{title:title,theory:theory,quiz:quiz}}
+
 var UNITS=[
 {title:"El Sistema Solar",emoji:"☀️",lessons:[
-  {fact:"El Sistema Solar está formado por el Sol y todo lo que orbita a su alrededor: 8 planetas, decenas de lunas, asteroides y cometas.",q:{type:"mcq",question:"¿Cuántos planetas orbitan alrededor del Sol?",options:["7","8","9","10"],answer:1,explain:"Son 8 planetas desde que Plutón se reclasificó como planeta enano en 2006."}},
-  {fact:"El Sol contiene el 99.8% de toda la masa del Sistema Solar; su gravedad mantiene a todo girando a su alrededor.",q:{type:"tf",question:"El Sol es un planeta.",answer:false,explain:"Es una estrella: genera su propia luz mediante fusión nuclear, algo que ningún planeta hace."}},
-  {fact:"Mercurio es el planeta más cercano al Sol y también el más pequeño de los 8 planetas.",q:{type:"mcq",question:"¿Cuál es el planeta más pequeño del Sistema Solar?",options:["Marte","Mercurio","Venus","Plutón"],answer:1,explain:"Mercurio es el más pequeño de los 8 planetas."}},
-  {fact:"La Tierra es, hasta ahora, el único planeta conocido con vida, gracias a su atmósfera y su distancia justa al Sol.",q:{type:"tf",question:"La Tierra es el planeta más cercano al Sol.",answer:false,explain:"Ese es Mercurio; la Tierra es el tercer planeta desde el Sol."}},
-  {fact:"Un 'año' en un planeta es el tiempo que tarda en dar una vuelta completa al Sol: en la Tierra son 365 días, en Neptuno son 165 años terrestres.",q:{type:"mcq",question:"¿Qué es un 'año' en un planeta?",options:["Un día completo","Una vuelta completa al Sol","Una fase lunar","Un eclipse"],answer:1,explain:"Un año es el tiempo que tarda un planeta en completar una órbita alrededor del Sol."}}
+lesson("¿Qué es el Sistema Solar?","El Sistema Solar está formado por el Sol —una estrella— y todo lo que gira a su alrededor por su gravedad: 8 planetas, más de 200 lunas, asteroides, cometas y polvo interplanetario. El Sol concentra el 99.8% de toda la masa del sistema, así que su gravedad domina el movimiento de todo lo demás.",[
+  mcq("¿Qué es el Sol?",["Un planeta","Una estrella","Una luna","Un cometa"],1,"El Sol es una estrella: genera su propia luz y calor."),
+  mcq("¿Cuántos planetas hay en el Sistema Solar?",["7","8","9","10"],1,"Son 8 planetas desde que Plutón se reclasificó como planeta enano."),
+  tf("El Sol es el objeto con más masa del Sistema Solar.",true,"Concentra el 99.8% de toda la masa del sistema."),
+  mcq("¿Qué mantiene a los planetas girando alrededor del Sol?",["El viento solar","La gravedad","El campo magnético","La luz solar"],1,"La gravedad del Sol domina el movimiento de todo lo demás."),
+  tf("Hay más de 200 lunas conocidas en el Sistema Solar.",true,"Contando todas las lunas de todos los planetas, superan las 200.")
+]),
+lesson("Planetas rocosos: los vecinos cercanos","Los cuatro planetas más cercanos al Sol —Mercurio, Venus, Tierra y Marte— son rocosos: pequeños, densos y con una superficie sólida. Mercurio es el más pequeño y rápido; Venus el más caliente; la Tierra el único con vida confirmada; y Marte el más explorado con robots.",[
+  mcq("¿Cuál es el planeta rocoso más cercano al Sol?",["Venus","Mercurio","Tierra","Marte"],1,"Mercurio es el planeta más cercano al Sol."),
+  tf("Venus es el planeta más caliente del Sistema Solar.",true,"Su densa atmósfera atrapa el calor, por eso es más caliente que Mercurio."),
+  mcq("¿Cuántos planetas rocosos hay?",["2","3","4","5"],2,"Mercurio, Venus, Tierra y Marte son los 4 planetas rocosos."),
+  mcq("¿Cuál es el único planeta con vida confirmada?",["Marte","Venus","Tierra","Mercurio"],2,"La Tierra es el único planeta con vida confirmada."),
+  tf("Marte es el planeta rocoso más explorado con robots.",true,"Ha recibido más misiones robóticas que cualquier otro planeta.")
+]),
+lesson("Gigantes gaseosos: los colosos exteriores","Más allá de Marte están los gigantes gaseosos: Júpiter, Saturno, Urano y Neptuno. Son enormes comparados con los rocosos, compuestos principalmente de hidrógeno y helio, sin superficie sólida real. Júpiter es el más grande de todos; Saturno es famoso por sus anillos.",[
+  mcq("¿Cuál es el planeta más grande del Sistema Solar?",["Saturno","Júpiter","Urano","Neptuno"],1,"Júpiter es, por lejos, el planeta más grande."),
+  tf("Los gigantes gaseosos tienen una superficie sólida como la Tierra.",false,"Están hechos principalmente de gas, sin superficie sólida real."),
+  mcq("¿Qué planeta es famoso por sus anillos?",["Júpiter","Saturno","Urano","Neptuno"],1,"Saturno es célebre por sus espectaculares anillos de hielo."),
+  mcq("¿De qué están hechos principalmente los gigantes gaseosos?",["Roca y metal","Hidrógeno y helio","Hielo seco","Hierro fundido"],1,"Están compuestos sobre todo de hidrógeno y helio."),
+  tf("Neptuno está más lejos del Sol que Urano.",true,"Neptuno es el planeta más alejado del Sol.")
+]),
+lesson("Lunas, asteroides y cometas","Además de los planetas, hay cuerpos más pequeños: lunas que orbitan planetas, asteroides —agrupados sobre todo en el cinturón entre Marte y Júpiter— y cometas, bolas de hielo y polvo que al acercarse al Sol forman una cola brillante.",[
+  mcq("¿Dónde se concentra la mayoría de los asteroides?",["Entre Mercurio y Venus","Entre Marte y Júpiter","Entre Saturno y Urano","Más allá de Neptuno"],1,"El cinturón de asteroides está entre Marte y Júpiter."),
+  tf("Los cometas están hechos principalmente de hielo y polvo.",true,"Por eso se les llama a veces 'bolas de nieve sucia'."),
+  mcq("¿Qué le pasa a un cometa cuando se acerca al Sol?",["Se congela más","Forma una cola brillante","Desaparece","Se convierte en asteroide"],1,"El calor del Sol vaporiza parte del cometa, formando su característica cola."),
+  mcq("¿Cómo se llama un cuerpo que orbita un planeta?",["Cometa","Asteroide","Luna o satélite","Meteorito"],2,"Un cuerpo que orbita un planeta es una luna o satélite natural."),
+  tf("Todos los planetas tienen al menos una luna.",false,"Mercurio y Venus no tienen ninguna luna.")
+]),
+lesson("Las distancias del Sistema Solar","El espacio entre planetas es enorme. La luz del Sol tarda unos 8 minutos en llegar a la Tierra, pero más de 4 horas en llegar a Neptuno. Para medir estas distancias se usa la Unidad Astronómica (UA): la distancia Tierra-Sol, unos 150 millones de km.",[
+  mcq("¿Cuánto tarda la luz del Sol en llegar a la Tierra?",["8 segundos","8 minutos","8 horas","8 días"],1,"La luz del Sol tarda unos 8 minutos en llegar a la Tierra."),
+  mcq("¿Qué mide una Unidad Astronómica (UA)?",["La distancia Tierra-Luna","La distancia Tierra-Sol","El diámetro del Sol","La distancia entre planetas vecinos"],1,"Una UA es la distancia promedio entre la Tierra y el Sol."),
+  tf("Neptuno recibe la luz del Sol más rápido que la Tierra.",false,"Al estar mucho más lejos, la luz tarda más de 4 horas en llegar a Neptuno."),
+  mcq("¿Aproximadamente cuántos km es 1 Unidad Astronómica?",["15,000 km","150,000 km","1.5 millones de km","150 millones de km"],3,"1 UA equivale a unos 150 millones de km."),
+  tf("Las distancias en el Sistema Solar son tan grandes que se necesitan unidades especiales para medirlas.",true,"Por eso se usa la Unidad Astronómica en vez de kilómetros comunes.")
+])
 ]},
 {title:"La Luna y sus fases",emoji:"🌙",lessons:[
-  {fact:"La Luna es el único satélite natural de la Tierra y el objeto más brillante del cielo nocturno.",q:{type:"tf",question:"La Luna emite luz propia.",answer:false,explain:"La Luna no genera luz: solo refleja la luz del Sol."}},
-  {fact:"La Luna tarda 27.3 días en dar una vuelta completa alrededor de la Tierra.",q:{type:"mcq",question:"¿Cuánto tarda la Luna en orbitar la Tierra?",options:["1 día","27.3 días","100 días","1 año"],answer:1,explain:"Su órbita completa dura unos 27.3 días."}},
-  {fact:"Las fases lunares —nueva, creciente, llena y menguante— se repiten cada 29.5 días.",q:{type:"mcq",question:"¿Cuántas fases lunares principales existen?",options:["2","4","6","8"],answer:1,explain:"Nueva, creciente, llena y menguante son las 4 fases principales."}},
-  {fact:"Un eclipse solar ocurre cuando la Luna se interpone entre la Tierra y el Sol, tapando su luz.",q:{type:"tf",question:"En un eclipse lunar, la Tierra se interpone entre el Sol y la Luna.",answer:true,explain:"Correcto: la sombra de la Tierra cae sobre la Luna, oscureciéndola."}},
-  {fact:"La Luna se aleja de la Tierra unos 3.8 cm cada año, por la energía que pierde nuestro planeta al frenarse levemente.",q:{type:"mcq",question:"¿La Luna se acerca o se aleja de la Tierra?",options:["Se acerca","Se aleja","Se queda igual","Depende del año"],answer:1,explain:"Se aleja, muy lentamente, unos 3.8 cm cada año."}}
+lesson("Qué es la Luna","La Luna es el único satélite natural de la Tierra: un cuerpo rocoso mucho más pequeño que nuestro planeta, sin atmósfera ni agua líquida en superficie. Es el objeto más brillante del cielo nocturno, aunque no genera luz propia.",[
+  tf("La Luna genera su propia luz.",false,"Solo refleja la luz del Sol."),
+  mcq("¿Qué es la Luna respecto a la Tierra?",["Un planeta vecino","Su único satélite natural","Una estrella lejana","Un asteroide capturado"],1,"La Luna es el único satélite natural de la Tierra."),
+  tf("La Luna tiene una atmósfera similar a la de la Tierra.",false,"La Luna prácticamente no tiene atmósfera."),
+  mcq("¿Qué tipo de cuerpo es la Luna?",["Gaseoso","Rocoso","De hielo puro","Una nube de polvo"],1,"La Luna es un cuerpo rocoso."),
+  tf("La Luna es el objeto más brillante del cielo nocturno.",true,"Es el objeto más brillante visto desde la Tierra durante la noche.")
+]),
+lesson("Las fases lunares","A medida que la Luna orbita la Tierra, vemos distintas porciones de su cara iluminada por el Sol: eso son las fases lunares (nueva, creciente, llena, menguante). Un ciclo completo dura unos 29.5 días.",[
+  mcq("¿Cuántas fases lunares principales hay?",["2","4","6","8"],1,"Nueva, creciente, llena y menguante son las 4 fases principales."),
+  mcq("¿Cuánto dura un ciclo completo de fases lunares?",["7 días","15 días","29.5 días","60 días"],2,"El ciclo de fases dura unos 29.5 días."),
+  tf("Las fases lunares ocurren porque la Luna cambia de forma físicamente.",false,"La Luna no cambia de forma: solo vemos distinta cantidad de su cara iluminada."),
+  mcq("¿Cómo se llama la fase en la que vemos toda la cara iluminada?",["Luna nueva","Luna llena","Cuarto menguante","Luna negra"],1,"En luna llena vemos toda la cara iluminada."),
+  tf("En luna nueva, la cara iluminada de la Luna no es visible desde la Tierra.",true,"Por eso se ve 'oscura' o casi invisible.")
+]),
+lesson("Eclipses","Un eclipse solar ocurre cuando la Luna se interpone entre la Tierra y el Sol. Un eclipse lunar ocurre al revés: la Tierra se interpone entre el Sol y la Luna. No ocurren cada mes porque la órbita lunar está ligeramente inclinada.",[
+  mcq("¿Qué pasa en un eclipse solar?",["La Tierra tapa al Sol","La Luna tapa al Sol","El Sol tapa a la Luna","La Luna desaparece"],1,"La Luna se interpone entre la Tierra y el Sol."),
+  tf("En un eclipse lunar, la sombra de la Tierra cae sobre la Luna.",true,"La Tierra se interpone entre el Sol y la Luna."),
+  mcq("¿Por qué no hay un eclipse cada mes?",["Porque la Luna es muy pequeña","Porque la órbita lunar está inclinada","Porque el Sol se mueve","Porque la Tierra no siempre gira igual"],1,"La órbita lunar está ligeramente inclinada respecto a la de la Tierra."),
+  tf("Los eclipses solares y lunares son exactamente el mismo fenómeno.",false,"Son fenómenos distintos, con distintos cuerpos haciendo sombra."),
+  mcq("¿Qué astro proyecta su sombra en un eclipse lunar?",["El Sol","La Luna","La Tierra","Venus"],2,"La sombra de la Tierra cae sobre la Luna en un eclipse lunar.")
+]),
+lesson("Las mareas","La gravedad de la Luna atrae el agua de los océanos, generando las mareas. El Sol también influye, aunque menos por estar mucho más lejos. Cuando el Sol y la Luna se alinean, las mareas son más intensas (mareas vivas).",[
+  mcq("¿Qué causa principalmente las mareas en la Tierra?",["El viento","La gravedad de la Luna","La rotación terrestre","Las corrientes marinas"],1,"La gravedad de la Luna es la causa principal de las mareas."),
+  tf("El Sol no tiene ninguna influencia sobre las mareas.",false,"También influye, aunque menos que la Luna."),
+  mcq("¿Cómo se llaman las mareas más intensas, cuando Sol y Luna se alinean?",["Mareas muertas","Mareas vivas","Mareas rojas","Mareas negras"],1,"Se llaman mareas vivas."),
+  tf("Las mareas son subidas y bajadas periódicas del nivel del mar.",true,"Eso es exactamente lo que son las mareas."),
+  mcq("¿Por qué el Sol influye menos que la Luna en las mareas?",["Es más pequeño","Está mucho más lejos","No tiene gravedad","Se mueve más rápido"],1,"Aunque el Sol es enorme, su distancia reduce su efecto de marea comparado con la Luna.")
+]),
+lesson("Explorando la Luna","La Luna ha sido visitada por humanos: entre 1969 y 1972, las misiones Apollo de la NASA llevaron a 12 astronautas a caminar sobre su superficie, comenzando con el Apollo 11 y Neil Armstrong.",[
+  mcq("¿Qué misiones llevaron humanos a la Luna?",["Voyager","Apollo","Artemis I","Sputnik"],1,"Las misiones Apollo llevaron humanos a la Luna."),
+  mcq("¿Quién fue el primer humano en pisar la Luna?",["Buzz Aldrin","Yuri Gagarin","Neil Armstrong","John Glenn"],2,"Neil Armstrong fue el primero en pisar la Luna, en 1969."),
+  tf("Ningún humano ha pisado la superficie de la Luna.",false,"12 astronautas caminaron sobre ella durante las misiones Apollo."),
+  tf("Las huellas de los astronautas en la Luna podrían durar millones de años.",true,"Al no haber viento ni agua en la Luna, nada las borra."),
+  mcq("¿En qué década ocurrieron las misiones Apollo tripuladas a la Luna?",["1950s","1960s-1970s","1980s","1990s"],1,"Las misiones Apollo tripuladas fueron entre 1969 y 1972.")
+])
 ]},
 {title:"Rocosos vs. gigantes gaseosos",emoji:"🪐",lessons:[
-  {fact:"Los planetas rocosos —Mercurio, Venus, Tierra y Marte— son pequeños, densos y tienen superficie sólida.",q:{type:"mcq",question:"¿Cuál de estos es un planeta rocoso?",options:["Júpiter","Marte","Saturno","Neptuno"],answer:1,explain:"Marte, junto con Mercurio, Venus y la Tierra, es uno de los 4 planetas rocosos."}},
-  {fact:"Los gigantes gaseosos —Júpiter, Saturno, Urano y Neptuno— están hechos sobre todo de hidrógeno y helio, sin superficie sólida real.",q:{type:"tf",question:"Saturno tiene una superficie sólida como la Tierra.",answer:false,explain:"Saturno es un gigante gaseoso: no tiene una superficie sólida donde aterrizar."}},
-  {fact:"Júpiter es el planeta más grande del Sistema Solar: podrían caber más de 1,300 Tierras dentro de él.",q:{type:"mcq",question:"¿Cuál es el planeta más grande del Sistema Solar?",options:["Saturno","Júpiter","Urano","Neptuno"],answer:1,explain:"Júpiter es, por lejos, el planeta más grande."}},
-  {fact:"Saturno es tan poco denso que, si existiera una bañera lo bastante grande, flotaría en el agua.",q:{type:"tf",question:"Saturno es más denso que el agua.",answer:false,explain:"Es menos denso que el agua: flotaría."}},
-  {fact:"Urano y Neptuno se conocen como 'gigantes de hielo', porque además de gas tienen mucha agua, amoníaco y metano congelados.",q:{type:"mcq",question:"¿Cómo se les llama a Urano y Neptuno?",options:["Gigantes de hielo","Planetas enanos","Planetas rocosos","Cinturón de asteroides"],answer:0,explain:"Se les llama 'gigantes de hielo' por su composición helada."}}
+lesson("Qué hace a un planeta 'rocoso'","Un planeta rocoso tiene una superficie sólida hecha de roca y metal, y es relativamente pequeño y denso. Mercurio, Venus, la Tierra y Marte son los 4 planetas rocosos, todos cerca del Sol.",[
+  mcq("¿Qué característica define a un planeta rocoso?",["Estar hecho de gas","Tener una superficie sólida","No tener gravedad","Tener anillos"],1,"Un planeta rocoso tiene una superficie sólida de roca y metal."),
+  mcq("¿Cuántos planetas rocosos hay en el Sistema Solar?",["2","3","4","5"],2,"Mercurio, Venus, Tierra y Marte son los 4 planetas rocosos."),
+  tf("Los planetas rocosos están ubicados más cerca del Sol que los gaseosos.",true,"Los 4 rocosos son los más cercanos al Sol."),
+  tf("Los planetas rocosos son más grandes que los gaseosos.",false,"Son mucho más pequeños que los gigantes gaseosos."),
+  mcq("¿Cuál de estos NO es un planeta rocoso?",["Marte","Venus","Júpiter","Mercurio"],2,"Júpiter es un gigante gaseoso, no un planeta rocoso.")
+]),
+lesson("Qué hace a un planeta 'gigante gaseoso'","Los gigantes gaseosos —Júpiter, Saturno, Urano y Neptuno— son mucho más grandes que los rocosos, compuestos principalmente de hidrógeno y helio, sin superficie sólida. Se ubican en las regiones frías y alejadas del sistema.",[
+  mcq("¿De qué están hechos principalmente los gigantes gaseosos?",["Roca y hierro","Hidrógeno y helio","Hielo seco puro","Diamante"],1,"Están compuestos sobre todo de hidrógeno y helio."),
+  tf("Los gigantes gaseosos tienen una superficie sólida definida.",false,"No tienen una superficie sólida real."),
+  mcq("¿Dónde se ubican los gigantes gaseosos respecto al Sol?",["Muy cerca","En las regiones frías y alejadas","Justo en el centro","No orbitan el Sol"],1,"Se ubican en las regiones más frías y alejadas del Sistema Solar."),
+  mcq("¿Cuántos gigantes gaseosos hay?",["2","3","4","5"],2,"Júpiter, Saturno, Urano y Neptuno son los 4 gigantes gaseosos."),
+  tf("Todos los gigantes gaseosos tienen algún sistema de anillos.",true,"Los 4 tienen anillos, aunque los de Saturno son los más visibles.")
+]),
+lesson("Comparando tamaños","La diferencia de tamaño es enorme: podrían caber más de 1,300 Tierras dentro de Júpiter. En contraste, Mercurio —el planeta más pequeño— es apenas un poco más grande que la Luna.",[
+  mcq("¿Aproximadamente cuántas Tierras caben dentro de Júpiter?",["13","130","1,300","13,000"],2,"Más de 1,300 Tierras cabrían dentro de Júpiter."),
+  tf("Mercurio es más pequeño que Marte.",true,"Mercurio es el planeta más pequeño del Sistema Solar."),
+  mcq("¿Cuál es el planeta más pequeño de todos?",["Marte","Venus","Mercurio","Plutón (planeta enano)"],2,"Mercurio es el planeta más pequeño."),
+  tf("Júpiter es más grande que todos los demás planetas juntos.",true,"Su masa es mayor que la de todos los demás planetas combinados."),
+  mcq("¿Qué comparación es correcta?",["Los rocosos son más grandes que los gaseosos","Todos los planetas tienen el mismo tamaño","Los gaseosos son mucho más grandes que los rocosos","Solo hay planetas rocosos"],2,"Los gigantes gaseosos son mucho más grandes que los rocosos.")
+]),
+lesson("Las atmósferas","Los planetas rocosos tienen atmósferas delgadas (o casi ninguna, como Mercurio). Los gigantes gaseosos tienen atmósferas enormes y densas que se mezclan gradualmente con su interior, sin un límite claro.",[
+  mcq("¿Qué planeta rocoso casi no tiene atmósfera?",["Venus","Tierra","Mercurio","Marte"],2,"Mercurio prácticamente no tiene atmósfera."),
+  tf("La atmósfera de un gigante gaseoso tiene un límite claro con su superficie.",false,"Se mezcla gradualmente con el interior, sin límite claro."),
+  mcq("¿De qué está hecha principalmente la atmósfera terrestre?",["Hidrógeno y helio","Nitrógeno y oxígeno","Metano puro","Dióxido de azufre"],1,"La atmósfera terrestre es sobre todo nitrógeno y oxígeno."),
+  tf("Venus tiene una atmósfera muy densa que atrapa mucho calor.",true,"Por eso es el planeta más caliente del Sistema Solar."),
+  mcq("¿Qué tipo de planeta tiene atmósferas mucho más grandes y densas?",["Rocosos","Gigantes gaseosos","Ninguno tiene atmósfera","Ambos por igual"],1,"Los gigantes gaseosos tienen atmósferas enormes y densas.")
+]),
+lesson("Los gigantes de hielo","Urano y Neptuno a veces se clasifican aparte, como 'gigantes de hielo': contienen más agua, amoníaco y metano congelados en su interior que Júpiter y Saturno.",[
+  mcq("¿Qué planetas se conocen como 'gigantes de hielo'?",["Júpiter y Saturno","Urano y Neptuno","Marte y Venus","Mercurio y la Tierra"],1,"Urano y Neptuno se conocen como gigantes de hielo."),
+  tf("Los gigantes de hielo están hechos solo de hielo sólido, sin gas.",false,"También tienen atmósferas gaseosas, pero con más hielo en su interior."),
+  mcq("¿Qué compuestos son comunes en el interior de los gigantes de hielo?",["Hierro y níquel","Agua, amoníaco y metano congelados","Solo oxígeno","Diamante puro"],1,"Contienen agua, amoníaco y metano congelados."),
+  tf("Júpiter y Saturno tienen más hielo interior que Urano y Neptuno.",false,"Es al revés: Urano y Neptuno tienen proporcionalmente más hielo."),
+  mcq("¿Cuántos gigantes de hielo hay en el Sistema Solar?",["1","2","3","4"],1,"Urano y Neptuno: 2 gigantes de hielo.")
+])
 ]},
 {title:"Estrellas: nacimiento y muerte",emoji:"⭐",lessons:[
-  {fact:"Las estrellas nacen en nebulosas: enormes nubes de gas y polvo que colapsan por su propia gravedad.",q:{type:"mcq",question:"¿Dónde nacen las estrellas?",options:["En agujeros negros","En nebulosas","En cometas","En lunas"],answer:1,explain:"Nacen en nebulosas, nubes de gas y polvo que colapsan por gravedad."}},
-  {fact:"Una estrella brilla porque en su núcleo funde hidrógeno en helio, liberando enormes cantidades de energía.",q:{type:"tf",question:"Las estrellas brillan por combustión química, como el fuego.",answer:false,explain:"Brillan por fusión nuclear en su núcleo, no por combustión química."}},
-  {fact:"Nuestro Sol es una estrella de tamaño mediano, con suficiente combustible para brillar unos 10,000 millones de años.",q:{type:"mcq",question:"¿Qué tipo de estrella es el Sol?",options:["Gigante roja","Mediana","Enana blanca","Estrella de neutrones"],answer:1,explain:"El Sol es una estrella de tamaño y brillo medianos."}},
-  {fact:"Al morir, una estrella como el Sol se convierte en una enana blanca; las muy masivas pueden colapsar en una estrella de neutrones o un agujero negro.",q:{type:"tf",question:"Todas las estrellas terminan convirtiéndose en agujeros negros.",answer:false,explain:"Solo las muy masivas; las demás terminan como enanas blancas o estrellas de neutrones."}},
-  {fact:"Una supernova es la explosión final de una estrella masiva, tan brillante que puede superar el brillo de toda su galaxia por semanas.",q:{type:"mcq",question:"¿Qué es una supernova?",options:["El nacimiento de un planeta","La explosión final de una estrella masiva","Una lluvia de meteoros","Una fase lunar"],answer:1,explain:"Es la explosión con la que termina la vida de una estrella masiva."}}
+lesson("El nacimiento de una estrella","Las estrellas nacen dentro de nebulosas: nubes de gas (sobre todo hidrógeno) y polvo. La gravedad compacta el material hasta que la presión y temperatura son suficientes para encender la fusión nuclear.",[
+  mcq("¿Dónde nacen las estrellas?",["En agujeros negros","En nebulosas","En cometas","En cinturones de asteroides"],1,"Las estrellas nacen en nebulosas."),
+  mcq("¿Qué elemento es el más abundante en las nebulosas donde nacen estrellas?",["Hierro","Hidrógeno","Oxígeno","Carbono"],1,"El hidrógeno es el elemento más abundante."),
+  tf("Una estrella 'nace' cuando comienza la fusión nuclear en su núcleo.",true,"Ese es el momento en que se considera que nace oficialmente."),
+  tf("Las estrellas nacen solas, nunca en grupo.",false,"Muchas estrellas nacen juntas, en cúmulos, dentro de la misma nebulosa."),
+  mcq("¿Qué fuerza compacta el gas y polvo hasta formar una estrella?",["El magnetismo","La gravedad","La luz","El viento solar"],1,"La gravedad compacta el material de la nebulosa.")
+]),
+lesson("La vida de una estrella","Durante la mayor parte de su vida, una estrella funde hidrógeno en helio en su núcleo. A esta etapa estable se le llama 'secuencia principal', y puede durar millones o miles de millones de años.",[
+  mcq("¿Qué proceso hace brillar a una estrella durante la mayor parte de su vida?",["Combustión química","Fusión de hidrógeno en helio","Reflejo de otras estrellas","Fricción atmosférica"],1,"La fusión nuclear de hidrógeno en helio produce su brillo."),
+  tf("Todas las estrellas viven exactamente el mismo tiempo.",false,"El tiempo de vida depende del tamaño y masa de la estrella."),
+  mcq("¿Cómo se llama la etapa estable de una estrella, fundiendo hidrógeno?",["Supernova","Secuencia principal","Nebulosa planetaria","Colapso gravitacional"],1,"Se llama secuencia principal."),
+  tf("Las estrellas más masivas suelen vivir MÁS tiempo que las pequeñas.",false,"Es al revés: las estrellas masivas queman su combustible mucho más rápido y viven menos."),
+  mcq("¿Cuánto puede durar la etapa estable de una estrella?",["Solo unos días","Unos meses","Millones o miles de millones de años","Exactamente 100 años"],2,"Puede durar desde millones hasta miles de millones de años.")
+]),
+lesson("El final de estrellas como el Sol","Cuando una estrella mediana agota su combustible, se expande en gigante roja y luego expulsa sus capas externas, dejando un núcleo denso llamado enana blanca.",[
+  mcq("¿En qué se convierte una estrella mediana antes de morir?",["Directamente en agujero negro","En una gigante roja","En un cometa","En un planeta"],1,"Se expande convirtiéndose en gigante roja."),
+  mcq("¿Cómo se llama el núcleo denso que queda tras la muerte de una estrella como el Sol?",["Estrella de neutrones","Enana blanca","Supernova","Nebulosa"],1,"Queda una enana blanca."),
+  tf("El Sol terminará su vida convirtiéndose en un agujero negro.",false,"El Sol no tiene suficiente masa: terminará como una enana blanca."),
+  tf("Una gigante roja es una estrella que se ha expandido enormemente al agotar su combustible.",true,"Correcto, eso es una gigante roja."),
+  mcq("¿Qué le pasa a las capas externas de una estrella mediana al morir?",["Se expulsan al espacio","Se convierten en un planeta","Explotan como supernova","Nada, permanecen intactas"],0,"Se expulsan al espacio, formando una nebulosa planetaria.")
+]),
+lesson("Supernovas: la muerte de las estrellas masivas","Las estrellas mucho más masivas que el Sol terminan en una supernova, una explosión capaz de brillar más que toda una galaxia por semanas.",[
+  mcq("¿Qué es una supernova?",["El nacimiento de una estrella","La explosión final de una estrella masiva","Una lluvia de meteoros","Un tipo de eclipse"],1,"Es la explosión final de una estrella masiva."),
+  tf("Una supernova puede brillar más que toda una galaxia.",true,"Durante semanas, puede superar el brillo de toda su galaxia."),
+  mcq("¿Qué tipo de estrellas terminan en supernova?",["Todas por igual","Solo las muy masivas","Solo las muy pequeñas","Ninguna, es un mito"],1,"Solo las estrellas muy masivas terminan así."),
+  tf("Las supernovas ayudan a dispersar elementos pesados por el universo.",true,"Los elementos que forman planetas vienen en parte de supernovas antiguas."),
+  mcq("¿Qué le pasa al brillo de una galaxia cuando ocurre una supernova en ella?",["No cambia nada","Puede aumentar dramáticamente por semanas","Disminuye","La galaxia desaparece"],1,"El brillo puede aumentar dramáticamente por semanas.")
+]),
+lesson("Lo que queda: remanentes estelares","Tras una supernova puede quedar una estrella de neutrones, extremadamente densa, o —si la estrella era aún más masiva— un agujero negro.",[
+  mcq("¿Qué puede quedar tras una supernova muy masiva?",["Una enana blanca","Un agujero negro","Un cometa","Un cinturón de asteroides"],1,"Puede quedar un agujero negro."),
+  tf("Una estrella de neutrones es extremadamente densa.",true,"Una cucharadita pesaría cerca de mil millones de toneladas."),
+  mcq("¿Qué remanente se forma con estrellas MENOS masivas tras la supernova?",["Agujero negro","Estrella de neutrones","Planeta","Cometa"],1,"Se forma una estrella de neutrones."),
+  tf("De un agujero negro puede escapar la luz si tiene suficiente velocidad.",false,"Ni la luz puede escapar una vez cruza el horizonte de eventos."),
+  mcq("¿Qué determina si el remanente es una estrella de neutrones o un agujero negro?",["El color de la estrella","La masa de la estrella original","La temperatura del universo","La cantidad de lunas que tenía"],1,"La masa original de la estrella determina el remanente final.")
+])
 ]},
 {title:"Agujeros negros",emoji:"🕳️",lessons:[
-  {fact:"Un agujero negro tiene una gravedad tan extrema que ni la luz puede escapar de él una vez cruza el horizonte de eventos.",q:{type:"mcq",question:"¿Qué no puede escapar de un agujero negro?",options:["El sonido","La luz","El calor","Nada de lo anterior"],answer:1,explain:"Ni siquiera la luz puede escapar una vez cruza el horizonte de eventos."}},
-  {fact:"Los agujeros negros estelares se forman cuando una estrella muy masiva colapsa al final de su vida.",q:{type:"tf",question:"Cualquier estrella puede convertirse en agujero negro.",answer:false,explain:"Solo las estrellas muy masivas tienen suficiente gravedad para colapsar así."}},
-  {fact:"En 2019, el Event Horizon Telescope capturó la primera imagen real de un agujero negro, en la galaxia M87.",q:{type:"tf",question:"En 2019 se tomó la primera fotografía real de un agujero negro.",answer:true,explain:"Así es, un logro histórico de la astronomía."}},
-  {fact:"Casi todas las galaxias grandes, incluida la Vía Láctea, tienen un agujero negro supermasivo en su centro.",q:{type:"mcq",question:"¿Dónde suele estar el agujero negro supermasivo de una galaxia?",options:["En sus bordes","En el centro","No existen","Solo en galaxias pequeñas"],answer:1,explain:"Se ubica en el centro de la galaxia."}},
-  {fact:"El horizonte de eventos es el límite alrededor de un agujero negro a partir del cual ya no hay retorno posible.",q:{type:"mcq",question:"¿Cómo se llama el 'punto sin retorno' de un agujero negro?",options:["Núcleo","Horizonte de eventos","Corona","Órbita"],answer:1,explain:"El horizonte de eventos marca el límite sin retorno."}}
+lesson("Qué es un agujero negro","Un agujero negro es una región con gravedad tan extrema que nada, ni la luz, puede escapar una vez cruza el horizonte de eventos. Es una concentración de masa extremadamente densa.",[
+  mcq("¿Qué característica define a un agujero negro?",["Es muy frío","Su gravedad es tan extrema que ni la luz escapa","Es un planeta oscuro","Es una nube de polvo"],1,"Su gravedad extrema impide que hasta la luz escape."),
+  tf("Un agujero negro es literalmente un 'hueco' vacío en el espacio.",false,"Es una concentración extrema de masa, no un vacío."),
+  mcq("¿Cómo se llama el límite del que nada puede escapar?",["Núcleo","Horizonte de eventos","Corona","Anillo de fuego"],1,"Se llama horizonte de eventos."),
+  tf("La luz puede escapar de un agujero negro si viaja lo suficientemente rápido.",false,"Ni la luz puede escapar una vez cruza el horizonte de eventos."),
+  mcq("¿Qué es lo más extremo de un agujero negro?",["Su temperatura","Su color","Su gravedad","Su tamaño siempre gigante"],2,"Su gravedad extrema es su característica más notable.")
+]),
+lesson("Cómo se forman","Los agujeros negros estelares se forman cuando una estrella muy masiva colapsa tras una supernova. Existen también agujeros negros supermasivos, millones de veces más pesados.",[
+  mcq("¿Cómo se forma un agujero negro estelar?",["Por la unión de dos planetas","Por el colapso de una estrella muy masiva","Por una tormenta solar","Por el choque de dos cometas"],1,"Se forma por el colapso de una estrella muy masiva."),
+  tf("Cualquier estrella, sin importar su masa, puede colapsar en agujero negro.",false,"Solo las estrellas muy masivas tienen la gravedad suficiente."),
+  mcq("¿Qué evento suele preceder la formación de un agujero negro estelar?",["Una supernova","Una luna nueva","Un eclipse","Una lluvia de meteoros"],0,"Una supernova suele preceder su formación."),
+  tf("Los agujeros negros supermasivos son más pequeños que los estelares.",false,"Son mucho más grandes: millones de veces más pesados."),
+  mcq("¿Qué tipo de agujero negro es más pesado?",["Estelar","Supermasivo","Son iguales","Ninguno tiene masa"],1,"Los supermasivos son mucho más pesados.")
+]),
+lesson("El horizonte de eventos y la singularidad","El horizonte de eventos es el límite sin retorno de un agujero negro. En su centro se cree que existe una singularidad, un punto de densidad extrema.",[
+  mcq("¿Qué representa el horizonte de eventos?",["El centro del agujero negro","El límite sin retorno","Su temperatura","Su color"],1,"Representa el límite sin retorno."),
+  mcq("¿Qué se cree que hay en el centro de un agujero negro?",["Un planeta comprimido","Una singularidad","Una nueva estrella","Nada, está vacío"],1,"Se cree que hay una singularidad."),
+  tf("En la singularidad, las leyes de la física tal como las conocemos dejan de aplicarse con normalidad.",true,"Es una de las grandes fronteras sin resolver de la física."),
+  tf("Se puede salir de un agujero negro si cruzas el horizonte de eventos y luego cambias de dirección.",false,"Una vez cruzado, no hay forma de volver a salir."),
+  mcq("¿Qué palabra describe el punto central de densidad extrema?",["Núcleo","Corona","Singularidad","Nebulosa"],2,"Se llama singularidad.")
+]),
+lesson("Tipos de agujeros negros","Además de estelares y supermasivos, existen los de masa intermedia y los hipotéticos primordiales. Los supermasivos habitan el centro de casi todas las galaxias grandes.",[
+  mcq("¿Dónde suele estar el agujero negro supermasivo de una galaxia?",["En sus bordes","En el centro","Fuera de la galaxia","No existen en galaxias"],1,"Está en el centro de la galaxia."),
+  tf("La Vía Láctea tiene un agujero negro supermasivo en su centro.",true,"Se llama Sagitario A*."),
+  mcq("¿Qué tipo de agujero negro podría haberse formado poco después del Big Bang?",["Estelar","Supermasivo","Primordial","De masa intermedia"],2,"Los primordiales son hipotéticos, formados muy temprano en el universo."),
+  tf("Todos los agujeros negros tienen exactamente la misma masa.",false,"Varían enormemente, desde masas estelares hasta millones de masas solares."),
+  mcq("¿Cómo se llama el agujero negro supermasivo de la Vía Láctea?",["M87","Sagitario A*","Cygnus X-1","TON 618"],1,"Se llama Sagitario A*.")
+]),
+lesson("Descubrimientos recientes","En 2019 se capturó la primera imagen real de un agujero negro. En 2015 se detectaron por primera vez ondas gravitacionales, confirmando una predicción de Einstein.",[
+  tf("En 2019 se capturó la primera imagen real de un agujero negro.",true,"Fue un hito histórico del Event Horizon Telescope."),
+  mcq("¿En qué galaxia está el agujero negro fotografiado en 2019?",["Vía Láctea","Andrómeda","M87","Triángulo"],2,"Está en la galaxia M87."),
+  mcq("¿Qué se detectó por primera vez en 2015?",["Vida extraterrestre","Ondas gravitacionales","Un nuevo planeta","Un cometa gigante"],1,"Se detectaron ondas gravitacionales por primera vez."),
+  tf("Las ondas gravitacionales fueron predichas por Einstein mucho antes de ser detectadas.",true,"Einstein las predijo alrededor de 1916."),
+  mcq("¿Qué produce ondas gravitacionales, según lo detectado en 2015?",["El brillo de una estrella","El choque de dos agujeros negros","La rotación de un planeta","Una lluvia de meteoros"],1,"El choque de dos agujeros negros produjo esas ondas.")
+])
 ]},
 {title:"Materia y energía oscura",emoji:"🌌",lessons:[
-  {fact:"La materia oscura no emite ni refleja luz, pero su gravedad afecta el movimiento de galaxias enteras.",q:{type:"tf",question:"La materia oscura se puede ver con un telescopio normal.",answer:false,explain:"Se detecta solo por sus efectos gravitacionales, no directamente."}},
-  {fact:"Se estima que la materia oscura compone cerca del 27% de todo el universo.",q:{type:"mcq",question:"¿Qué porcentaje del universo es materia oscura, aproximadamente?",options:["5%","27%","68%","95%"],answer:1,explain:"Cerca del 27% del universo sería materia oscura."}},
-  {fact:"La energía oscura representa cerca del 68% del universo y parece estar acelerando su expansión.",q:{type:"tf",question:"La energía oscura frena la expansión del universo.",answer:false,explain:"La acelera, según las observaciones desde 1998."}},
-  {fact:"La materia 'normal' que conocemos —planetas, estrellas, tú— es apenas el 5% de todo lo que existe en el universo.",q:{type:"mcq",question:"¿Qué porcentaje del universo es materia 'normal' conocida?",options:["5%","27%","50%","68%"],answer:0,explain:"Solo el 5% del universo es la materia que conocemos bien."}},
-  {fact:"Aunque no sabemos exactamente qué son, la materia y energía oscura explican por qué las galaxias giran y se expanden como lo hacen.",q:{type:"mcq",question:"¿Por qué los científicos creen que existe la materia oscura?",options:["Por su color brillante","Por sus efectos gravitacionales observados","Por su temperatura","Por su sonido"],answer:1,explain:"Se infiere su existencia por sus efectos gravitacionales sobre lo que sí podemos ver."}}
+lesson("Qué es la materia oscura","La materia oscura no emite, absorbe ni refleja luz, por lo que es invisible a los telescopios normales. Sabemos que existe por su efecto gravitacional sobre estrellas y galaxias.",[
+  mcq("¿Por qué la materia oscura es invisible a los telescopios normales?",["Es demasiado pequeña","No emite ni refleja luz","Está fuera del universo","Se mueve demasiado rápido"],1,"No emite ni refleja luz, por eso es invisible."),
+  tf("Sabemos que la materia oscura existe porque la vemos directamente.",false,"Se infiere por sus efectos gravitacionales, no se observa directamente."),
+  mcq("¿Qué efecto de la materia oscura sí podemos observar?",["Su color","Su temperatura","Su efecto gravitacional","Su sonido"],2,"Podemos observar su efecto gravitacional."),
+  tf("La materia oscura afecta cómo se mueven las galaxias.",true,"Su gravedad influye en el movimiento de estrellas y galaxias enteras."),
+  mcq("¿Qué tipo de materia es la materia oscura?",["Visible pero lejana","Invisible pero detectable por gravedad","Un tipo de luz","Un gas común"],1,"Es invisible pero se detecta por sus efectos gravitacionales.")
+]),
+lesson("La evidencia de la materia oscura","Las estrellas en los bordes exteriores de las galaxias giran mucho más rápido de lo que la materia visible explicaría. Esa 'masa faltante' se atribuye a la materia oscura.",[
+  mcq("¿Qué observación llevó a proponer la materia oscura?",["El color de las galaxias","La velocidad de rotación de las galaxias","El sonido del espacio","La temperatura del Sol"],1,"La velocidad de rotación de las galaxias fue clave."),
+  tf("Las estrellas en los bordes de una galaxia giran más lento de lo esperado.",false,"Giran MÁS RÁPIDO de lo que la materia visible explicaría."),
+  mcq("¿A qué se le llama la 'masa faltante' en las galaxias?",["Energía oscura","Materia oscura","Antimateria","Radiación cósmica"],1,"Se le llama materia oscura."),
+  tf("La materia visible por sí sola explica completamente cómo giran las galaxias.",false,"No la explica del todo; se necesita materia oscura adicional."),
+  mcq("¿Qué tipo de evidencia es la principal para la materia oscura?",["Directa, con fotos","Gravitacional, indirecta","Auditiva","Química"],1,"La evidencia es gravitacional e indirecta.")
+]),
+lesson("Qué es la energía oscura","La energía oscura se le atribuye la aceleración de la expansión del universo, descubierta en 1998. A diferencia de la gravedad, parece 'empujar' el espacio para que se expanda más rápido.",[
+  mcq("¿A qué se le atribuye la energía oscura?",["A la formación de planetas","A la aceleración de la expansión del universo","Al brillo del Sol","A las mareas"],1,"Se le atribuye la aceleración de la expansión del universo."),
+  tf("La energía oscura fue descubierta antes que la materia oscura.",false,"La evidencia de materia oscura es más antigua; la energía oscura se descubrió en 1998."),
+  mcq("¿Qué observaciones llevaron al descubrimiento de la energía oscura?",["Supernovas lejanas","Eclipses solares","Fases lunares","Manchas solares"],0,"Se descubrió observando supernovas lejanas."),
+  tf("La energía oscura actúa como la gravedad, atrayendo objetos.",false,"Al contrario: parece empujar el espacio, acelerando su expansión."),
+  mcq("¿Qué le pasa a la expansión del universo según la energía oscura?",["Se frena","Se detiene por completo","Se acelera","No cambia"],2,"La expansión se acelera.")
+]),
+lesson("De qué está hecho el universo","Según las mejores estimaciones, el universo es cerca de 68% energía oscura, 27% materia oscura, y apenas 5% materia 'normal': todo lo que vemos, incluidos nosotros mismos.",[
+  mcq("¿Qué porcentaje del universo es energía oscura, aproximadamente?",["5%","27%","68%","95%"],2,"Cerca del 68% del universo sería energía oscura."),
+  mcq("¿Qué porcentaje del universo es materia oscura, aproximadamente?",["5%","27%","68%","95%"],1,"Cerca del 27% del universo sería materia oscura."),
+  tf("La materia 'normal' que conocemos es la mayor parte del universo.",false,"Es apenas el 5%: la menor parte de todo lo que existe."),
+  mcq("¿Qué porcentaje del universo es materia ordinaria (planetas, estrellas, nosotros)?",["5%","27%","50%","68%"],0,"Solo el 5% del universo es materia ordinaria."),
+  tf("Juntas, materia y energía oscura son la mayor parte del universo.",true,"Suman cerca del 95% del total.")
+]),
+lesson("Preguntas abiertas","Ni la materia oscura ni la energía oscura han sido detectadas directamente: son de los mayores misterios sin resolver de la cosmología moderna.",[
+  tf("Los científicos ya saben exactamente qué son la materia y la energía oscura.",false,"Siguen siendo dos de los mayores misterios sin resolver de la física."),
+  mcq("¿Cómo se describen la materia y energía oscura en la cosmología actual?",["Fenómenos completamente resueltos","Dos de los mayores misterios sin resolver","Simples errores de medición","Mitos sin evidencia"],1,"Son dos de los mayores misterios sin resolver."),
+  tf("Resolver el misterio de la materia y energía oscura podría cambiar nuestra comprensión del universo.",true,"Sería uno de los mayores avances de la física moderna."),
+  mcq("¿Se ha detectado directamente una partícula de materia oscura?",["Sí, hace décadas","No, solo se infiere por sus efectos","Sí, en 2015","No existe evidencia de ningún tipo"],1,"No se ha detectado directamente; solo se infiere por sus efectos."),
+  mcq("¿Qué campo de la ciencia estudia estos misterios del universo a gran escala?",["Biología","Cosmología","Geología","Química orgánica"],1,"La cosmología estudia el universo a gran escala.")
+])
 ]}
 ];
 
@@ -6328,7 +6513,7 @@ function renderPath(){
   inner.innerHTML=
     '<span class="rs-view-eyebrow">Ruta Estelar · aprendizaje por niveles</span>'+
     '<h2>Tu camino de aprendizaje espacial</h2>'+
-    '<p class="rs-view-lead">Completa las 5 lecciones de cada unidad para desbloquear la siguiente, al estilo de tus apps de idiomas favoritas.</p>'+
+    '<p class="rs-view-lead">Cada unidad tiene 5 lecciones, cada una con su propia información y un quiz de 5 preguntas. Complétalas todas para desbloquear la siguiente unidad.</p>'+
     '<div class="rs-path" id="rsPath" role="list" aria-label="Unidades de la Ruta Estelar">'+nodes+'</div>';
   inner.querySelectorAll(".rs-node[data-state]:not([data-state=\"locked\"])").forEach(function(btn){
     btn.addEventListener("click",function(){openUnit(Number(btn.dataset.unit))});
@@ -6343,49 +6528,72 @@ function bindBack(){
   if(b)b.addEventListener("click",renderPath);
 }
 
+function lessonDotsHtml(lessonIndex){
+  var u=UNITS[current.unit-1];
+  return u.lessons.map(function(_,i){
+    var cls=i<lessonIndex?"is-done":i===lessonIndex?"is-current":"";
+    return'<span class="rs-lesson-dot '+cls+'"></span>';
+  }).join("");
+}
+
 function openUnit(n){
   var u=UNITS[n-1];
   inner.innerHTML=
     backBtnHtml()+
     '<span class="rs-unit-emoji" aria-hidden="true">'+u.emoji+'</span>'+
     '<h2>Unidad '+n+': '+u.title+'</h2>'+
-    '<p class="rs-unit-meta">5 lecciones cortas</p>'+
+    '<p class="rs-unit-meta">5 lecciones · cada una con su quiz de 5 preguntas</p>'+
     '<button type="button" class="btn btn-primary" id="rsStartUnit">Comenzar</button>';
   bindBack();
   document.getElementById("rsStartUnit").addEventListener("click",function(){
-    current={unit:n,lessonIndex:0};
-    renderLesson();
+    current={unit:n,lessonIndex:0,qIndex:0};
+    renderLessonIntro();
   });
 }
 
-function renderLesson(){
+function renderLessonIntro(){
   var u=UNITS[current.unit-1];
   var lesson=u.lessons[current.lessonIndex];
-  var dots=u.lessons.map(function(_,i){
-    var cls=i<current.lessonIndex?"is-done":i===current.lessonIndex?"is-current":"";
-    return'<span class="rs-lesson-dot '+cls+'"></span>';
-  }).join("");
   inner.innerHTML=
-    '<div class="rs-lesson-progress">'+dots+'</div>'+
-    '<div class="rs-fact-card"><p>'+lesson.fact+'</p></div>'+
-    '<p class="rs-quiz-q">'+lesson.q.question+'</p>'+
-    '<div class="rs-quiz-options" id="rsQuizOptions"></div>';
-  var q=lesson.q;
+    backBtnHtml()+
+    '<div class="rs-lesson-progress">'+lessonDotsHtml(current.lessonIndex)+'</div>'+
+    '<h2>'+lesson.title+'</h2>'+
+    '<div class="rs-fact-card"><p>'+lesson.theory+'</p></div>'+
+    '<button type="button" class="btn btn-primary" id="rsStartQuiz">Comenzar Quiz (5 preguntas)</button>';
+  bindBack();
+  document.getElementById("rsStartQuiz").addEventListener("click",function(){
+    current.qIndex=0;
+    renderQuestion();
+  });
+}
+
+function renderQuestion(){
+  var u=UNITS[current.unit-1];
+  var lesson=u.lessons[current.lessonIndex];
+  var q=lesson.quiz[current.qIndex];
   var options=q.type==="tf"?["Verdadero","Falso"]:q.options;
+  inner.innerHTML=
+    backBtnHtml()+
+    '<div class="rs-lesson-progress">'+lessonDotsHtml(current.lessonIndex)+'</div>'+
+    '<p class="rs-quiz-meta">Pregunta '+(current.qIndex+1)+' de '+lesson.quiz.length+' · '+lesson.title+'</p>'+
+    '<p class="rs-quiz-q">'+q.question+'</p>'+
+    '<div class="rs-quiz-options" id="rsQuizOptions"></div>';
+  bindBack();
   var optsWrap=document.getElementById("rsQuizOptions");
   options.forEach(function(label,i){
     var b=document.createElement("button");
     b.type="button";
     b.className="rs-quiz-opt";
     b.textContent=label;
-    b.addEventListener("click",function(){answerLesson(i,optsWrap)});
+    b.addEventListener("click",function(){answerQuestion(i,optsWrap)});
     optsWrap.appendChild(b);
   });
 }
 
-function answerLesson(i,optsWrap){
+function answerQuestion(i,optsWrap){
   var u=UNITS[current.unit-1];
-  var q=u.lessons[current.lessonIndex].q;
+  var lesson=u.lessons[current.lessonIndex];
+  var q=lesson.quiz[current.qIndex];
   var correctIndex=q.type==="tf"?(q.answer?0:1):q.answer;
   var buttons=optsWrap.querySelectorAll(".rs-quiz-opt");
   buttons.forEach(function(b,idx){
@@ -6400,14 +6608,23 @@ function answerLesson(i,optsWrap){
   explain.textContent=(correct?"¡Correcto! ":"No exactamente. ")+q.explain;
   optsWrap.parentNode.insertBefore(explain,optsWrap.nextSibling);
 
-  var isLast=current.lessonIndex>=u.lessons.length-1;
+  var isLastQuestion=current.qIndex>=lesson.quiz.length-1;
+  var isLastLesson=current.lessonIndex>=u.lessons.length-1;
   var nextBtn=document.createElement("button");
   nextBtn.type="button";
   nextBtn.className="btn btn-primary rs-quiz-next";
-  nextBtn.textContent=isLast?"Finalizar unidad":"Siguiente lección";
+  nextBtn.textContent=!isLastQuestion?"Siguiente pregunta":isLastLesson?"Finalizar unidad":"Siguiente lección";
   nextBtn.addEventListener("click",function(){
-    if(isLast)finishUnit();
-    else{current.lessonIndex++;renderLesson()}
+    if(!isLastQuestion){
+      current.qIndex++;
+      renderQuestion();
+    }else if(!isLastLesson){
+      current.lessonIndex++;
+      current.qIndex=0;
+      renderLessonIntro();
+    }else{
+      finishUnit();
+    }
   });
   explain.parentNode.insertBefore(nextBtn,explain.nextSibling);
 }
@@ -6431,7 +6648,7 @@ function finishUnit(){
   inner.innerHTML=
     '<span class="rs-result-emoji" aria-hidden="true">🎉</span>'+
     '<h2>¡Unidad completada!</h2>'+
-    '<p class="rs-result-score">'+u.title+' · 5 / 5 lecciones</p>'+
+    '<p class="rs-result-score">'+u.title+' · 5 / 5 lecciones · 25 preguntas respondidas</p>'+
     '<p class="rs-view-lead">'+(n<UNITS.length?"Desbloqueaste la Unidad "+(n+1)+": "+UNITS[n].title+". ¡Adelante, tripulante!":"¡Completaste toda la Ruta Estelar! Eres oficialmente un experto cósmico.")+'</p>'+
     '<button type="button" class="btn btn-primary" id="rsBackToPathFromResult">Volver al mapa</button>';
   document.getElementById("rsBackToPathFromResult").addEventListener("click",renderPath);
