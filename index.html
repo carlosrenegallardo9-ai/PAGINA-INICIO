@@ -224,6 +224,39 @@ html[data-nivel="principiante"] .section-head{border-left:2px solid var(--nebula
 .nav-links{gap:var(--space-5)}
 .nav-actions{gap:var(--space-4)}
 @media(min-width:861px) and (max-width:1180px){.nav-links{gap:var(--space-4);font-size:.72rem}}
+@media(min-width:1181px) and (max-width:1340px){.nav-links{gap:var(--space-4);font-size:.76rem}}
+</style>
+
+<style id="cm-styles">
+/* Comunidad — muro de fotos y preguntas con moderación automática. Aislado, prefijo "cm-". */
+.cm-composer{background:var(--cosmic-indigo);border:1px solid var(--cosmic-indigo-border);border-radius:var(--radius-lg);padding:var(--space-6);margin-top:var(--space-2);max-width:640px}
+.cm-tabs{display:flex;gap:var(--space-2);margin-bottom:var(--space-5)}
+.cm-tab{padding:.6rem 1.2rem;border-radius:var(--radius-pill);border:1px solid var(--cosmic-indigo-border);font-family:var(--font-mono);font-size:.76rem;letter-spacing:.03em;text-transform:uppercase;color:var(--proton-silver);background:var(--cosmic-indigo-light);transition:border-color var(--dur-fast),color var(--dur-fast),background var(--dur-fast)}
+.cm-tab:hover{color:var(--estelar-mist)}
+.cm-tab.is-active{background:var(--solar-ember);border-color:var(--solar-ember);color:var(--deep-void);font-weight:700}
+.cm-form textarea{width:100%;resize:vertical;min-height:88px;background:var(--deep-void);border:1px solid var(--cosmic-indigo-border);border-radius:var(--radius-md);padding:var(--space-4);color:var(--estelar-mist);font-family:var(--font-body);font-size:.94rem}
+.cm-form textarea:focus-visible{outline:0;border-color:var(--nebula-violet-soft)}
+.cm-photo-field{display:flex;flex-direction:column;gap:var(--space-3);margin-top:var(--space-4)}
+.cm-photo-field input[type=file]{font-size:.82rem;color:var(--proton-silver)}
+.cm-photo-field input[type=text]{width:100%;background:var(--deep-void);border:1px solid var(--cosmic-indigo-border);border-radius:var(--radius-md);padding:.7rem 1rem;color:var(--estelar-mist);font-size:.9rem}
+.cm-photo-field input[type=text]:focus-visible{outline:0;border-color:var(--nebula-violet-soft)}
+.cm-photo-preview{max-width:200px;max-height:160px;border-radius:var(--radius-md);border:1px solid var(--cosmic-indigo-border);object-fit:cover;display:none}
+.cm-photo-preview.is-visible{display:block}
+.cm-status{margin-top:var(--space-4);font-size:.84rem;padding:var(--space-3) var(--space-4);border-radius:var(--radius-md);display:none}
+.cm-status.is-visible{display:block}
+.cm-status.is-error{background:var(--solar-ember-dim);color:var(--solar-ember-soft);border:1px solid var(--solar-ember)}
+.cm-status.is-pending{background:var(--cosmic-indigo-light);color:var(--proton-silver);border:1px solid var(--cosmic-indigo-border)}
+.cm-status.is-success{background:rgba(74,222,128,.15);color:#4ADE80;border:1px solid #4ADE80}
+.cm-submit{margin-top:var(--space-5)}
+.cm-feed{display:grid;gap:var(--space-5);grid-template-columns:repeat(auto-fill,minmax(260px,1fr));margin-top:var(--space-8)}
+.cm-post{background:var(--cosmic-indigo);border:1px solid var(--cosmic-indigo-border);border-radius:var(--radius-lg);overflow:hidden;display:flex;flex-direction:column}
+.cm-post-photo{width:100%;aspect-ratio:4/3;object-fit:cover;background:var(--cosmic-indigo-light)}
+.cm-post-body{padding:var(--space-4) var(--space-5);display:flex;flex-direction:column;gap:var(--space-2)}
+.cm-post-user{font-family:var(--font-mono);font-size:.68rem;letter-spacing:.05em;color:var(--dorado-celestial);text-transform:uppercase}
+.cm-post-text{font-size:.9rem;color:var(--estelar-mist);line-height:1.5}
+.cm-post-question .cm-post-text{font-family:var(--font-display);font-size:1rem}
+.cm-post-time{font-family:var(--font-mono);font-size:.66rem;color:var(--proton-silver)}
+.cm-feed-empty{color:var(--proton-silver);font-size:.9rem;grid-column:1/-1}
 </style>
 
 </head> <body>
@@ -289,13 +322,14 @@ html[data-nivel="principiante"] .section-head{border-left:2px solid var(--nebula
 <a href="#escala">Escala</a>
 <a href="#minijuego">Juego</a>
 <a href="#aprender">Aprender</a>
+<a href="#comunidad">Comunidad</a>
 <a href="#recursos">Recursos</a>
 <a href="#informacion">Info</a>
 </nav>
 <div class="nal-tooltip" id="nalTooltip" role="status" hidden></div>
 </div>
 
- <noscript><style>.reveal{opacity:1!important;transform:none!important}</style></noscript> <a class="sr-only" href="#main">Saltar al contenido principal</a> <header class="nav"> <div class="container"> <a class="brand" href="#inicio"> <svg class="brand-mark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><circle cx="12" cy="12" r="2.4" fill="currentColor" stroke="none"/><ellipse cx="12" cy="12" rx="10" ry="4.2" transform="rotate(-24 12 12)"/></svg> Nébula </a> <div class="nav-actions"> <nav class="nav-links" id="navLinks" aria-label="Navegación principal"> <a href="#inicio">Inicio</a> <a href="#explorador">Explorador</a> <a href="#escala">Escala cósmica</a> <a href="#minijuego">Minijuego</a> <a href="#" data-open-ruta>Ruta Estelar</a> <a href="#aprender">Aprender</a> <a href="#recursos">Recursos</a> <a href="#informacion">Información</a> <a href="https://carlosrenegallardo9-ai.github.io/pagina-ia-espacio/cosmo-quiz.html">Quiz</a> <a href="#" data-open-ai>Guía interactiva</a> </nav> <button id="observatoryToggle" class="btn-observatory" title="Modo Observatorio Nocturno"> <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"> <path d="M20.5 14.3A8.5 8.5 0 1110 3.2a7 7 0 0010.5 11.1z"></path> </svg> <span>Observatorio</span> </button> <div class="a11y-widget" id="a11yWidget"> <button type="button" class="a11y-toggle-btn" id="a11yToggleBtn" aria-expanded="false" aria-controls="a11yPanel" aria-label="Abrir opciones de accesibilidad"> <span aria-hidden="true">♿</span> </button> <div class="a11y-panel" id="a11yPanel" role="dialog" aria-label="Accesibilidad"> <span class="a11y-panel-title">Accesibilidad</span> <label class="a11y-panel-option"> <input type="checkbox" id="a11yVoiceToggle"> <span>Asistencia por voz guiada</span> </label> <p class="a11y-panel-hint">Lee en voz alta los mensajes del Capitán Cósmico, las lecciones de la Ruta Estelar y los avisos del Buscador Celeste.</p> </div> </div> <button class="nav-toggle" id="navToggle" aria-label="Abrir menú" aria-expanded="false" aria-controls="navLinks"> <span></span><span></span><span></span> </button> </div> </div> </header> <main id="main"> <section class="hero" id="inicio"> <canvas id="starfield" aria-hidden="true"></canvas> <div class="container"> <div class="hero-inner"> <span class="eyebrow">Observatorio digital interactivo</span> <h1>Explora el <em>cosmos</em> a tu propio ritmo</h1> <p>Un observatorio interactivo para descubrir planetas, escalas cósmicas y fenómenos extremos del universo, con una guía interactiva que orienta tu recorrido según lo que eliges.</p> <div class="hero-actions"> <a class="btn btn-primary" href="#explorador">Iniciar exploración</a> <a class="hero-link-secondary" href="#aprender">Ver módulos de aprendizaje <span aria-hidden="true">→</span></a> <button type="button" class="btn btn-ghost rs-launch-btn" id="rsLaunchBtn" data-open-ruta aria-haspopup="dialog" aria-controls="rsView"><span aria-hidden="true">🪐</span> Ruta Estelar</button> </div> <div class="df-card" id="dfCard">
+ <noscript><style>.reveal{opacity:1!important;transform:none!important}</style></noscript> <a class="sr-only" href="#main">Saltar al contenido principal</a> <header class="nav"> <div class="container"> <a class="brand" href="#inicio"> <svg class="brand-mark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><circle cx="12" cy="12" r="2.4" fill="currentColor" stroke="none"/><ellipse cx="12" cy="12" rx="10" ry="4.2" transform="rotate(-24 12 12)"/></svg> Nébula </a> <div class="nav-actions"> <nav class="nav-links" id="navLinks" aria-label="Navegación principal"> <a href="#inicio">Inicio</a> <a href="#explorador">Explorador</a> <a href="#escala">Escala cósmica</a> <a href="#minijuego">Minijuego</a> <a href="#" data-open-ruta>Ruta Estelar</a> <a href="#aprender">Aprender</a> <a href="#comunidad">Comunidad</a> <a href="#recursos">Recursos</a> <a href="#informacion">Información</a> <a href="https://carlosrenegallardo9-ai.github.io/pagina-ia-espacio/cosmo-quiz.html">Quiz</a> <a href="#" data-open-ai>Guía interactiva</a> </nav> <button id="observatoryToggle" class="btn-observatory" title="Modo Observatorio Nocturno"> <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"> <path d="M20.5 14.3A8.5 8.5 0 1110 3.2a7 7 0 0010.5 11.1z"></path> </svg> <span>Observatorio</span> </button> <div class="a11y-widget" id="a11yWidget"> <button type="button" class="a11y-toggle-btn" id="a11yToggleBtn" aria-expanded="false" aria-controls="a11yPanel" aria-label="Abrir opciones de accesibilidad"> <span aria-hidden="true">♿</span> </button> <div class="a11y-panel" id="a11yPanel" role="dialog" aria-label="Accesibilidad"> <span class="a11y-panel-title">Accesibilidad</span> <label class="a11y-panel-option"> <input type="checkbox" id="a11yVoiceToggle"> <span>Asistencia por voz guiada</span> </label> <p class="a11y-panel-hint">Lee en voz alta los mensajes del Capitán Cósmico, las lecciones de la Ruta Estelar y los avisos del Buscador Celeste.</p> </div> </div> <button class="nav-toggle" id="navToggle" aria-label="Abrir menú" aria-expanded="false" aria-controls="navLinks"> <span></span><span></span><span></span> </button> </div> </div> </header> <main id="main"> <section class="hero" id="inicio"> <canvas id="starfield" aria-hidden="true"></canvas> <div class="container"> <div class="hero-inner"> <span class="eyebrow">Observatorio digital interactivo</span> <h1>Explora el <em>cosmos</em> a tu propio ritmo</h1> <p>Un observatorio interactivo para descubrir planetas, escalas cósmicas y fenómenos extremos del universo, con una guía interactiva que orienta tu recorrido según lo que eliges.</p> <div class="hero-actions"> <a class="btn btn-primary" href="#explorador">Iniciar exploración</a> <a class="hero-link-secondary" href="#aprender">Ver módulos de aprendizaje <span aria-hidden="true">→</span></a> <button type="button" class="btn btn-ghost rs-launch-btn" id="rsLaunchBtn" data-open-ruta aria-haspopup="dialog" aria-controls="rsView"><span aria-hidden="true">🪐</span> Ruta Estelar</button> </div> <div class="df-card" id="dfCard">
 <span class="df-card-icon" aria-hidden="true">🌌</span>
 <span>
 <span class="df-card-label">Dato curioso del día</span>
@@ -339,7 +373,34 @@ html[data-nivel="principiante"] .section-head{border-left:2px solid var(--nebula
 </div>
 
 
-<section class="section" id="aprender"> <div class="container"> <div class="section-head reveal"> <span class="eyebrow">Base de conocimiento</span> <h2>Fenómenos que definen el universo</h2> <p>Módulos breves para entender, desde lo esencial, los grandes misterios del cosmos.</p> </div> <div class="knowledge-grid" id="knowledgeGrid"></div> </div> </section> <section class="section" id="recursos"> <div class="container"> <div class="section-head reveal"> <span class="eyebrow">Explora más allá de Nébula</span> <h2>Recursos y enlaces recomendados</h2> <p>Herramientas y sitios oficiales para seguir explorando el universo.</p> </div> <div class="resources-grid" id="resourcesGrid"></div> <div class="roadmap-panel reveal"> <div class="section-head"> <span class="eyebrow">En construcción</span> <h2>Próximas expansiones</h2> <p>Nébula está pensado para crecer. Estos son los próximos módulos en camino.</p> </div> <div class="roadmap-grid" id="roadmapGrid"></div> </div> </div> </section> <section class="section" id="informacion"> <div class="container"> <div class="section-head reveal"> <span class="eyebrow">Información</span> <h2>Una mirada espiritual al cosmos</h2> <p>Una experiencia adicional de Nébula: contempla el origen del universo junto a las Escrituras, en un rincón íntimo y sereno.</p> </div> <button type="button" class="bible-cta reveal" id="openBibleBtn" aria-haspopup="dialog" aria-controls="bibleView"> <span class="bible-cta-glow" aria-hidden="true"></span> <span class="bible-cta-icon" aria-hidden="true"> <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5.5C4 4.67 4.67 4 5.5 4H12v16H5.5A1.5 1.5 0 014 18.5v-13z"/><path d="M20 5.5c0-.83-.67-1.5-1.5-1.5H12v16h6.5a1.5 1.5 0 001.5-1.5v-13z"/><path d="M12 4v16"/></svg> </span> <span class="bible-cta-text"> <strong>Aprendiendo con Jesús</strong> <small>Biblia Digital Educativa · La creación y el cosmos</small> </span> <span class="bible-cta-arrow" aria-hidden="true">→</span> </button> <button type="button" class="gallery-cta reveal" id="openGalleryBtn" aria-haspopup="dialog" aria-controls="galleryView"> <span class="gallery-cta-glow" aria-hidden="true"></span> <span class="gallery-cta-icon" aria-hidden="true"> <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2.5c-3.6 0-6.5 3.2-6.5 8 0 3.6 1.3 6.6 2.2 8.4.3.6.9 1 1.6 1h5.4c.7 0 1.3-.4 1.6-1 .9-1.8 2.2-4.8 2.2-8.4 0-4.8-2.9-8-6.5-8z"/><circle cx="12" cy="10.5" r="3.4"/><path d="M8.3 18.4c-.4 1.2-.4 2.4 0 3.1M15.7 18.4c.4 1.2.4 2.4 0 3.1"/></svg> </span> <span class="gallery-cta-text"> <strong>Galería Espacial</strong> <small>9 hitos que cambiaron la historia de la exploración espacial</small> </span> <span class="gallery-cta-arrow" aria-hidden="true">→</span> </button> <button type="button" class="sky-cta reveal" id="openSkyBtn" aria-haspopup="dialog" aria-controls="skyView" data-open-sky>
+<section class="section" id="aprender"> <div class="container"> <div class="section-head reveal"> <span class="eyebrow">Base de conocimiento</span> <h2>Fenómenos que definen el universo</h2> <p>Módulos breves para entender, desde lo esencial, los grandes misterios del cosmos.</p> </div> <div class="knowledge-grid" id="knowledgeGrid"></div> </div> </section> <section class="section" id="comunidad">
+<div class="container">
+<div class="section-head reveal">
+<span class="eyebrow">Comunidad Nébula</span>
+<h2>Comparte con la comunidad espacial</h2>
+<p>Sube una foto del cielo o haz una pregunta a otros exploradores. Todo pasa primero por una revisión automática para mantener la comunidad segura y agradable.</p>
+</div>
+<div class="cm-composer">
+<div class="cm-tabs" role="tablist" aria-label="Tipo de publicación">
+<button type="button" class="cm-tab is-active" id="cmTabQuestion" data-mode="question" role="tab" aria-selected="true">Pregunta</button>
+<button type="button" class="cm-tab" id="cmTabPhoto" data-mode="photo" role="tab" aria-selected="false">Foto</button>
+</div>
+<form id="cmForm" class="cm-form" novalidate>
+<textarea id="cmTextInput" placeholder="¿Qué quieres preguntarle a la comunidad?" maxlength="400"></textarea>
+<div class="cm-photo-field" id="cmPhotoField" hidden>
+<input type="file" id="cmImageInput" accept="image/jpeg,image/png,image/webp">
+<img class="cm-photo-preview" id="cmPhotoPreview" alt="Vista previa de tu foto">
+<input type="text" id="cmCaptionInput" placeholder="Cuéntanos sobre tu foto (opcional)" maxlength="200">
+</div>
+<div class="cm-status" id="cmStatus"></div>
+<button type="submit" class="btn btn-primary cm-submit" id="cmSubmitBtn">Publicar</button>
+</form>
+</div>
+<div class="cm-feed" id="cmFeed"></div>
+</div>
+</section>
+
+<section class="section" id="recursos"> <div class="container"> <div class="section-head reveal"> <span class="eyebrow">Explora más allá de Nébula</span> <h2>Recursos y enlaces recomendados</h2> <p>Herramientas y sitios oficiales para seguir explorando el universo.</p> </div> <div class="resources-grid" id="resourcesGrid"></div> <div class="roadmap-panel reveal"> <div class="section-head"> <span class="eyebrow">En construcción</span> <h2>Próximas expansiones</h2> <p>Nébula está pensado para crecer. Estos son los próximos módulos en camino.</p> </div> <div class="roadmap-grid" id="roadmapGrid"></div> </div> </div> </section> <section class="section" id="informacion"> <div class="container"> <div class="section-head reveal"> <span class="eyebrow">Información</span> <h2>Una mirada espiritual al cosmos</h2> <p>Una experiencia adicional de Nébula: contempla el origen del universo junto a las Escrituras, en un rincón íntimo y sereno.</p> </div> <button type="button" class="bible-cta reveal" id="openBibleBtn" aria-haspopup="dialog" aria-controls="bibleView"> <span class="bible-cta-glow" aria-hidden="true"></span> <span class="bible-cta-icon" aria-hidden="true"> <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5.5C4 4.67 4.67 4 5.5 4H12v16H5.5A1.5 1.5 0 014 18.5v-13z"/><path d="M20 5.5c0-.83-.67-1.5-1.5-1.5H12v16h6.5a1.5 1.5 0 001.5-1.5v-13z"/><path d="M12 4v16"/></svg> </span> <span class="bible-cta-text"> <strong>Aprendiendo con Jesús</strong> <small>Biblia Digital Educativa · La creación y el cosmos</small> </span> <span class="bible-cta-arrow" aria-hidden="true">→</span> </button> <button type="button" class="gallery-cta reveal" id="openGalleryBtn" aria-haspopup="dialog" aria-controls="galleryView"> <span class="gallery-cta-glow" aria-hidden="true"></span> <span class="gallery-cta-icon" aria-hidden="true"> <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2.5c-3.6 0-6.5 3.2-6.5 8 0 3.6 1.3 6.6 2.2 8.4.3.6.9 1 1.6 1h5.4c.7 0 1.3-.4 1.6-1 .9-1.8 2.2-4.8 2.2-8.4 0-4.8-2.9-8-6.5-8z"/><circle cx="12" cy="10.5" r="3.4"/><path d="M8.3 18.4c-.4 1.2-.4 2.4 0 3.1M15.7 18.4c.4 1.2.4 2.4 0 3.1"/></svg> </span> <span class="gallery-cta-text"> <strong>Galería Espacial</strong> <small>9 hitos que cambiaron la historia de la exploración espacial</small> </span> <span class="gallery-cta-arrow" aria-hidden="true">→</span> </button> <button type="button" class="sky-cta reveal" id="openSkyBtn" aria-haspopup="dialog" aria-controls="skyView" data-open-sky>
 <span class="sky-cta-glow" aria-hidden="true"></span>
 <span class="sky-cta-icon" aria-hidden="true">🔭</span>
 <span class="sky-cta-text">
@@ -7189,6 +7250,166 @@ document.addEventListener("click",function(e){
 voiceCheckbox.addEventListener("change",function(){
   setVoiceEnabled(voiceCheckbox.checked);
   if(voiceCheckbox.checked)window.a11ySpeak("Asistencia por voz guiada activada.");
+});
+})();
+</script>
+
+<script id="cm-script">
+(function(){
+"use strict";
+var tabQuestion=document.getElementById("cmTabQuestion");
+var tabPhoto=document.getElementById("cmTabPhoto");
+var form=document.getElementById("cmForm");
+var textInput=document.getElementById("cmTextInput");
+var photoField=document.getElementById("cmPhotoField");
+var imageInput=document.getElementById("cmImageInput");
+var photoPreview=document.getElementById("cmPhotoPreview");
+var captionInput=document.getElementById("cmCaptionInput");
+var statusEl=document.getElementById("cmStatus");
+var submitBtn=document.getElementById("cmSubmitBtn");
+var feedEl=document.getElementById("cmFeed");
+if(!form||!feedEl)return;
+
+var mode="question";
+
+function setMode(m){
+  mode=m;
+  tabQuestion.classList.toggle("is-active",m==="question");
+  tabPhoto.classList.toggle("is-active",m==="photo");
+  tabQuestion.setAttribute("aria-selected",String(m==="question"));
+  tabPhoto.setAttribute("aria-selected",String(m==="photo"));
+  textInput.hidden=m!=="question";
+  photoField.hidden=m!=="photo";
+  clearStatus();
+}
+tabQuestion.addEventListener("click",function(){setMode("question")});
+tabPhoto.addEventListener("click",function(){setMode("photo")});
+
+imageInput&&imageInput.addEventListener("change",function(){
+  var file=imageInput.files&&imageInput.files[0];
+  if(!file){photoPreview.classList.remove("is-visible");return}
+  var reader=new FileReader();
+  reader.onload=function(e){
+    photoPreview.src=e.target.result;
+    photoPreview.classList.add("is-visible");
+  };
+  reader.readAsDataURL(file);
+});
+
+function setStatus(msg,type){
+  statusEl.textContent=msg;
+  statusEl.className="cm-status is-visible"+(type?" is-"+type:"");
+}
+function clearStatus(){
+  statusEl.textContent="";
+  statusEl.className="cm-status";
+}
+
+function getUsername(){
+  var s=window.safeStorage&&window.safeStorage.get("nebula:session");
+  return s&&s.username?s.username:null;
+}
+
+function escapeHtml(s){
+  return String(s).replace(/[&<>"']/g,function(c){
+    return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c];
+  });
+}
+
+function timeAgo(iso){
+  var diff=Math.max(0,(Date.now()-new Date(iso).getTime())/1000);
+  if(diff<60)return"justo ahora";
+  if(diff<3600)return Math.floor(diff/60)+" min";
+  if(diff<86400)return Math.floor(diff/3600)+" h";
+  return Math.floor(diff/86400)+" d";
+}
+
+function renderFeed(posts){
+  if(!posts||!posts.length){
+    feedEl.innerHTML='<p class="cm-feed-empty">Todavía no hay publicaciones. ¡Sé el primero en compartir algo!</p>';
+    return;
+  }
+  feedEl.innerHTML=posts.map(function(p){
+    var userHtml='<span class="cm-post-user">'+escapeHtml(p.username||"Anónimo")+' · <span class="cm-post-time">'+timeAgo(p.created_at)+'</span></span>';
+    if(p.type==="photo"){
+      return'<div class="cm-post cm-post-photo-card">'+
+        '<img class="cm-post-photo" src="'+escapeHtml(p.image_url)+'" alt="Foto compartida por '+escapeHtml(p.username||"un explorador")+'" loading="lazy">'+
+        '<div class="cm-post-body">'+userHtml+
+        (p.text_content?'<p class="cm-post-text">'+escapeHtml(p.text_content)+'</p>':'')+
+        '</div></div>';
+    }
+    return'<div class="cm-post cm-post-question">'+
+      '<div class="cm-post-body">'+userHtml+
+      '<p class="cm-post-text">'+escapeHtml(p.text_content||"")+'</p>'+
+      '</div></div>';
+  }).join("");
+}
+
+function loadFeed(){
+  fetch("/api/community-posts")
+    .then(function(r){return r.json()})
+    .then(function(data){renderFeed(data&&data.posts?data.posts:[])})
+    .catch(function(){feedEl.innerHTML='<p class="cm-feed-empty">No se pudo cargar la comunidad ahora mismo.</p>'});
+}
+loadFeed();
+
+form.addEventListener("submit",function(evt){
+  evt.preventDefault();
+  clearStatus();
+  var username=getUsername();
+  if(!username){setStatus("Inicia sesión para publicar.","error");return}
+
+  if(mode==="question"){
+    var text=textInput.value.trim();
+    if(text.length<3){setStatus("Escribe una pregunta un poco más larga.","error");return}
+    submitBtn.disabled=true;
+    setStatus("Enviando y revisando tu pregunta…","pending");
+    fetch("/api/community-posts",{
+      method:"POST",
+      headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({username:username,text:text})
+    }).then(function(r){return r.json().then(function(data){return{ok:r.ok,data:data}})})
+      .then(function(res){
+        submitBtn.disabled=false;
+        if(res.ok&&res.data&&res.data.ok){
+          setStatus("¡Publicado!","success");
+          textInput.value="";
+          loadFeed();
+        }else{
+          setStatus((res.data&&res.data.error)||"No se pudo publicar. Intenta de nuevo.","error");
+        }
+      }).catch(function(){
+        submitBtn.disabled=false;
+        setStatus("No se pudo conectar. Intenta de nuevo.","error");
+      });
+  }else{
+    var file=imageInput.files&&imageInput.files[0];
+    if(!file){setStatus("Elige una foto para subir.","error");return}
+    if(file.size>5*1024*1024){setStatus("La imagen es muy grande (máximo 5 MB).","error");return}
+    var fd=new FormData();
+    fd.append("username",username);
+    fd.append("caption",captionInput.value.trim());
+    fd.append("image",file);
+    submitBtn.disabled=true;
+    setStatus("Subiendo y revisando tu foto…","pending");
+    fetch("/api/community-posts",{method:"POST",body:fd})
+      .then(function(r){return r.json().then(function(data){return{ok:r.ok,data:data}})})
+      .then(function(res){
+        submitBtn.disabled=false;
+        if(res.ok&&res.data&&res.data.ok){
+          setStatus("¡Publicado!","success");
+          imageInput.value="";
+          captionInput.value="";
+          photoPreview.classList.remove("is-visible");
+          loadFeed();
+        }else{
+          setStatus((res.data&&res.data.error)||"No se pudo publicar. Intenta de nuevo.","error");
+        }
+      }).catch(function(){
+        submitBtn.disabled=false;
+        setStatus("No se pudo conectar. Intenta de nuevo.","error");
+      });
+  }
 });
 })();
 </script>
