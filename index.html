@@ -1773,6 +1773,7 @@ html[data-nivel="principiante"] .section-head{border-left:2px solid var(--nebula
   if (!e || !a) return;
   const r = "nebula-guide-interacted";
   let h = null;
+  let sessionHistory = [];
   function l(e) {
     return e
       .toLowerCase()
@@ -1879,6 +1880,56 @@ html[data-nivel="principiante"] .section-head{border-left:2px solid var(--nebula
   function p() {
     (c("¿Qué te atrae más del cosmos?", "ai"), d(g));
   }
+  function buildContextDigest() {
+    const prog = window.__nebulaProgress;
+    if (!prog || !Array.isArray(prog.recentMessages) || !prog.recentMessages.length) return "";
+    return prog.recentMessages
+      .map(
+        (msg) =>
+          `- Preguntó: "${msg.user_message || ""}" → Se le respondió: "${msg.ai_reply || ""}"`,
+      )
+      .join("\n");
+  }
+  function showInitialGreeting() {
+    function render(prog) {
+      const streak = prog && typeof prog.streak === "number" ? prog.streak : null;
+      const last =
+        prog && Array.isArray(prog.recentMessages) && prog.recentMessages.length
+          ? prog.recentMessages[prog.recentMessages.length - 1]
+          : null;
+      let greeting;
+      if (streak && streak > 1) {
+        greeting = `¡Por los Anillos de Saturno! Qué alegría verte de nuevo, estimado tripulante — ¡llevas ${streak} días seguidos explorando el cosmos conmigo! `;
+        greeting += last && last.user_message
+          ? `La última vez hablamos sobre "${last.user_message}". ¿Retomamos ahí o prefieres un nuevo destino?`
+          : "¿Cuál será nuestro próximo destino: un planeta, un agujero negro, o una recomendación a tu medida?";
+      } else {
+        greeting =
+          "¡Por los Anillos de Saturno! Bienvenido a bordo, estimado tripulante. Soy el Capitán Cósmico, y esta es tu nave de turismo estelar. ¡Ajusten sus cinturones de gravedad! ¿Cuál será nuestro primer destino: un planeta, un agujero negro, o prefieres que te recomiende una parada a tu medida?";
+      }
+      c(greeting, "ai");
+      d(m);
+    }
+    if (window.__nebulaProgress !== undefined && window.__nebulaProgress !== null) {
+      render(window.__nebulaProgress);
+    } else if (window.__nebulaProgressPromise) {
+      let settled = false;
+      window.__nebulaProgressPromise.then((prog) => {
+        if (!settled) {
+          settled = true;
+          render(prog);
+        }
+      });
+      setTimeout(() => {
+        if (!settled) {
+          settled = true;
+          render(null);
+        }
+      }, 1200);
+    } else {
+      render(null);
+    }
+  }
   async function y(e) {
     const w = document.createElement("div");
     ((w.className = "ai-msg from-ai ai-typing"),
@@ -1895,16 +1946,23 @@ html[data-nivel="principiante"] .section-head{border-left:2px solid var(--nebula
           body: JSON.stringify({
             message: e,
             username: nalSession && nalSession.username ? nalSession.username : null,
+            history: sessionHistory,
+            context: buildContextDigest(),
           }),
         })
       ).json().catch(() => null);
-      (w.remove(),
-        j && j.reply
-          ? c(j.reply, "ai")
-          : c(
-              "No pude conectarme con la IA en este momento. Intenta de nuevo en unos segundos.",
-              "ai",
-            ));
+      w.remove();
+      if (j && j.reply) {
+        c(j.reply, "ai");
+        sessionHistory.push({ role: "user", text: e });
+        sessionHistory.push({ role: "model", text: j.reply });
+        if (sessionHistory.length > 20) sessionHistory.splice(0, sessionHistory.length - 20);
+      } else {
+        c(
+          "No pude conectarme con la IA en este momento. Intenta de nuevo en unos segundos.",
+          "ai",
+        );
+      }
     } catch (k) {
       (w.remove(),
         c(
@@ -1999,12 +2057,7 @@ html[data-nivel="principiante"] .section-head{border-left:2px solid var(--nebula
           (e.classList.add("is-settled"),
           window.safeStorage && window.safeStorage.set(r, !0)),
         o.dataset.started ||
-          ((o.dataset.started = "true"),
-          c(
-            "¡Por los Anillos de Saturno! Bienvenido a bordo, estimado tripulante. Soy el Capitán Cósmico, y esta es tu nave de turismo estelar. ¡Ajusten sus cinturones de gravedad! ¿Cuál será nuestro primer destino: un planeta, un agujero negro, o prefieres que te recomiende una parada a tu medida?",
-            "ai",
-          ),
-          d(m)),
+          ((o.dataset.started = "true"), showInitialGreeting()),
         s.focus());
   }),
     t.addEventListener("click", E),
@@ -5900,9 +5953,15 @@ function getSession(){
 function saveSession(session){storage.set(STORAGE_KEY,session)}
 
 function saveSessionRemote(session){
+  var p;
   try{
-    fetch("/api/session",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(session)}).catch(function(){});
-  }catch(e){}
+    p=fetch("/api/session",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(session)})
+      .then(function(r){return r.json()})
+      .then(function(data){window.__nebulaProgress=data&&data.ok?data:null;return window.__nebulaProgress})
+      .catch(function(){window.__nebulaProgress=null;return null});
+  }catch(e){p=Promise.resolve(null)}
+  window.__nebulaProgressPromise=p;
+  return p;
 }
 
 form.addEventListener("submit",function(evt){

@@ -27,3 +27,48 @@ export async function supabaseInsert(env, table, row) {
     return { ok: false, error: String(err) };
   }
 }
+
+export async function supabaseSelect(env, table, query) {
+  const url = env.SUPABASE_URL;
+  const key = env.SUPABASE_SERVICE_ROLE_KEY;
+  if (!url || !key) return { ok: false, error: "Supabase no configurado", data: null };
+
+  try {
+    const res = await fetch(`${url.replace(/\/$/, "")}/rest/v1/${table}?${query}`, {
+      headers: { apikey: key, Authorization: `Bearer ${key}` },
+    });
+    if (!res.ok) {
+      const text = await res.text().catch(() => "");
+      return { ok: false, error: `Supabase ${res.status}: ${text}`, data: null };
+    }
+    return { ok: true, data: await res.json() };
+  } catch (err) {
+    return { ok: false, error: String(err), data: null };
+  }
+}
+
+export async function supabaseUpsert(env, table, row, onConflict) {
+  const url = env.SUPABASE_URL;
+  const key = env.SUPABASE_SERVICE_ROLE_KEY;
+  if (!url || !key) return { ok: false, error: "Supabase no configurado" };
+
+  try {
+    const res = await fetch(`${url.replace(/\/$/, "")}/rest/v1/${table}?on_conflict=${onConflict}`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        apikey: key,
+        Authorization: `Bearer ${key}`,
+        Prefer: "resolution=merge-duplicates,return=minimal",
+      },
+      body: JSON.stringify(row),
+    });
+    if (!res.ok) {
+      const text = await res.text().catch(() => "");
+      return { ok: false, error: `Supabase ${res.status}: ${text}` };
+    }
+    return { ok: true };
+  } catch (err) {
+    return { ok: false, error: String(err) };
+  }
+}

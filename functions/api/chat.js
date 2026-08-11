@@ -50,9 +50,20 @@ export async function onRequestPost({ request, env, waitUntil }) {
   const apiKey = env.GEMINI_API_KEY;
   if (!apiKey) return jsonResponse({ error: "Falta configurar GEMINI_API_KEY" }, 500);
 
+  const rawHistory = Array.isArray(body?.history) ? body.history : [];
+  const history = rawHistory
+    .filter((t) => t && (t.role === "user" || t.role === "model") && typeof t.text === "string" && t.text.trim())
+    .slice(-20)
+    .map((t) => ({ role: t.role, parts: [{ text: t.text.trim().slice(0, 2000) }] }));
+
+  const contextDigest = typeof body?.context === "string" ? body.context.trim().slice(0, 3000) : "";
+  const systemText = contextDigest
+    ? `${SYSTEM_INSTRUCTION}\n\nMemoria de una sesión anterior con este tripulante (para darle continuidad; no la repitas literalmente, úsala solo como contexto):\n${contextDigest}`
+    : SYSTEM_INSTRUCTION;
+
   const payload = {
-    contents: [{ role: "user", parts: [{ text: message }] }],
-    systemInstruction: { parts: [{ text: SYSTEM_INSTRUCTION }] },
+    contents: [...history, { role: "user", parts: [{ text: message }] }],
+    systemInstruction: { parts: [{ text: systemText }] },
     generationConfig: {
       maxOutputTokens: 1024,
       temperature: 0.8,
