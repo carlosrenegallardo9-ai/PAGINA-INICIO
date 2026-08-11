@@ -114,7 +114,7 @@ export async function onRequestGet({ env }) {
   const result = await supabaseSelect(
     env,
     "nebula_community_posts",
-    "select=username,type,text_content,image_url,created_at&order=created_at.desc&limit=30",
+    "select=id,username,type,text_content,image_url,created_at&order=created_at.desc&limit=30",
   );
   if (!result.ok) {
     console.error("Supabase community fetch error", result.error);

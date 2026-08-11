@@ -228,10 +228,15 @@ html[data-nivel="principiante"] .section-head{border-left:2px solid var(--nebula
 </style>
 
 <style id="cm-styles">
-/* Comunidad — muro de fotos y preguntas con moderación automática. Aislado, prefijo "cm-". */
-.cm-composer{background:var(--cosmic-indigo);border:1px solid var(--cosmic-indigo-border);border-radius:var(--radius-lg);padding:var(--space-6);margin-top:var(--space-2);max-width:640px}
+/* Comunidad — muro estilo foro con moderación automática. Aislado, prefijo "cm-". */
+.cm-layout{max-width:680px;margin-top:var(--space-2)}
+.cm-composer{background:var(--cosmic-indigo);border:1px solid var(--cosmic-indigo-border);border-radius:var(--radius-lg);padding:var(--space-6)}
+.cm-composer-head{display:flex;align-items:center;gap:var(--space-3);margin-bottom:var(--space-5)}
+.cm-composer-head .cm-avatar{width:36px;height:36px;font-size:.86rem}
+.cm-composer-title{font-family:var(--font-display);font-size:.98rem;color:var(--estelar-mist);font-weight:600}
+.cm-composer-sub{font-family:var(--font-mono);font-size:.68rem;letter-spacing:.04em;color:var(--proton-silver);text-transform:uppercase;margin-top:.15rem}
 .cm-tabs{display:flex;gap:var(--space-2);margin-bottom:var(--space-5)}
-.cm-tab{padding:.6rem 1.2rem;border-radius:var(--radius-pill);border:1px solid var(--cosmic-indigo-border);font-family:var(--font-mono);font-size:.76rem;letter-spacing:.03em;text-transform:uppercase;color:var(--proton-silver);background:var(--cosmic-indigo-light);transition:border-color var(--dur-fast),color var(--dur-fast),background var(--dur-fast)}
+.cm-tab{padding:.6rem 1.2rem;border-radius:var(--radius-pill);border:1px solid var(--cosmic-indigo-border);font-family:var(--font-mono);font-size:.76rem;letter-spacing:.03em;text-transform:uppercase;color:var(--proton-silver);background:var(--cosmic-indigo-light);transition:border-color var(--dur-fast),color var(--dur-fast),background var(--dur-fast);cursor:pointer}
 .cm-tab:hover{color:var(--estelar-mist)}
 .cm-tab.is-active{background:var(--solar-ember);border-color:var(--solar-ember);color:var(--deep-void);font-weight:700}
 .cm-form textarea{width:100%;resize:vertical;min-height:88px;background:var(--deep-void);border:1px solid var(--cosmic-indigo-border);border-radius:var(--radius-md);padding:var(--space-4);color:var(--estelar-mist);font-family:var(--font-body);font-size:.94rem}
@@ -248,15 +253,35 @@ html[data-nivel="principiante"] .section-head{border-left:2px solid var(--nebula
 .cm-status.is-pending{background:var(--cosmic-indigo-light);color:var(--proton-silver);border:1px solid var(--cosmic-indigo-border)}
 .cm-status.is-success{background:rgba(74,222,128,.15);color:#4ADE80;border:1px solid #4ADE80}
 .cm-submit{margin-top:var(--space-5)}
-.cm-feed{display:grid;gap:var(--space-5);grid-template-columns:repeat(auto-fill,minmax(260px,1fr));margin-top:var(--space-8)}
-.cm-post{background:var(--cosmic-indigo);border:1px solid var(--cosmic-indigo-border);border-radius:var(--radius-lg);overflow:hidden;display:flex;flex-direction:column}
-.cm-post-photo{width:100%;aspect-ratio:4/3;object-fit:cover;background:var(--cosmic-indigo-light)}
-.cm-post-body{padding:var(--space-4) var(--space-5);display:flex;flex-direction:column;gap:var(--space-2)}
-.cm-post-user{font-family:var(--font-mono);font-size:.68rem;letter-spacing:.05em;color:var(--dorado-celestial);text-transform:uppercase}
-.cm-post-text{font-size:.9rem;color:var(--estelar-mist);line-height:1.5}
-.cm-post-question .cm-post-text{font-family:var(--font-display);font-size:1rem}
-.cm-post-time{font-family:var(--font-mono);font-size:.66rem;color:var(--proton-silver)}
-.cm-feed-empty{color:var(--proton-silver);font-size:.9rem;grid-column:1/-1}
+.cm-avatar{border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:var(--font-mono);font-weight:700;color:var(--deep-void);flex-shrink:0;text-transform:uppercase}
+.cm-sort{display:flex;gap:var(--space-2);margin:var(--space-8) 0 var(--space-4)}
+.cm-sort-btn{padding:.4rem 1rem;border-radius:var(--radius-pill);border:1px solid transparent;font-family:var(--font-mono);font-size:.7rem;letter-spacing:.03em;text-transform:uppercase;color:var(--proton-silver);background:transparent;cursor:pointer;transition:background var(--dur-fast),color var(--dur-fast)}
+.cm-sort-btn:hover{color:var(--estelar-mist)}
+.cm-sort-btn.is-active{background:var(--cosmic-indigo-light);color:var(--estelar-mist);border-color:var(--cosmic-indigo-border);font-weight:700}
+.cm-feed{display:flex;flex-direction:column;gap:var(--space-4)}
+.cm-post{background:var(--cosmic-indigo);border:1px solid var(--cosmic-indigo-border);border-radius:var(--radius-lg);overflow:hidden;display:flex;transition:border-color var(--dur-fast)}
+.cm-post:hover{border-color:var(--nebula-violet-soft)}
+.cm-vote{display:flex;flex-direction:column;align-items:center;gap:.2rem;padding:var(--space-4) var(--space-2);background:rgba(0,0,0,.15);flex-shrink:0}
+.cm-vote-btn{width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:var(--proton-silver);cursor:pointer;background:transparent;border:none;font-size:.9rem;line-height:1;transition:background var(--dur-fast),color var(--dur-fast)}
+.cm-vote-btn:hover{background:var(--cosmic-indigo-light);color:var(--estelar-mist)}
+.cm-vote-btn.is-up.is-active{color:var(--solar-ember)}
+.cm-vote-btn.is-down.is-active{color:var(--nebula-violet-soft)}
+.cm-vote-score{font-family:var(--font-mono);font-size:.78rem;font-weight:700;color:var(--estelar-mist)}
+.cm-post-main{flex:1;min-width:0;padding:var(--space-4) var(--space-5)}
+.cm-post-header{display:flex;align-items:center;gap:var(--space-3);margin-bottom:var(--space-3)}
+.cm-post-header .cm-avatar{width:30px;height:30px;font-size:.74rem}
+.cm-post-meta{display:flex;flex-direction:column;line-height:1.25;min-width:0}
+.cm-post-user{font-family:var(--font-mono);font-size:.72rem;letter-spacing:.03em;color:var(--dorado-celestial);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.cm-post-time{font-family:var(--font-mono);font-size:.64rem;color:var(--proton-silver)}
+.cm-post-badge{margin-left:auto;flex-shrink:0;font-family:var(--font-mono);font-size:.6rem;letter-spacing:.05em;text-transform:uppercase;padding:.2rem .6rem;border-radius:var(--radius-pill);border:1px solid var(--cosmic-indigo-border);color:var(--proton-silver)}
+.cm-post-text{font-size:.9rem;color:var(--estelar-mist);line-height:1.55}
+.cm-post-question .cm-post-text{font-family:var(--font-display);font-size:1.05rem;font-weight:600}
+.cm-post-photo{width:100%;max-height:440px;object-fit:cover;border-radius:var(--radius-md);border:1px solid var(--cosmic-indigo-border);margin-top:var(--space-3);background:var(--cosmic-indigo-light)}
+.cm-post-footer{display:flex;align-items:center;gap:var(--space-5);margin-top:var(--space-4)}
+.cm-post-footer-item{display:flex;align-items:center;gap:.35rem;font-family:var(--font-mono);font-size:.68rem;letter-spacing:.02em;color:var(--proton-silver)}
+.cm-post-share{background:transparent;border:none;cursor:pointer;padding:.25rem .5rem;margin:-0.25rem -0.5rem;border-radius:var(--radius-sm);transition:background var(--dur-fast),color var(--dur-fast)}
+.cm-post-share:hover{background:var(--cosmic-indigo-light);color:var(--estelar-mist)}
+.cm-feed-empty{color:var(--proton-silver);font-size:.9rem;text-align:center;padding:var(--space-6) 0}
 </style>
 
 </head> <body>
@@ -380,7 +405,15 @@ html[data-nivel="principiante"] .section-head{border-left:2px solid var(--nebula
 <h2>Comparte con la comunidad espacial</h2>
 <p>Sube una foto del cielo o haz una pregunta a otros exploradores. Todo pasa primero por una revisión automática para mantener la comunidad segura y agradable.</p>
 </div>
+<div class="cm-layout">
 <div class="cm-composer">
+<div class="cm-composer-head">
+<div class="cm-avatar" id="cmComposerAvatar" aria-hidden="true">?</div>
+<div>
+<div class="cm-composer-title">Crear publicación</div>
+<div class="cm-composer-sub">Visible para toda la comunidad</div>
+</div>
+</div>
 <div class="cm-tabs" role="tablist" aria-label="Tipo de publicación">
 <button type="button" class="cm-tab is-active" id="cmTabQuestion" data-mode="question" role="tab" aria-selected="true">Pregunta</button>
 <button type="button" class="cm-tab" id="cmTabPhoto" data-mode="photo" role="tab" aria-selected="false">Foto</button>
@@ -396,7 +429,12 @@ html[data-nivel="principiante"] .section-head{border-left:2px solid var(--nebula
 <button type="submit" class="btn btn-primary cm-submit" id="cmSubmitBtn">Publicar</button>
 </form>
 </div>
+<div class="cm-sort" role="tablist" aria-label="Ordenar publicaciones">
+<button type="button" class="cm-sort-btn is-active" id="cmSortNew" data-sort="new" role="tab" aria-selected="true">Recientes</button>
+<button type="button" class="cm-sort-btn" id="cmSortTop" data-sort="top" role="tab" aria-selected="false">Populares</button>
+</div>
 <div class="cm-feed" id="cmFeed"></div>
+</div>
 </div>
 </section>
 
@@ -7268,9 +7306,15 @@ var captionInput=document.getElementById("cmCaptionInput");
 var statusEl=document.getElementById("cmStatus");
 var submitBtn=document.getElementById("cmSubmitBtn");
 var feedEl=document.getElementById("cmFeed");
+var composerAvatar=document.getElementById("cmComposerAvatar");
+var sortNewBtn=document.getElementById("cmSortNew");
+var sortTopBtn=document.getElementById("cmSortTop");
 if(!form||!feedEl)return;
 
 var mode="question";
+var sortMode="new";
+var cachedPosts=[];
+var AVATAR_COLORS=["var(--solar-ember)","var(--dorado-celestial)","var(--nebula-violet-soft)","#4ADE80","#5EEAD4","#FF8FB3","#4AA8FF","#F59E0B"];
 
 function setMode(m){
   mode=m;
@@ -7324,31 +7368,136 @@ function timeAgo(iso){
   return Math.floor(diff/86400)+" d";
 }
 
-function renderFeed(posts){
-  if(!posts||!posts.length){
+function hashString(s){
+  var h=0;
+  for(var i=0;i<s.length;i++){h=(h<<5)-h+s.charCodeAt(i);h|=0}
+  return Math.abs(h);
+}
+
+function avatarColor(name){
+  return AVATAR_COLORS[hashString(name||"?")%AVATAR_COLORS.length];
+}
+
+function initials(name){
+  if(!name)return"?";
+  var parts=name.trim().split(/\s+/);
+  var s=parts[0].charAt(0)+(parts.length>1?parts[1].charAt(0):"");
+  return s.toUpperCase();
+}
+
+function avatarHtml(name,cls){
+  return'<div class="cm-avatar'+(cls?" "+cls:"")+'" style="background:'+avatarColor(name)+'" aria-hidden="true">'+escapeHtml(initials(name))+'</div>';
+}
+
+function updateComposerAvatar(){
+  if(!composerAvatar)return;
+  var username=getUsername();
+  composerAvatar.textContent=initials(username);
+  composerAvatar.style.background=avatarColor(username||"?");
+}
+updateComposerAvatar();
+
+var VOTES_KEY="cm_votes";
+function getVotes(){
+  try{var raw=localStorage.getItem(VOTES_KEY);return raw?JSON.parse(raw):{}}catch(e){return{}}
+}
+function setVote(id,dir){
+  var votes=getVotes();
+  if(votes[id]===dir)delete votes[id];else votes[id]=dir;
+  try{localStorage.setItem(VOTES_KEY,JSON.stringify(votes))}catch(e){}
+  return getVotes();
+}
+function postScore(id){
+  var votes=getVotes();
+  return 1+(votes[id]||0);
+}
+
+function postId(p){return p.id!=null?String(p.id):(p.username+"|"+p.created_at)}
+
+function sortedPosts(){
+  var list=cachedPosts.slice();
+  if(sortMode==="top"){
+    list.sort(function(a,b){
+      var diff=postScore(postId(b))-postScore(postId(a));
+      if(diff!==0)return diff;
+      return new Date(b.created_at)-new Date(a.created_at);
+    });
+  }
+  return list;
+}
+
+function renderFeed(){
+  var posts=sortedPosts();
+  if(!posts.length){
     feedEl.innerHTML='<p class="cm-feed-empty">Todavía no hay publicaciones. ¡Sé el primero en compartir algo!</p>';
     return;
   }
+  var votes=getVotes();
   feedEl.innerHTML=posts.map(function(p){
-    var userHtml='<span class="cm-post-user">'+escapeHtml(p.username||"Anónimo")+' · <span class="cm-post-time">'+timeAgo(p.created_at)+'</span></span>';
+    var id=postId(p);
+    var dir=votes[id]||0;
+    var score=postScore(id);
+    var badge=p.type==="photo"?"Foto":"Pregunta";
+    var voteHtml='<div class="cm-vote">'+
+      '<button type="button" class="cm-vote-btn is-up'+(dir===1?" is-active":"")+'" data-post-id="'+escapeHtml(id)+'" data-dir="1" aria-label="Votar a favor">▲</button>'+
+      '<span class="cm-vote-score">'+score+'</span>'+
+      '<button type="button" class="cm-vote-btn is-down'+(dir===-1?" is-active":"")+'" data-post-id="'+escapeHtml(id)+'" data-dir="-1" aria-label="Votar en contra">▼</button>'+
+      '</div>';
+    var headerHtml='<div class="cm-post-header">'+
+      avatarHtml(p.username)+
+      '<div class="cm-post-meta"><span class="cm-post-user">'+escapeHtml(p.username||"Anónimo")+'</span><span class="cm-post-time">'+timeAgo(p.created_at)+'</span></div>'+
+      '<span class="cm-post-badge">'+badge+'</span>'+
+      '</div>';
+    var footerHtml='<div class="cm-post-footer">'+
+      '<span class="cm-post-footer-item">💬 0 respuestas</span>'+
+      '<button type="button" class="cm-post-footer-item cm-post-share" data-share-id="'+escapeHtml(id)+'">↗ Compartir</button>'+
+      '</div>';
+    var bodyHtml;
     if(p.type==="photo"){
-      return'<div class="cm-post cm-post-photo-card">'+
-        '<img class="cm-post-photo" src="'+escapeHtml(p.image_url)+'" alt="Foto compartida por '+escapeHtml(p.username||"un explorador")+'" loading="lazy">'+
-        '<div class="cm-post-body">'+userHtml+
-        (p.text_content?'<p class="cm-post-text">'+escapeHtml(p.text_content)+'</p>':'')+
-        '</div></div>';
+      bodyHtml=(p.text_content?'<p class="cm-post-text">'+escapeHtml(p.text_content)+'</p>':'')+
+        '<img class="cm-post-photo" src="'+escapeHtml(p.image_url)+'" alt="Foto compartida por '+escapeHtml(p.username||"un explorador")+'" loading="lazy">';
+    }else{
+      bodyHtml='<p class="cm-post-text">'+escapeHtml(p.text_content||"")+'</p>';
     }
-    return'<div class="cm-post cm-post-question">'+
-      '<div class="cm-post-body">'+userHtml+
-      '<p class="cm-post-text">'+escapeHtml(p.text_content||"")+'</p>'+
-      '</div></div>';
+    return'<div class="cm-post cm-post-'+(p.type==="photo"?"photo-card":"question")+'">'+voteHtml+
+      '<div class="cm-post-main">'+headerHtml+bodyHtml+footerHtml+'</div></div>';
   }).join("");
 }
+
+feedEl.addEventListener("click",function(evt){
+  var voteBtn=evt.target.closest&&evt.target.closest(".cm-vote-btn");
+  if(voteBtn){
+    setVote(voteBtn.dataset.postId,parseInt(voteBtn.dataset.dir,10));
+    renderFeed();
+    return;
+  }
+  var shareBtn=evt.target.closest&&evt.target.closest(".cm-post-share");
+  if(shareBtn){
+    var post=cachedPosts.filter(function(p){return postId(p)===shareBtn.dataset.shareId})[0];
+    var text=post?(post.text_content||"Mira esta publicación en la Comunidad Nébula"):"Comunidad Nébula";
+    var restore=shareBtn.textContent;
+    var done=function(){shareBtn.textContent="✓ Copiado";setTimeout(function(){shareBtn.textContent=restore},1500)};
+    if(navigator.clipboard&&navigator.clipboard.writeText){
+      navigator.clipboard.writeText(text).then(done).catch(function(){});
+    }
+  }
+});
+
+function setSort(m){
+  sortMode=m;
+  sortNewBtn.classList.toggle("is-active",m==="new");
+  sortTopBtn.classList.toggle("is-active",m==="top");
+  sortNewBtn.setAttribute("aria-selected",String(m==="new"));
+  sortTopBtn.setAttribute("aria-selected",String(m==="top"));
+  renderFeed();
+}
+sortNewBtn&&sortNewBtn.addEventListener("click",function(){setSort("new")});
+sortTopBtn&&sortTopBtn.addEventListener("click",function(){setSort("top")});
 
 function loadFeed(){
   fetch("/api/community-posts")
     .then(function(r){return r.json()})
-    .then(function(data){renderFeed(data&&data.posts?data.posts:[])})
+    .then(function(data){cachedPosts=data&&data.posts?data.posts:[];renderFeed()})
     .catch(function(){feedEl.innerHTML='<p class="cm-feed-empty">No se pudo cargar la comunidad ahora mismo.</p>'});
 }
 loadFeed();
