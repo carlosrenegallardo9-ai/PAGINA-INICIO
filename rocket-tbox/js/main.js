@@ -679,11 +679,15 @@ window.updateUIForMode = updateUIForMode;
 
 // Update top-links (docs, GitHub) position based on events panel width
 function updateTopLinksPosition() {
+    // On mobile, top-links has its own fixed corner position (see mobile CSS)
+    // so it stays reachable above the startup menu instead of trailing the events panel.
+    if (window.innerWidth <= 768) return;
+
     const eventsPanel = document.getElementById('events');
     const topLinks = document.getElementById('top-links');
-    
+
     if (!eventsPanel || !topLinks) return;
-    
+
     const eventsRect = eventsPanel.getBoundingClientRect();
     const buffer = 10; // 10px buffer
     
@@ -1025,13 +1029,11 @@ function initMobileUI() {
     const mobilePanel = document.getElementById('mobile-ui-panel');
     const controls = document.getElementById('controls');
     const quickActions = document.getElementById('quick-actions');
-    const topLinks = document.getElementById('top-links');
     const pitchProgram = document.getElementById('pitch-program');
     const manualPitchControls = document.getElementById('manual-pitch-controls');
     const burnControls = document.getElementById('burn-controls');
-    
+
     const controlsContainer = document.getElementById('mobile-controls-container');
-    const githubContainer = document.getElementById('mobile-github-container');
     const pitchContainer = document.getElementById('mobile-pitch-container');
     
     if (!hamburger || !mobilePanel) return;
@@ -1045,9 +1047,6 @@ function initMobileUI() {
         
         if (controls && controlsContainer && !controlsContainer.contains(controls)) {
             controlsContainer.appendChild(controls);
-        }
-        if (topLinks && githubContainer && !githubContainer.contains(topLinks)) {
-            githubContainer.appendChild(topLinks);
         }
         if (pitchProgram && pitchContainer && !pitchContainer.contains(pitchProgram)) {
             pitchContainer.appendChild(pitchProgram);
@@ -1066,9 +1065,6 @@ function initMobileUI() {
         const body = document.body;
         if (controls && !body.contains(controls)) {
             body.appendChild(controls);
-        }
-        if (topLinks && !body.contains(topLinks)) {
-            body.appendChild(topLinks);
         }
         if (pitchProgram && !body.contains(pitchProgram)) {
             body.appendChild(pitchProgram);

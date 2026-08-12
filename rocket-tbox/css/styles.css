@@ -1950,28 +1950,51 @@ button:disabled {
     /* Hide controls and other panels by default on mobile - they'll be in the slide-in panel */
     /* Keep telemetry, events, t-minus display, quick actions, and burn controls visible */
     #controls,
-    #top-links,
     #pitch-program,
     #manual-pitch-controls {
         display: none !important;
     }
-    
+
     /* Show panels when inside mobile panel container */
     .mobile-ui-panel #controls,
-    .mobile-ui-panel #top-links,
     .mobile-ui-panel #pitch-program,
     .mobile-ui-panel #manual-pitch-controls {
         display: block !important;
     }
-    
+
     .mobile-ui-panel #controls {
         display: flex !important;
     }
-    
-    .mobile-ui-panel #top-links {
-        display: flex !important;
+
+    /* top-links (volver, hangar, docs) stay on screen at all times on mobile
+       instead of hiding inside the hamburger drawer, so the Hangar button is
+       reachable in one tap. z-index stays below the mission menu (999-1000)
+       so it doesn't block the menu's own close button while it's open. */
+    #top-links {
+        top: 10px !important;
+        right: 10px !important;
+        left: auto;
+        gap: 6px;
+        z-index: 500;
     }
-    
+
+    #top-links .top-link {
+        width: 30px;
+        height: 30px;
+    }
+
+    #top-links .top-link svg {
+        width: 17px;
+        height: 17px;
+    }
+
+    #top-links #docs-link,
+    #top-links #hangar-link {
+        min-width: 0;
+        min-height: 0;
+        padding: 0;
+    }
+
     /* Burn controls stay visible on mobile (not in hamburger) */
     /* Note: JavaScript controls visibility based on orbit status */
     /* On mobile, they're positioned at bottom left by default */
@@ -2237,11 +2260,11 @@ button:disabled {
         line-height: 1.1;
     }
 
-    /* T-minus display - adjust size and position */
+    /* T-minus display - adjust size and position (leaves room on the right for top-links) */
     #tminus-display {
         top: 10px;
         left: 10px;
-        right: 10px;
+        right: 118px;
         transform: none;
         font-size: 16px;
         padding: 8px 12px;
