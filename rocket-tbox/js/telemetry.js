@@ -8,6 +8,27 @@ import { drawTelemetryRocketDiagram } from './renderer.js';
 import { utilizationColor, getStructuralFailureGraceSeconds } from './structural.js';
 import { updateStructuralPanelVisibility } from './structuralPanel.js';
 
+function syncTelemetryPanelMode() {
+    const panel = document.getElementById('telemetry');
+    const collapseBtn = document.getElementById('telemetry-collapse-btn');
+    if (!panel || !collapseBtn) return;
+
+    panel.classList.toggle('telemetry-collapsed', !!state.telemetryCollapsed);
+    collapseBtn.textContent = state.telemetryCollapsed ? '+' : '_';
+    collapseBtn.title = state.telemetryCollapsed ? 'Expandir telemetría' : 'Minimizar telemetría';
+}
+
+export function initTelemetryPanel() {
+    const collapseBtn = document.getElementById('telemetry-collapse-btn');
+    if (!collapseBtn) return;
+
+    syncTelemetryPanelMode();
+    collapseBtn.addEventListener('click', () => {
+        state.telemetryCollapsed = !state.telemetryCollapsed;
+        syncTelemetryPanelMode();
+    });
+}
+
 // Update all telemetry displays
 export function updateTelemetry() {
     const altitude = getAltitude();

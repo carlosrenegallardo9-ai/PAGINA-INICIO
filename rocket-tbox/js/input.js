@@ -4,7 +4,7 @@ import { state, initState, getAltitude, resetCurrentMission } from './state.js';
 import { resetGuidance } from './guidance.js';
 import { resetCubicGuidance } from './cubicGuidance.js';
 import { addEvent, initEventsPanel } from './events.js';
-import { updateTelemetry } from './telemetry.js';
+import { updateTelemetry, initTelemetryPanel } from './telemetry.js';
 import { getCanvas, resize } from './renderer.js';
 import { initStructuralPanel } from './structuralPanel.js';
 import { captainLaunchCountdown } from './cosmicCaptain.js';
@@ -87,6 +87,7 @@ function setupBurnButton(buttonId, burnMode) {
 // Initialize all input handlers
 export function initInput() {
     initEventsPanel();
+    initTelemetryPanel();
 
     const telemetryTabFlightBtn = document.getElementById('telemetry-tab-flight');
     const telemetryTabStructuralBtn = document.getElementById('telemetry-tab-structural');

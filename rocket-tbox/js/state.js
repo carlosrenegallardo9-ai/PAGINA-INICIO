@@ -2,6 +2,10 @@ import { EARTH_RADIUS, EARTH_ROTATION, G, EARTH_MASS } from './constants.js';
 import { getRocketConfig } from './rocketConfig.js';
 import { addEvent } from './events.js';
 
+// On phones, start the dense text panels collapsed so the interface isn't
+// crowded with numbers on load; desktop keeps them open as before.
+const isMobileDevice = typeof window !== 'undefined' && window.innerWidth <= 768;
+
 // Game state object
 export const state = {
     running: false,
@@ -16,7 +20,8 @@ export const state = {
     fairingJettisoned: false,
     maxQ: 0,
     events: [],
-    eventsCollapsed: false,
+    eventsCollapsed: isMobileDevice,
+    telemetryCollapsed: isMobileDevice,
     apoapsis: 0,
     periapsis: 0,
     engineOn: false,
