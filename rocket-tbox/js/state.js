@@ -1,0 +1,268 @@
+import { EARTH_RADIUS, EARTH_ROTATION, G, EARTH_MASS } from './constants.js';
+import { getRocketConfig } from './rocketConfig.js';
+import { addEvent } from './events.js';
+
+// Game state object
+export const state = {
+    running: false,
+    time: 0,
+    timeWarp: 1,
+    x: 0,
+    y: EARTH_RADIUS,
+    vx: 0,
+    vy: 0,
+    currentStage: 0,
+    propellantRemaining: (() => { const c = getRocketConfig(); return [c.stages[0].propellantMass, c.stages[1].propellantMass]; })(),
+    fairingJettisoned: false,
+    maxQ: 0,
+    events: [],
+    eventsCollapsed: false,
+    apoapsis: 0,
+    periapsis: 0,
+    engineOn: false,
+    trail: [],
+    manualZoom: 1.0,
+    autoZoom: true,
+    cameraMode: 'rocket', // 'rocket' or 'earth'
+    burnMode: null, // null, 'prograde', 'retrograde', 'normal', 'anti-normal', 'radial', 'anti-radial'
+    burnStartTime: null, // Time when current burn started
+    manualBurnPerformed: false, // Set to true after user performs any manual burn
+    guidancePhase: 'pre-launch',
+    guidancePitch: 90.0,
+    guidanceThrottle: 1.0,
+    // New mode management
+    gameMode: null, // null | 'manual' | 'guided' | 'orbital'
+    failureReason: null, // null | 'impact' | 'structural'
+    manualPitch: null, // null | number (null = use guidance, number = manual pitch angle)
+    targetAltitude: 500000, // for guided mode, default 500km
+    orbitalSpawnAltitude: 500000, // for orbital mode, default 500km
+    guidanceRecommendation: null, // stores current guidance pitch for manual mode
+    telemetryTab: 'flight', // 'flight' | 'structural'
+    structuralPanelDocked: true,
+    structuralPanelPosition: { x: 20, y: 200 },
+    
+    // Rotational dynamics state
+    // Rocket orientation angle (radians) - angle from local vertical (up)
+    // 0 = pointing straight up, positive = tilted east (clockwise in our frame)
+    rocketAngle: 0,
+    // Angular velocity (radians/second)
+    angularVelocity: 0,
+    // Current gimbal angle (degrees) - deflection from rocket centerline
+    // Positive = thrust vector tilted to cause clockwise rotation (pitch down/east)
+    gimbalAngle: 0,
+    // Commanded gimbal angle from guidance (degrees)
+    commandedGimbal: 0,
+    
+    // Settings
+    settings: {
+        controlMode: 'turnrate',        // 'turnrate' or 'gimbal'
+        enableAerodynamicForces: false, // Only applies in gimbal control mode
+        structuralFailureMode: 'warn'   // 'warn' or 'terminate'
+    },
+    
+    // Structural integrity data (updated each frame)
+    structuralData: null,        // array of section stress objects from structural.js
+    structuralFailureTime: null, // mission time when first overstress detected (null = no failure)
+
+    // Diagram expansion state
+    expandedDiagram: null,  // null, 'forces', or 'rocket'
+    
+    // Manual gimbal control (degrees, for gimbal control mode)
+    manualGimbal: 0,
+    
+    // Force vectors for force diagram (unit vectors)
+    forceVectors: {
+        gravity: { x: 0, y: 0 },    // Unit vector pointing toward Earth center
+        thrust: { x: 0, y: 0 },     // Unit vector along thrust direction
+        drag: { x: 0, y: 0 },       // Unit vector opposite to airspeed direction
+        aero: { x: 0, y: 0 }        // Unit vector for total aerodynamic force (normal + axial)
+    }
+};
+
+// Initialize/reset state
+export function initState() {
+    // Initialize rocket at pad position
+    const x0 = 0;
+    const y0 = EARTH_RADIUS;
+    
+    // Atmospheric velocity at rocket's position (rotating with Earth)
+    // Rocket should start with this velocity so airspeed is ~0
+    // Earth rotates counterclockwise (eastward)
+    const atmVx0 = EARTH_ROTATION * y0;  // perpendicular to position vector (eastward)
+    const atmVy0 = -EARTH_ROTATION * x0;
+    
+    state.running = false;
+    state.time = 0;
+    state.timeWarp = 1;
+    state.x = x0;
+    state.y = y0;
+    state.vx = atmVx0;  // Match atmospheric velocity so airspeed is ~0
+    state.vy = atmVy0;
+    state.currentStage = 0;
+    const rocketConfig = getRocketConfig();
+    state.propellantRemaining = [rocketConfig.stages[0].propellantMass, rocketConfig.stages[1].propellantMass];
+    state.fairingJettisoned = false;
+    state.maxQ = 0;
+    state.events = [];
+    state.apoapsis = 0;
+    state.periapsis = 0;
+    state.engineOn = false;
+    state.trail = [];
+    state.manualZoom = 1.0;
+    state.autoZoom = true;
+    state.cameraMode = 'rocket';
+    state.burnMode = null;
+    state.burnStartTime = null;
+    state.manualBurnPerformed = false;
+    state.guidancePhase = 'pre-launch';
+    state.guidancePitch = 90.0;
+    state.guidanceThrottle = 1.0;
+    
+    // Preserve gameMode, but reset mode-specific state
+    if (state.gameMode === 'manual') {
+        state.manualPitch = 90;
+    } else {
+        state.manualPitch = null;
+    }
+    state.guidanceRecommendation = null;
+    state.telemetryTab = 'flight';
+    state.structuralData = null;
+    state.structuralFailureTime = null;
+    state.failureReason = null;
+
+    // Reset rotational dynamics
+    state.rocketAngle = 0;        // Start pointing straight up
+    state.angularVelocity = 0;
+    state.gimbalAngle = 0;
+    state.commandedGimbal = 0;
+    state.manualGimbal = 0;
+    // Reset force vectors
+    state.forceVectors = {
+        gravity: { x: 0, y: 0 },
+        thrust: { x: 0, y: 0 },
+        drag: { x: 0, y: 0 },
+        aero: { x: 0, y: 0 }
+    };
+    // Reset diagram expansion
+    state.expandedDiagram = null;
+    // Note: settings are preserved across resets
+    
+    const eventList = document.getElementById('event-list');
+    if (eventList) {
+        eventList.innerHTML = '';
+    }
+}
+
+// Reset current mission without changing mode
+export function resetCurrentMission() {
+    if (state.gameMode === 'orbital') {
+        spawnInOrbit(state.orbitalSpawnAltitude);
+    } else {
+        initState();
+    }
+}
+
+// Spawn rocket in circular orbit
+export function spawnInOrbit(altitude = 500000) {
+    const r = EARTH_RADIUS + altitude;
+    const mu = G * EARTH_MASS;
+    
+    // Circular orbit velocity: v = sqrt(G*M/r)
+    const vCircular = Math.sqrt(mu / r);
+    
+    // Position at altitude above Earth (eastward)
+    const x0 = 0;
+    const y0 = r;
+    
+    // Velocity horizontal (eastward) with correct magnitude
+    const vx0 = vCircular;
+    const vy0 = 0;
+    
+    state.running = false;
+    state.time = 0;
+    state.timeWarp = 1;
+    state.x = x0;
+    state.y = y0;
+    state.vx = vx0;
+    state.vy = vy0;
+    state.currentStage = 1; // Start with stage 2 (second stage)
+    // Give 10% fuel for orbital mode
+    const rocketConfig = getRocketConfig();
+    state.propellantRemaining = [0, rocketConfig.stages[1].propellantMass * 0.1]; // Stage 1 empty, stage 2 at 10%
+    state.fairingJettisoned = true; // Already in space
+    state.maxQ = 0;
+    state.events = [];
+    state.apoapsis = altitude;
+    state.periapsis = altitude;
+    state.engineOn = false;
+    state.trail = [];
+    state.manualZoom = 1.0;
+    state.autoZoom = true;
+    state.cameraMode = 'rocket';
+    state.burnMode = null;
+    state.burnStartTime = null;
+    state.manualBurnPerformed = false;
+    state.guidancePhase = 'orbit';
+    state.guidancePitch = 0.0;
+    state.guidanceThrottle = 0.0;
+    state.manualPitch = null;
+    state.guidanceRecommendation = null;
+    state.telemetryTab = 'flight';
+    state.structuralData = null;
+    state.structuralFailureTime = null;
+
+    // Initialize rotational state for orbital mode
+    // Rocket should be oriented prograde (along velocity vector)
+    // In our coordinate system at (0, r) moving (+vx, 0), prograde is horizontal
+    state.rocketAngle = Math.PI / 2;  // 90 degrees from vertical = horizontal (prograde)
+    state.angularVelocity = 0;
+    state.gimbalAngle = 0;
+    state.commandedGimbal = 0;
+    state.manualGimbal = 0;
+    // Reset force vectors
+    state.forceVectors = {
+        gravity: { x: 0, y: 0 },
+        thrust: { x: 0, y: 0 },
+        drag: { x: 0, y: 0 },
+        aero: { x: 0, y: 0 }
+    };
+    
+    const eventList = document.getElementById('event-list');
+    if (eventList) {
+        eventList.innerHTML = '';
+    }
+    
+    addEvent(`Aparece en órbita a ${(altitude / 1000).toFixed(0)}km`);
+}
+
+// Get total rocket mass
+export function getTotalMass() {
+    const rocketConfig = getRocketConfig();
+    let mass = rocketConfig.payload.mass;
+    if (!state.fairingJettisoned) mass += rocketConfig.fairing.mass;
+    for (let i = state.currentStage; i < rocketConfig.stages.length; i++) {
+        mass += rocketConfig.stages[i].dryMass + state.propellantRemaining[i];
+    }
+    return mass;
+}
+
+// Get current altitude
+export function getAltitude() {
+    return Math.sqrt(state.x * state.x + state.y * state.y) - EARTH_RADIUS;
+}
+
+// Get pitch (from guidance system or default)
+export function getPitch(time) {
+    // In manual mode, use manual pitch if set
+    if (state.gameMode === 'manual' && state.manualPitch !== null) {
+        return state.manualPitch;
+    }
+    // Use guidance system pitch (pitch from horizontal: 0° = east, 90° = up)
+    // Convert to pitch from vertical for backward compatibility (90° = up, 0° = horizontal)
+    if (state.guidancePitch !== undefined) {
+        return state.guidancePitch; // Guidance system already uses correct convention
+    }
+    // Fallback if guidance hasn't run yet
+    return 90.0;
+}
+

@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="description" content="Simulador interactivo de lanzamiento de cohetes con física realista, modelado atmosférico y mecánica orbital. Visualiza lanzamientos desde la Tierra hasta la órbita.">
+    <title>Rocket TBox · Simulador de Trayectoria de Cohetes</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <canvas id="canvas"></canvas>
+
+    <button id="mobile-menu-toggle" class="mobile-hamburger" aria-label="Alternar menú">
+        <span></span>
+        <span></span>
+        <span></span>
+    </button>
+
+    <div id="top-links">
+        <a href="../index.html#rocket-tbox" id="back-link" class="top-link" title="Volver a Nébula">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+        </a>
+        <a href="builder.html" id="hangar-link" class="top-link top-link--label" title="Hangar de Vehículos — constructor de cohetes personalizado">Hangar</a>
+        <a href="about.html" id="docs-link" class="top-link" title="Cómo funciona y documentación">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><line x1="10" y1="9" x2="8" y2="9"/></svg>
+        </a>
+        <a href="https://github.com/donutTheJedi" target="_blank" rel="noopener noreferrer" id="github-link" class="top-link" title="Ver perfil de GitHub original">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+            </svg>
+        </a>
+    </div>
+
+    <div id="tminus-display">
+        <div class="tminus-time" id="tminus-time">T- 00:00</div>
+        <div class="tminus-event" id="tminus-event-name">Próximo evento</div>
+    </div>
+
+    <div id="telemetry">
+        <h3>TELEMETRÍA</h3>
+        <div class="telemetry-tabs">
+            <button id="telemetry-tab-flight" class="telemetry-tab active">VUELO</button>
+            <button id="telemetry-tab-structural" class="telemetry-tab">ESTRUCTURA</button>
+        </div>
+        <div id="telemetry-flight-content">
+        <div class="section">
+            <div><span class="label">T+</span><span class="value" id="time">00:00:00</span></div>
+            <div><span class="label">Etapa</span><span class="value" id="stage">1</span></div>
+        </div>
+        <div class="section">
+            <div><span class="label">Altitud</span><span class="value" id="altitude">0 km</span></div>
+            <div><span class="label">Alcance</span><span class="value" id="downrange">0 km</span></div>
+            <div><span class="label">Velocidad</span><span class="value" id="velocity">0 m/s</span></div>
+            <div><span class="label">V. Vertical</span><span class="value" id="vvel">0 m/s</span></div>
+            <div><span class="label">V. Horizontal</span><span class="value" id="hvel">0 m/s</span></div>
+        </div>
+        <div class="section">
+            <div><span class="label">Aceleración</span><span class="value" id="accel">0 G</span></div>
+            <div><span class="label">Max Q</span><span class="value" id="maxq">0 kPa</span></div>
+            <div><span class="label">Presión Din.</span><span class="value" id="dynpress">0 kPa</span></div>
+            <div><span class="label">Coef. Arrastre</span><span class="value" id="dragcoeff">0.00</span></div>
+            <div><span class="label">Mach</span><span class="value" id="mach">0.00</span></div>
+        </div>
+        <div class="section">
+            <div><span class="label">Masa</span><span class="value" id="mass">0 kg</span></div>
+            <div><span class="label">Propelente</span><span class="value" id="propellant">0%</span></div>
+            <div><span class="label">Empuje</span><span class="value" id="thrust">0 kN</span></div>
+            <div><span class="label">CDG</span><span class="value" id="cog">0.0 m</span></div>
+            <div><span class="label">CdP</span><span class="value" id="cop">0.0 m</span></div>
+            <div><span class="label">Nivel Combustible</span><span class="value" id="fuel-level">0.0 m</span></div>
+        </div>
+        <div class="section">
+            <div><span class="label">Cabeceo</span><span class="value" id="pitch">90°</span></div>
+            <div><span class="label">Gimbal</span><span class="value" id="gimbal">0.0°</span></div>
+            <div><span class="label">Vel. de Giro</span><span class="value" id="turn-rate">0.0 °/s</span></div>
+            <div><span class="label">Apoastro</span><span class="value" id="apoapsis">0 km</span></div>
+            <div><span class="label">Periastro</span><span class="value" id="periapsis">0 km</span></div>
+        </div>
+        </div>
+        <div id="telemetry-structural-dock" class="telemetry-structural-dock" hidden>
+            <div id="structural-panel" class="structural-panel structural-panel--docked">
+                <div class="structural-panel-header" id="structural-panel-header" title="Arrastra para mover">
+                    <span class="structural-panel-grip" aria-hidden="true">⋮⋮</span>
+                    <span class="structural-panel-title">ESTRUCTURA</span>
+                    <button type="button" id="structural-panel-dock-btn" class="structural-panel-dock-btn" title="Desanclar panel">⧉</button>
+                </div>
+                <div id="telemetry-structural-content">
+                    <div class="section telemetry-structural-diagram-section">
+                        <div class="telemetry-structural-diagram-title">MAPA DE ESFUERZOS</div>
+                        <canvas id="telemetry-rocket-canvas" width="160" height="300"></canvas>
+                    </div>
+                    <div id="structural-sections-panel">
+                        <!-- Poblado dinámicamente por telemetry.js -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="events">
+        <h3>
+            <span>EVENTOS DE MISIÓN</span>
+            <button type="button" id="events-collapse-btn" class="events-collapse-btn" title="Minimizar eventos de misión">_</button>
+        </h3>
+        <div id="event-list"></div>
+    </div>
+
+    <div id="pitch-program">
+        <h3>PROGRAMA DE CABECEO</h3>
+        <div><span class="label">Objetivo:</span> <span id="target-pitch">90°</span></div>
+        <div><span class="label">Actual:</span> <span id="current-pitch">90°</span></div>
+        <div class="pitch-bar">
+            <div class="pitch-indicator" id="pitch-bar"></div>
+        </div>
+    </div>
+
+    <div id="guidance-info" style="display: none; color: #0ff; font-size: 11px; margin: 10px; padding: 8px; background: rgba(0, 255, 255, 0.1); border: 1px solid #0ff; border-radius: 4px; text-align: center;">
+    </div>
+
+    <div id="controls">
+        <button id="menu-btn">MENÚ</button>
+        <button id="reset-btn">REINICIAR</button>
+        <button id="zoom-out-btn">ALEJAR</button>
+        <button id="zoom-in-btn">ACERCAR</button>
+        <button id="zoom-auto-btn">ZOOM AUTO</button>
+        <button id="camera-btn">SEGUIR COHETE</button>
+    </div>
+
+    <!-- Botones de acción rápida (lanzar, pausa, velocidad) - abajo a la derecha -->
+    <div id="quick-actions">
+        <button id="speed-btn">1x</button>
+        <button id="launch-btn">LANZAR</button>
+        <button id="pause-btn" style="display: none;">PAUSA</button>
+    </div>
+
+    <div id="menu-panel" style="display: none;">
+        <div class="menu-header">
+            <h2>CONTROL DE MISIÓN</h2>
+            <button id="menu-close-btn" class="menu-close">×</button>
+        </div>
+
+        <!-- ► MODO DE VUELO -->
+        <div class="menu-sg">
+            <div class="menu-sg-label">► MODO DE VUELO</div>
+            <div class="menu-mode-grid">
+                <button class="menu-mode-card" data-mode="manual">
+                    <div class="menu-mode-card-label">MANUAL</div>
+                    <div class="menu-mode-card-sub">Vuela a mano</div>
+                    <div class="menu-mode-badges">
+                        <span class="mode-badge mode-badge--hard">DIFÍCIL</span>
+                        <span class="mode-badge mode-badge--tag">Teclas W/S</span>
+                    </div>
+                </button>
+                <button type="button" class="menu-mode-card menu-mode-card--challenge" id="challenge-card">
+                    <div class="menu-mode-card-label" id="challenge-card-label">DESAFÍO</div>
+                    <div class="menu-mode-card-sub" id="challenge-card-sub">Dificultad extrema</div>
+                    <div class="menu-mode-badges">
+                        <span class="mode-badge mode-badge--hard" id="challenge-card-badge-main">DIFÍCIL</span>
+                        <span class="mode-badge mode-badge--tag" id="challenge-card-badge-sub">Diseña y vuela</span>
+                    </div>
+                </button>
+                <button class="menu-mode-card" data-mode="cubic">
+                    <div class="menu-mode-card-label">CÚBICO</div>
+                    <div class="menu-mode-card-sub">Órbita de precisión</div>
+                    <div class="menu-mode-badges">
+                        <span class="mode-badge mode-badge--medium">MEDIO</span>
+                        <span class="mode-badge mode-badge--tag">Trayectoria spline</span>
+                    </div>
+                </button>
+                <button class="menu-mode-card" data-mode="orbital">
+                    <div class="menu-mode-card-label">ORBITAL</div>
+                    <div class="menu-mode-card-sub">Aparece en órbita</div>
+                    <div class="menu-mode-badges">
+                        <span class="mode-badge mode-badge--easy">FÁCIL</span>
+                        <span class="mode-badge mode-badge--tag">Sin ascenso</span>
+                    </div>
+                </button>
+            </div>
+            <div id="menu-challenge-active-note" class="menu-challenge-active-note" style="display:none">
+                Desafío activo: fuerzas aerodinámicas, control por gimbal y explosión estructural al fallar. Usa el modo Manual — Orbital no está disponible.
+            </div>
+            <!-- Caja unificada de info de modo + configuración -->
+            <div id="mode-info-box" class="menu-mode-infobox" style="display:none">
+                <div class="menu-mode-info" data-mode="manual" style="display:none">
+                    <p class="menu-mode-infotext">Usa las teclas W/S para controlar el ángulo de cabeceo. El sistema de guiado ofrece recomendaciones de rumbo. Techo de habilidad alto — control total sobre la trayectoria.</p>
+                </div>
+                <input type="number" id="target-altitude-input" value="500" min="150" max="2000" step="50" hidden aria-hidden="true">
+                <div class="menu-mode-info" data-mode="cubic" style="display:none">
+                    <p class="menu-mode-infotext">Un solver de Gauss-Newton calcula el perfil cúbico óptimo de ángulo de empuje para alcanzar la órbita objetivo. El resultado del solver se imprime en la consola.</p>
+                    <div class="menu-input-group">
+                        <label for="cubic-altitude-input">Altitud Objetivo (km)</label>
+                        <input type="number" id="cubic-altitude-input" value="500" min="150" max="2000" step="50">
+                    </div>
+                </div>
+                <div class="menu-mode-info" data-mode="orbital" style="display:none">
+                    <p class="menu-mode-infotext">Sáltate la fase de lanzamiento — aparece directamente en una órbita circular con combustible limitado. Ideal para practicar quemados, cambios de plano y encuentros orbitales.</p>
+                    <div class="menu-preset-buttons">
+                        <button class="preset-btn" data-altitude="200">200 km</button>
+                        <button class="preset-btn" data-altitude="400">400 km</button>
+                        <button class="preset-btn active" data-altitude="500">500 km</button>
+                        <button class="preset-btn" data-altitude="600">600 km</button>
+                        <button class="preset-btn" data-altitude="800">800 km</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ► CONFIGURACIÓN DEL COHETE -->
+        <div class="menu-sg">
+            <div class="menu-sg-label">► CONFIGURACIÓN DEL COHETE</div>
+            <div class="menu-rocket-card">
+                <div class="menu-rocket-top">
+                    <div>
+                        <div class="menu-rocket-name">
+                            <span class="menu-rocket-icon">▲</span>
+                            <span id="menu-rocket-title">FALCON-9 MK1</span>
+                        </div>
+                        <div class="menu-rocket-meta" id="menu-rocket-meta">2 ETAPAS · KEROLOX</div>
+                    </div>
+                    <div class="menu-build-btn-group">
+                        <button id="reset-rocket-btn" class="menu-reset-rocket-btn" style="display:none" title="Restaurar cohete por defecto">REINICIAR</button>
+                        <a href="builder.html" id="build-rocket-btn" class="menu-build-inline-btn">CONSTRUIR ›</a>
+                    </div>
+                </div>
+                <div class="menu-rocket-stats">
+                    <div class="menu-rocket-stat">
+                        <div class="menu-rocket-stat-val" id="menu-stat-drymass">—</div>
+                        <div class="menu-rocket-stat-label">MASA SECA</div>
+                    </div>
+                    <div class="menu-rocket-stat">
+                        <div class="menu-rocket-stat-val" id="menu-stat-twr">—</div>
+                        <div class="menu-rocket-stat-label">TWR</div>
+                    </div>
+                    <div class="menu-rocket-stat">
+                        <div class="menu-rocket-stat-val" id="menu-stat-isp">—</div>
+                        <div class="menu-rocket-stat-label">ISP VAC</div>
+                    </div>
+                </div>
+                <div class="menu-readiness">
+                    <div class="menu-readiness-header">
+                        <span>PREPARACIÓN DE LANZAMIENTO</span>
+                        <span id="menu-readiness-label">—</span>
+                    </div>
+                    <div class="menu-readiness-bg">
+                        <div class="menu-readiness-fill" id="menu-readiness-fill" style="width:0%"></div>
+                    </div>
+                </div>
+            </div>
+            <div id="menu-advisory" class="menu-advisory" style="display:none">
+                <span class="menu-advisory-icon">⚠</span>
+                <span id="menu-advisory-text"></span>
+            </div>
+        </div>
+
+        <!-- ► AJUSTES -->
+        <div class="menu-sg" id="menu-settings-section">
+            <div class="menu-sg-label">► AJUSTES</div>
+            <div class="menu-settings-list">
+                <div class="menu-srow menu-srow--clickable" id="settings-control-mode-row">
+                    <span class="menu-srow-key">MODO DE CONTROL</span>
+                    <span class="menu-srow-val" id="settings-control-mode-val">VEL. DE GIRO ›</span>
+                </div>
+                <div class="menu-srow" id="aero-forces-setting" style="display:none">
+                    <span class="menu-srow-key">FUERZAS AERODINÁMICAS</span>
+                    <label class="menu-toggle">
+                        <input type="checkbox" id="aero-forces-toggle">
+                        <span class="menu-toggle-track"></span>
+                    </label>
+                </div>
+                <div class="menu-srow">
+                    <span class="menu-srow-key">FALLO ESTRUCTURAL</span>
+                    <label class="menu-toggle">
+                        <input type="checkbox" id="struct-fail-toggle">
+                        <span class="menu-toggle-track"></span>
+                    </label>
+                </div>
+            </div>
+            <!-- Botones originales ocultos, preservados para input.js -->
+            <div style="display:none">
+                <button id="control-turnrate-btn" class="toggle-btn active">Vel. de Giro</button>
+                <button id="control-gimbal-btn" class="toggle-btn">Gimbal</button>
+                <button id="aero-forces-off-btn" class="toggle-btn active">Off</button>
+                <button id="aero-forces-on-btn" class="toggle-btn">On</button>
+                <button id="struct-fail-warn-btn" class="toggle-btn active">Avisar</button>
+                <button id="struct-fail-terminate-btn" class="toggle-btn">Terminar</button>
+                <p id="control-mode-description"></p>
+                <p id="aero-forces-description"></p>
+            </div>
+        </div>
+
+        <!-- Lanzar -->
+        <button id="menu-launch-btn" class="menu-launch-btn" disabled>SELECCIONA UN MODO</button>
+
+        <!-- Botones de inicio ocultos, preservados por compatibilidad con JS -->
+        <button id="start-manual-btn" style="display:none">INICIAR MANUAL</button>
+        <button id="start-guided-btn" style="display:none">INICIAR GUIADO</button>
+        <button id="start-cubic-btn" style="display:none">INICIAR CÚBICO</button>
+        <button id="start-orbital-btn" style="display:none">APARECER EN ÓRBITA</button>
+    </div>
+
+    <div id="menu-overlay" style="display: none;"></div>
+
+    <div id="failure-dialog" class="failure-dialog" role="dialog" aria-labelledby="failure-dialog-title" aria-modal="true" hidden>
+        <div class="failure-dialog-card">
+            <h2 id="failure-dialog-title" class="failure-dialog-title">FALLO DE MISIÓN</h2>
+            <p id="failure-dialog-message" class="failure-dialog-message">Vehículo destruido.</p>
+            <div class="failure-dialog-actions">
+                <button type="button" id="failure-restart-btn" class="failure-dialog-btn failure-dialog-btn--primary">REINICIAR</button>
+                <button type="button" id="failure-alt-btn" class="failure-dialog-btn">IR AL MENÚ</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Panel de UI móvil (se desliza desde la izquierda) -->
+    <div id="mobile-ui-panel" class="mobile-ui-panel">
+        <div id="mobile-controls-container"></div>
+        <div id="mobile-github-container"></div>
+        <div id="mobile-pitch-container"></div>
+    </div>
+
+    <div id="manual-pitch-controls" style="display: none;">
+        <h3 id="manual-control-title">CONTROL MANUAL DE CABECEO</h3>
+        <div class="pitch-display">
+            <div id="manual-pitch-display">90°</div>
+            <div id="manual-gimbal-display" style="display: none;">Gimbal: 0.0°</div>
+            <div id="guidance-recommendation" class="guidance-recommendation" style="display: none;">
+                Guiado: <span id="guidance-rec-value">90°</span>
+            </div>
+        </div>
+        <div class="pitch-buttons">
+            <button id="pitch-up-btn">↑ SUBIR CABECEO<br>(Tecla W)</button>
+            <button id="pitch-down-btn">↓ BAJAR CABECEO<br>(Tecla S)</button>
+        </div>
+    </div>
+
+    <div id="burn-controls" style="display: none;">
+        <h3>QUEMADOS ORBITALES</h3>
+        <div id="burn-status">
+            <div>Mantén el botón para quemar</div>
+        </div>
+        <div id="burn-btn-grid">
+            <button id="refuel-btn">REPOSTAR (5000 kg)</button>
+            <button id="burn-prograde-btn">PROGRADO</button>
+            <button id="burn-retrograde-btn">RETRÓGRADO</button>
+            <button id="burn-normal-btn">NORMAL</button>
+            <button id="burn-anti-normal-btn">ANTI-NORMAL</button>
+            <button id="burn-radial-btn">RADIAL</button>
+            <button id="burn-anti-radial-btn">ANTI-RADIAL</button>
+        </div>
+    </div>
+
+    <div id="structural-panel-float-root"></div>
+
+    <script type="module" src="js/main.js"></script>
+</body>
+</html>

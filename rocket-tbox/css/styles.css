@@ -1,0 +1,2375 @@
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
+
+#top-links #back-link {
+    border-color: rgba(0, 255, 0, 0.5);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
+    -webkit-touch-callout: none;
+}
+
+*:not(input):not(textarea) {
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+}
+
+body {
+    background: #000;
+    font-family: 'Courier New', monospace;
+    overflow: hidden;
+    display: flex;
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    touch-action: none;
+}
+
+#canvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 0;
+    background: #000a1e;
+    display: block;
+    touch-action: none;
+    width: 100vw;
+    height: 100vh;
+}
+
+#top-links {
+    position: fixed;
+    top: 20px;
+    right: calc(20px + 250px + 10px); /* events right (20px) + events max-width (250px) + buffer (10px) */
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    z-index: 1000;
+}
+
+#top-links .top-link {
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0, 0, 0, 0.7);
+    border: 1px solid #0f0;
+    border-radius: 5px;
+    color: #0f0;
+    text-decoration: none;
+    transition: all 0.2s ease;
+}
+
+#top-links .top-link:hover {
+    background: rgba(0, 255, 0, 0.1);
+    border-color: #0ff;
+    color: #0ff;
+    transform: scale(1.1);
+}
+
+#top-links .top-link:active {
+    transform: scale(0.95);
+}
+
+#top-links .top-link svg {
+    width: 20px;
+    height: 20px;
+}
+
+/* Allow text labels (e.g. "Learn") to fit without clipping. */
+#top-links #docs-link,
+#top-links #hangar-link {
+    width: auto;
+    min-width: 72px;
+    height: auto;
+    min-height: 32px;
+    padding: 6px 12px;
+    font-size: 14px;
+    line-height: 1;
+    letter-spacing: 0.02em;
+}
+
+#top-links #hangar-link {
+    border-color: rgba(255, 136, 0, 0.5);
+    color: #f80;
+}
+
+#top-links #hangar-link:hover {
+    border-color: #f80;
+    color: #fa0;
+}
+
+#top-links #learn-link {
+    width: auto;
+    min-width: 74px;
+    padding: 0 10px;
+    gap: 6px;
+}
+
+#top-links .feedback-btn-link {
+    width: auto;
+    min-width: 88px;
+    padding: 0 10px;
+    gap: 6px;
+    font-family: 'Courier New', monospace;
+    font-size: inherit;
+    cursor: pointer;
+}
+
+.feedback-text {
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+}
+
+/* Feedback modal */
+.feedback-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.6);
+    z-index: 1900;
+}
+
+.feedback-modal {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 2000;
+    width: min(420px, calc(100vw - 32px));
+    background: rgba(0, 0, 0, 0.97);
+    border: 1px solid #0ff;
+    border-radius: 6px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    color: #0f0;
+    font-family: 'Courier New', monospace;
+}
+
+.feedback-modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid #0ff;
+    padding-bottom: 10px;
+    color: #0ff;
+    font-size: 14px;
+    font-weight: bold;
+    letter-spacing: 0.08em;
+}
+
+.feedback-close {
+    background: none;
+    border: none;
+    color: #0ff;
+    font-size: 22px;
+    line-height: 1;
+    cursor: pointer;
+    padding: 0 4px;
+    font-family: inherit;
+}
+
+.feedback-close:hover { color: #fff; }
+
+.feedback-intro {
+    font-size: 12px;
+    color: rgba(0, 255, 0, 0.75);
+    margin: 0;
+}
+
+.feedback-textarea {
+    background: rgba(0, 255, 0, 0.05);
+    border: 1px solid #0f0;
+    border-radius: 4px;
+    color: #0f0;
+    font-family: 'Courier New', monospace;
+    font-size: 13px;
+    padding: 10px;
+    resize: vertical;
+    width: 100%;
+    outline: none;
+    transition: border-color 0.2s;
+}
+
+.feedback-textarea:focus { border-color: #0ff; }
+
+.feedback-textarea::placeholder { color: rgba(0, 255, 0, 0.35); }
+
+.feedback-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+}
+
+.feedback-status {
+    font-size: 12px;
+    flex: 1;
+}
+
+.feedback-status--ok { color: #0f0; }
+.feedback-status--error { color: #f44; }
+
+.feedback-submit-btn {
+    padding: 8px 20px;
+    background: rgba(0, 255, 255, 0.1);
+    border: 1px solid #0ff;
+    border-radius: 4px;
+    color: #0ff;
+    font-family: 'Courier New', monospace;
+    font-size: 13px;
+    font-weight: bold;
+    cursor: pointer;
+    letter-spacing: 0.06em;
+    transition: background 0.2s;
+    white-space: nowrap;
+}
+
+.feedback-submit-btn:hover:not(:disabled) { background: rgba(0, 255, 255, 0.2); }
+.feedback-submit-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+/* Mobile Hamburger Menu */
+.mobile-hamburger {
+    display: none;
+    position: fixed;
+    top: 10px;
+    left: 10px;
+    width: 44px;
+    height: 44px;
+    background: rgba(0, 0, 0, 0.7);
+    border: 1px solid #0f0;
+    border-radius: 5px;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+    padding: 8px;
+    z-index: 2000;
+    cursor: pointer;
+    touch-action: manipulation;
+}
+
+.mobile-hamburger span {
+    display: block;
+    width: 24px;
+    height: 2px;
+    background: #0f0;
+    transition: all 0.3s ease;
+}
+
+.mobile-hamburger.active span:nth-child(1) {
+    transform: rotate(45deg) translate(7px, 7px);
+}
+
+.mobile-hamburger.active span:nth-child(2) {
+    opacity: 0;
+}
+
+.mobile-hamburger.active span:nth-child(3) {
+    transform: rotate(-45deg) translate(7px, -7px);
+}
+
+/* Mobile UI Panel Container */
+.mobile-ui-panel {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 280px;
+    max-width: 85vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.95);
+    border-right: 2px solid #0f0;
+    z-index: 1500;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    transform: translateX(-100%);
+    transition: transform 0.3s ease;
+    padding: 60px 15px 15px 15px;
+    box-shadow: 2px 0 10px rgba(0, 255, 0, 0.3);
+}
+
+.mobile-ui-panel.show {
+    transform: translateX(0);
+}
+
+/* Mobile panel backdrop */
+.mobile-ui-panel::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: -1;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+}
+
+.mobile-ui-panel.show::before {
+    opacity: 1;
+    pointer-events: all;
+}
+
+.mobile-ui-panel h3 {
+    color: #0ff;
+    margin-bottom: 10px;
+    font-size: 14px;
+    border-bottom: 1px solid #0ff;
+    padding-bottom: 5px;
+}
+
+#telemetry {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    z-index: 100;
+    color: #0f0;
+    font-size: 13px;
+    line-height: 1.6;
+    background: rgba(0, 0, 0, 0.7);
+    padding: 15px;
+    border: 1px solid #0f0;
+    border-radius: 5px;
+    min-width: 280px;
+}
+
+#telemetry h3 {
+    color: #0ff;
+    margin-bottom: 10px;
+    border-bottom: 1px solid #0ff;
+    padding-bottom: 5px;
+}
+
+.telemetry-tabs {
+    display: flex;
+    gap: 6px;
+    margin-bottom: 10px;
+}
+
+.telemetry-tab {
+    flex: 1;
+    padding: 6px 8px;
+    font-size: 11px;
+    border: 1px solid #0ff;
+    color: #0ff;
+    background: rgba(0, 255, 255, 0.08);
+}
+
+.telemetry-tab:hover {
+    background: rgba(0, 255, 255, 0.2);
+    color: #0ff;
+}
+
+.telemetry-tab.active {
+    background: #0ff;
+    color: #000;
+    font-weight: bold;
+}
+
+.telemetry-structural-dock {
+    margin-top: 4px;
+}
+
+.structural-panel {
+    font-family: 'Courier New', monospace;
+}
+
+.structural-panel--docked {
+    width: 100%;
+}
+
+.structural-panel--floating {
+    position: fixed;
+    z-index: 99; /* below telemetry (100) and mission menu (1000) */
+    width: min(300px, calc(100vw - 16px));
+    max-height: min(85vh, 640px);
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    color: #0f0;
+    font-size: 13px;
+    line-height: 1.6;
+    background: rgba(0, 0, 0, 0.92);
+    padding: 0 12px 12px;
+    border: 1px solid #0f0;
+    border-radius: 5px;
+    box-shadow: 0 8px 32px rgba(0, 255, 0, 0.15);
+    cursor: grab;
+    touch-action: none;
+    user-select: none;
+}
+
+body.structural-panel-dragging .structural-panel--floating {
+    cursor: grabbing;
+}
+
+.structural-panel-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 0 6px;
+    margin-bottom: 4px;
+    border-bottom: 1px solid #0ff;
+}
+
+.structural-panel-grip {
+    color: #0a6;
+    font-size: 14px;
+    letter-spacing: -2px;
+    line-height: 1;
+}
+
+.structural-panel-title {
+    flex: 1;
+    color: #0ff;
+    font-size: 12px;
+    font-weight: bold;
+    letter-spacing: 0.06em;
+}
+
+.structural-panel-dock-btn {
+    flex-shrink: 0;
+    width: 28px;
+    height: 24px;
+    padding: 0;
+    border: 1px solid #0ff;
+    border-radius: 3px;
+    background: rgba(0, 255, 255, 0.1);
+    color: #0ff;
+    font-size: 14px;
+    line-height: 1;
+    cursor: pointer;
+    touch-action: manipulation;
+}
+
+.structural-panel-dock-btn:hover {
+    background: rgba(0, 255, 255, 0.25);
+    color: #fff;
+}
+
+/* Anchor only — do not cover the viewport (was blocking the sim canvas). */
+#structural-panel-float-root {
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 0;
+    height: 0;
+    overflow: visible;
+    pointer-events: none;
+    z-index: 99;
+}
+
+#structural-panel-float-root .structural-panel--floating {
+    pointer-events: auto;
+}
+
+.telemetry-structural-diagram-section {
+    text-align: center;
+    padding-bottom: 4px;
+}
+
+.telemetry-structural-diagram-title {
+    color: #0ff;
+    font-size: 11px;
+    margin-bottom: 6px;
+    letter-spacing: 0.05em;
+}
+
+#telemetry-rocket-canvas {
+    width: 100%;
+    max-width: 160px;
+    height: 300px;
+    background: rgba(0, 0, 0, 0.55);
+    border: 1px solid #0ff;
+    border-radius: 4px;
+    display: block;
+    margin: 0 auto;
+}
+
+/* Structural telemetry panel — section cards */
+#structural-sections-panel {
+    margin-top: 6px;
+}
+
+.structural-section {
+    background: rgba(0, 0, 0, 0.4);
+    border: 1px solid #333;
+    border-radius: 4px;
+    padding: 6px 8px;
+    margin-bottom: 6px;
+    font-family: 'Courier New', monospace;
+    font-size: 11px;
+}
+
+.structural-section.overstress {
+    border-color: #e00000;
+    animation: structural-flash 0.6s ease-in-out infinite alternate;
+}
+
+@keyframes structural-flash {
+    from { background: rgba(80, 0, 0, 0.3); }
+    to   { background: rgba(140, 0, 0, 0.15); }
+}
+
+.structural-section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 4px;
+}
+
+.structural-section-name {
+    color: #ccc;
+    font-weight: bold;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+}
+
+.structural-util-label {
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.structural-util-bar-bg {
+    height: 5px;
+    background: #222;
+    border-radius: 3px;
+    overflow: hidden;
+    margin-bottom: 6px;
+}
+
+.structural-util-bar-fill {
+    height: 100%;
+    border-radius: 3px;
+    transition: width 0.1s, background 0.1s;
+}
+
+.structural-components {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1px 6px;
+}
+
+.structural-row {
+    display: flex;
+    justify-content: space-between;
+    color: #999;
+    font-size: 10px;
+    padding: 1px 0;
+}
+
+.structural-row span:last-child {
+    color: #ddd;
+}
+
+.structural-vm {
+    color: #bbb;
+    font-size: 10.5px;
+}
+
+.structural-vm span:first-child {
+    font-weight: bold;
+    color: #bbb;
+}
+
+.structural-yield-row span:last-child {
+    color: #888;
+}
+
+.structural-warn {
+    margin-top: 5px;
+    text-align: center;
+    font-size: 11px;
+    font-weight: bold;
+    color: #ff2020;
+    letter-spacing: 0.06em;
+    animation: structural-flash 0.4s ease-in-out infinite alternate;
+}
+
+.structural-no-data {
+    color: #555;
+    font-size: 11px;
+    text-align: center;
+    padding: 12px 0;
+}
+
+
+
+.section {
+    margin: 10px 0;
+    padding: 8px 0;
+    border-bottom: 1px solid #333;
+}
+
+.label {
+    color: #888;
+}
+
+.value {
+    color: #0f0;
+    float: right;
+}
+
+#controls {
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+    z-index: 100;
+    display: flex;
+    gap: 10px;
+    transition: left 0.3s ease;
+}
+
+/* Shift controls to the right when burn controls are in orbit position (bottom left) */
+#controls.burn-controls-in-orbit {
+    left: 170px; /* Move right to avoid overlap with burn controls (~120px wide + 60px spacing) */
+}
+
+button {
+    background: #222;
+    color: #0f0;
+    border: 1px solid #0f0;
+    padding: 10px 20px;
+    font-family: 'Courier New', monospace;
+    cursor: pointer;
+    transition: all 0.2s;
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: rgba(0, 255, 0, 0.2);
+}
+
+button:hover {
+    background: #0f0;
+    color: #000;
+}
+
+button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+#events {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 100;
+    color: #0ff;
+    font-size: 12px;
+    background: rgba(0, 0, 0, 0.7);
+    padding: 15px;
+    border: 1px solid #0ff;
+    border-radius: 5px;
+    max-width: 250px;
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+#burn-controls {
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+    color: #0ff;
+    font-size: 11px;
+    background: rgba(0, 0, 0, 0.7);
+    padding: 8px;
+    border: 1px solid #0ff;
+    border-radius: 5px;
+    min-width: 120px;
+    z-index: 1000;
+}
+
+#burn-controls h3 {
+    color: #0ff;
+    margin-bottom: 10px;
+    font-size: 11px;
+    padding-bottom: 4px;
+}
+
+#burn-controls #burn-status {
+    color: #0f0;
+    font-size: 11px;
+    margin-bottom: 10px;
+    min-height: 30px;
+}
+
+#burn-btn-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+#refuel-btn {
+    background: #2a2;
+    border-color: #2a2;
+    margin-bottom: 5px;
+}
+
+#burn-controls button {
+    width: 100%;
+    padding: 5px 6px;
+    font-size: 10px;
+    line-height: 1.2;
+}
+
+#burn-controls button.active {
+    background: #0ff;
+    color: #000;
+}
+
+.burn-status-active { color: #0ff; font-weight: bold; }
+.burn-status-duration { color: #0f0; }
+
+#events h3 {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    margin-bottom: 10px;
+    border-bottom: 1px solid #0ff;
+    padding-bottom: 5px;
+}
+
+.events-collapse-btn {
+    width: 24px;
+    height: 20px;
+    min-width: 24px;
+    padding: 0;
+    font-size: 12px;
+    line-height: 1;
+    border: 1px solid #0ff;
+    color: #0ff;
+    background: rgba(0, 255, 255, 0.08);
+}
+
+#events.events-collapsed .event:not(:first-child) {
+    display: none;
+}
+
+#events.events-collapsed #event-list {
+    max-height: 28px;
+    overflow: hidden;
+}
+
+.event {
+    margin: 5px 0;
+    padding: 3px 0;
+    border-bottom: 1px solid #333;
+    font-size: 11px;
+}
+
+.event-time {
+    color: #888;
+}
+
+#pitch-program {
+    position: fixed;
+    bottom: 20px;
+    right: 140px; /* Positioned to the left of quick actions */
+    color: #f80;
+    font-size: 12px;
+    background: rgba(0, 0, 0, 0.7);
+    padding: 15px;
+    border: 1px solid #f80;
+    border-radius: 5px;
+    width: 200px;
+}
+
+#pitch-program h3 {
+    margin-bottom: 10px;
+    border-bottom: 1px solid #f80;
+    padding-bottom: 5px;
+}
+
+.pitch-bar {
+    width: 100%;
+    height: 20px;
+    background: #333;
+    margin-top: 10px;
+    position: relative;
+}
+
+.pitch-indicator {
+    height: 100%;
+    background: linear-gradient(90deg, #f80, #ff0);
+    transition: width 0.1s;
+}
+
+#tminus-display {
+    position: fixed;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    color: #0ff;
+    font-size: 24px;
+    background: rgba(0, 0, 0, 0.8);
+    padding: 15px 30px;
+    border: 2px solid #0ff;
+    border-radius: 5px;
+    text-align: center;
+    display: none;
+    font-weight: bold;
+    z-index: 1000;
+    box-shadow: 0 0 20px rgba(0, 255, 255, 0.5);
+}
+
+/* Quick action buttons (launch, pause, speed) */
+#quick-actions {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    z-index: 1000;
+    transition: right 0.3s ease;
+}
+
+/* Shift quick actions right when burn controls are visible at default position (right: 140px) */
+/* Burn controls are ~120px wide, positioned at right: 140px */
+/* Shift quick actions to right: 160px to give just enough space (140px + 20px buffer) */
+#quick-actions.burn-controls-visible {
+    right: 160px; /* Shift right just enough to avoid burn controls */
+}
+
+/* When burn controls are in orbit (bottom left), quick actions stay at default position */
+#quick-actions.burn-controls-in-orbit {
+    right: 20px;
+}
+
+#quick-actions button {
+    background: #222;
+    color: #0f0;
+    border: 1px solid #0f0;
+    padding: 12px 20px;
+    font-family: 'Courier New', monospace;
+    cursor: pointer;
+    transition: all 0.2s;
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: rgba(0, 255, 0, 0.2);
+    min-width: 100px;
+    font-size: 13px;
+    font-weight: bold;
+}
+
+#quick-actions button:hover {
+    background: #0f0;
+    color: #000;
+}
+
+#quick-actions button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+#tminus-display .tminus-time {
+    font-size: 32px;
+    color: #0ff;
+    margin-bottom: 5px;
+}
+
+#tminus-display .tminus-event {
+    font-size: 14px;
+    color: #0f0;
+    text-transform: uppercase;
+}
+
+/* ═══════════════════════════════════ MENU PANEL ═══════════════════════════════════ */
+#menu-overlay {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 999;
+}
+
+.failure-dialog {
+    position: fixed;
+    inset: 0;
+    z-index: 1100;
+    padding: 20px;
+    background: rgba(0, 0, 0, 0.75);
+}
+
+.failure-dialog[hidden] {
+    display: none !important;
+}
+
+.failure-dialog:not([hidden]) {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.failure-dialog-card {
+    width: min(360px, 100%);
+    padding: 24px 22px 20px;
+    background: rgba(8, 12, 10, 0.98);
+    border: 2px solid rgba(255, 80, 80, 0.55);
+    border-radius: 4px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.6);
+    text-align: center;
+}
+
+.failure-dialog-title {
+    color: #f88;
+    font-size: 18px;
+    letter-spacing: 0.12em;
+    margin: 0 0 12px;
+}
+
+.failure-dialog-message {
+    color: rgba(255, 200, 200, 0.85);
+    font-size: 12px;
+    line-height: 1.55;
+    margin: 0 0 20px;
+}
+
+.failure-dialog-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.failure-dialog-btn {
+    font-family: 'Courier New', monospace;
+    font-size: 13px;
+    font-weight: bold;
+    letter-spacing: 0.08em;
+    padding: 12px 16px;
+    cursor: pointer;
+    border-radius: 3px;
+    border: 1px solid rgba(0, 255, 255, 0.45);
+    background: rgba(0, 30, 28, 0.9);
+    color: #0ff;
+    transition: background 0.15s, color 0.15s;
+}
+
+.failure-dialog-btn:hover {
+    background: rgba(0, 255, 255, 0.12);
+    border-color: #0ff;
+}
+
+.failure-dialog-btn--primary {
+    border-color: rgba(0, 255, 0, 0.55);
+    color: #0f0;
+    background: rgba(0, 40, 20, 0.9);
+}
+
+.failure-dialog-btn--primary:hover {
+    background: #0f0;
+    color: #000;
+}
+
+/* ── Win / orbit-achieved dialog ── */
+.win-dialog {
+    position: fixed;
+    inset: 0;
+    z-index: 1100;
+    padding: 20px;
+    background: rgba(0, 0, 0, 0.78);
+}
+
+.win-dialog[hidden] {
+    display: none !important;
+}
+
+.win-dialog:not([hidden]) {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.win-dialog-card {
+    width: min(380px, 100%);
+    padding: 28px 24px 22px;
+    background: rgba(2, 14, 6, 0.98);
+    border: 2px solid rgba(0, 255, 100, 0.65);
+    border-radius: 4px;
+    box-shadow: 0 0 48px rgba(0, 255, 80, 0.12), 0 8px 32px rgba(0, 0, 0, 0.6);
+    text-align: center;
+}
+
+.win-dialog-star-row {
+    color: rgba(0, 255, 100, 0.55);
+    font-size: 14px;
+    letter-spacing: 0.3em;
+    margin-bottom: 12px;
+}
+
+.win-dialog-title {
+    color: #0f0;
+    font-size: 20px;
+    letter-spacing: 0.16em;
+    margin: 0 0 14px;
+    text-shadow: 0 0 20px rgba(0, 255, 80, 0.5);
+}
+
+.win-dialog-message {
+    color: rgba(180, 255, 200, 0.85);
+    font-size: 12px;
+    line-height: 1.6;
+    margin: 0 0 10px;
+}
+
+.win-dialog-stats {
+    color: #0ff;
+    font-size: 13px;
+    font-weight: bold;
+    letter-spacing: 0.06em;
+    margin: 0 0 14px;
+}
+
+.win-dialog-share {
+    color: rgba(180, 255, 220, 0.65);
+    font-size: 11px;
+    margin: 0 0 20px;
+}
+
+.win-dialog-share strong {
+    color: #0ff;
+}
+
+.win-dialog-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.win-dialog-btn {
+    font-family: 'Courier New', monospace;
+    font-size: 13px;
+    font-weight: bold;
+    letter-spacing: 0.08em;
+    padding: 12px 16px;
+    cursor: pointer;
+    border-radius: 3px;
+    border: 1px solid rgba(0, 255, 255, 0.45);
+    background: rgba(0, 30, 28, 0.9);
+    color: #0ff;
+    transition: background 0.15s, color 0.15s;
+}
+
+.win-dialog-btn:hover {
+    background: rgba(0, 255, 255, 0.12);
+    border-color: #0ff;
+}
+
+.win-dialog-btn--primary {
+    border-color: rgba(0, 255, 100, 0.7);
+    color: #0f0;
+    background: rgba(0, 40, 18, 0.9);
+}
+
+.win-dialog-btn--primary:hover {
+    background: #0f0;
+    color: #000;
+}
+
+#menu-panel {
+    position: fixed;
+    top: 0; right: 0;
+    width: 400px;
+    max-width: 90vw;
+    height: 100%;
+    background: rgba(4, 8, 6, 0.98);
+    border-left: 2px solid rgba(0, 255, 255, 0.4);
+    z-index: 1000;
+    overflow-y: auto;
+    padding: 20px;
+    transform: translateX(100%);
+    transition: transform 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+#menu-panel.show { transform: translateX(0); }
+
+.menu-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 14px;
+    border-bottom: 1px solid rgba(0, 255, 255, 0.2);
+    flex-shrink: 0;
+}
+
+.menu-header h2 {
+    color: #0ff;
+    font-size: 20px;
+    letter-spacing: 0.18em;
+    margin: 0;
+}
+
+.menu-close {
+    background: transparent;
+    border: 1px solid rgba(0, 255, 255, 0.4);
+    color: #0ff;
+    font-size: 24px;
+    width: 34px; height: 34px;
+    padding: 0; line-height: 1;
+    cursor: pointer;
+    font-family: 'Courier New', monospace;
+    transition: all 0.15s;
+    border-radius: 2px;
+}
+.menu-close:hover { background: rgba(0, 255, 255, 0.15); border-color: #0ff; }
+
+/* ── Section groups ── */
+.menu-sg { display: flex; flex-direction: column; gap: 10px; }
+
+.menu-sg-label {
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    color: rgba(0, 255, 255, 0.45);
+    padding-bottom: 4px;
+    border-bottom: 1px solid rgba(0, 255, 255, 0.1);
+}
+
+/* ── Flight mode cards ── */
+.menu-mode-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+}
+
+.menu-mode-card {
+    background: rgba(0, 20, 18, 0.8);
+    border: 1px solid rgba(0, 255, 255, 0.2);
+    color: #0ff;
+    padding: 14px 12px 12px;
+    cursor: pointer;
+    text-align: left;
+    font-family: 'Courier New', monospace;
+    transition: border-color 0.15s, background 0.15s;
+    border-radius: 3px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+.menu-mode-card:hover {
+    background: rgba(0, 255, 255, 0.06);
+    border-color: rgba(0, 255, 255, 0.55);
+}
+.menu-mode-card.selected {
+    border-color: #0ff;
+    background: rgba(0, 255, 255, 0.08);
+    box-shadow: 0 0 0 1px rgba(0, 255, 255, 0.25);
+}
+
+.menu-mode-card-label {
+    font-size: 13px;
+    font-weight: bold;
+    letter-spacing: 0.1em;
+    color: #0ff;
+}
+.menu-mode-card.selected .menu-mode-card-label { color: #fff; }
+
+.menu-mode-card-sub {
+    font-size: 10px;
+    color: rgba(0, 255, 200, 0.55);
+    letter-spacing: 0.04em;
+    margin-bottom: 6px;
+}
+
+.menu-mode-badges {
+    display: flex;
+    gap: 5px;
+    flex-wrap: wrap;
+    margin-top: 2px;
+}
+
+.mode-badge {
+    font-size: 9px;
+    padding: 2px 6px;
+    border-radius: 2px;
+    letter-spacing: 0.08em;
+    font-weight: bold;
+    white-space: nowrap;
+}
+.mode-badge--hard   { background: rgba(200, 50, 50, 0.25); border: 1px solid rgba(200, 50, 50, 0.6); color: #f87; }
+.mode-badge--medium { background: rgba(200, 140, 30, 0.2); border: 1px solid rgba(200, 140, 30, 0.5); color: #eb8; }
+.mode-badge--easy   { background: rgba(30, 180, 80, 0.15); border: 1px solid rgba(30, 180, 80, 0.45); color: #6d8; }
+.mode-badge--tag    { background: transparent; border: 1px solid rgba(0, 255, 255, 0.3); color: rgba(0, 255, 200, 0.7); font-weight: normal; }
+
+/* Guidance unavailable */
+.menu-guidance-note {
+    font-size: 10px;
+    color: #c84;
+    padding: 6px 10px;
+    border: 1px solid rgba(200, 130, 60, 0.3);
+    border-radius: 3px;
+    background: rgba(200, 130, 60, 0.06);
+    line-height: 1.4;
+}
+.menu-mode-card.guidance-disabled {
+    opacity: 0.25;
+    cursor: not-allowed;
+    pointer-events: none;
+}
+
+.menu-mode-card--challenge {
+    background: rgba(40, 8, 8, 0.85);
+    border-color: rgba(220, 70, 70, 0.45);
+    color: #f88;
+}
+.menu-mode-card--challenge:hover {
+    background: rgba(80, 20, 20, 0.5);
+    border-color: rgba(255, 100, 100, 0.7);
+}
+.menu-mode-card--challenge .menu-mode-card-label {
+    color: #faa;
+}
+.menu-mode-card--challenge .menu-mode-card-sub {
+    color: rgba(255, 160, 160, 0.65);
+}
+.menu-mode-card--challenge .mode-badge--tag {
+    border-color: rgba(255, 120, 120, 0.4);
+    color: rgba(255, 180, 180, 0.85);
+}
+
+.menu-mode-card--challenge-exit {
+    border-color: rgba(255, 140, 80, 0.55);
+    background: rgba(50, 20, 8, 0.9);
+}
+.menu-mode-card--challenge-exit:hover {
+    border-color: rgba(255, 180, 100, 0.85);
+    background: rgba(70, 30, 12, 0.85);
+}
+
+.menu-challenge-active-note {
+    font-size: 10px;
+    color: #f88;
+    padding: 8px 10px;
+    border: 1px solid rgba(220, 70, 70, 0.4);
+    border-radius: 3px;
+    background: rgba(80, 20, 20, 0.25);
+    line-height: 1.5;
+    margin-top: 8px;
+}
+
+/* Mode info box */
+.menu-mode-infobox {
+    border: 1px solid rgba(0, 255, 255, 0.15);
+    border-radius: 3px;
+    padding: 14px;
+    background: rgba(0, 20, 18, 0.6);
+}
+.menu-mode-infotext {
+    color: rgba(0, 255, 200, 0.65);
+    font-size: 11px;
+    line-height: 1.6;
+    margin-bottom: 12px;
+}
+.menu-mode-infotext:last-child { margin-bottom: 0; }
+
+.menu-input-group { margin-top: 4px; }
+.menu-input-group label {
+    display: block;
+    color: rgba(0, 255, 255, 0.5);
+    margin-bottom: 5px;
+    font-size: 10px;
+    letter-spacing: 0.1em;
+}
+.menu-input-group input {
+    width: 100%;
+    padding: 8px;
+    background: rgba(0, 0, 0, 0.5);
+    border: 1px solid rgba(0, 255, 255, 0.4);
+    color: #0f0;
+    font-family: 'Courier New', monospace;
+    font-size: 14px;
+    border-radius: 2px;
+}
+.menu-input-group input:focus {
+    outline: none;
+    border-color: #0f0;
+    background: rgba(0, 20, 0, 0.6);
+}
+
+.menu-preset-buttons {
+    display: flex;
+    gap: 5px;
+    flex-wrap: wrap;
+    margin-top: 10px;
+}
+.preset-btn {
+    flex: 1;
+    min-width: 52px;
+    padding: 8px 4px;
+    background: rgba(0, 0, 0, 0.4);
+    border: 1px solid rgba(0, 255, 255, 0.3);
+    color: rgba(0, 255, 200, 0.7);
+    font-size: 11px;
+    font-family: 'Courier New', monospace;
+    cursor: pointer;
+    transition: all 0.15s;
+    border-radius: 2px;
+}
+.preset-btn:hover { background: rgba(0, 255, 255, 0.1); border-color: #0ff; color: #0ff; }
+.preset-btn.active { background: rgba(0, 255, 255, 0.15); border-color: #0ff; color: #0ff; font-weight: bold; }
+
+/* ── Rocket config card ── */
+.menu-rocket-card {
+    border: 1px solid rgba(0, 255, 255, 0.25);
+    border-radius: 4px;
+    padding: 16px;
+    background: rgba(0, 20, 18, 0.7);
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.menu-rocket-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+
+.menu-rocket-name {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    margin-bottom: 3px;
+}
+.menu-rocket-icon { color: #0ff; font-size: 13px; }
+.menu-rocket-name span:last-child {
+    color: #0ff;
+    font-size: 15px;
+    font-weight: bold;
+    letter-spacing: 0.08em;
+}
+.menu-rocket-meta {
+    color: rgba(0, 255, 200, 0.45);
+    font-size: 10px;
+    letter-spacing: 0.1em;
+}
+
+.menu-build-inline-btn {
+    padding: 6px 12px;
+    background: transparent;
+    border: 1px solid rgba(0, 255, 255, 0.3);
+    color: rgba(0, 255, 200, 0.6);
+    font-family: 'Courier New', monospace;
+    font-size: 11px;
+    letter-spacing: 0.06em;
+    cursor: pointer;
+    transition: all 0.15s;
+    border-radius: 2px;
+    white-space: nowrap;
+    flex-shrink: 0;
+}
+.menu-build-inline-btn:hover { border-color: #0ff; color: #0ff; background: rgba(0, 255, 255, 0.08); }
+
+.menu-build-btn-group {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex-shrink: 0;
+}
+
+.menu-reset-rocket-btn {
+    padding: 5px 8px;
+    background: transparent;
+    border: 1px solid rgba(255, 80, 80, 0.5);
+    color: rgba(255, 100, 100, 0.85);
+    font-family: 'Courier New', monospace;
+    font-size: 10px;
+    letter-spacing: 0.06em;
+    cursor: pointer;
+    transition: all 0.15s;
+    border-radius: 2px;
+    white-space: nowrap;
+}
+.menu-reset-rocket-btn:hover {
+    border-color: #ff4444;
+    color: #ff6666;
+    background: rgba(255, 50, 50, 0.1);
+}
+
+.menu-rocket-stats {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    border-top: 1px solid rgba(0, 255, 255, 0.1);
+    border-bottom: 1px solid rgba(0, 255, 255, 0.1);
+    padding: 12px 0;
+}
+.menu-rocket-stat { text-align: center; }
+.menu-rocket-stat-val {
+    color: #0f0;
+    font-size: 18px;
+    font-weight: bold;
+    letter-spacing: 0.04em;
+    line-height: 1.1;
+}
+.menu-rocket-stat-label {
+    color: rgba(0, 255, 100, 0.4);
+    font-size: 9px;
+    letter-spacing: 0.12em;
+    margin-top: 3px;
+}
+
+.menu-readiness { display: flex; flex-direction: column; gap: 6px; }
+.menu-readiness-header {
+    display: flex;
+    justify-content: space-between;
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    color: rgba(0, 255, 200, 0.45);
+}
+#menu-readiness-label { color: rgba(0, 255, 100, 0.75); }
+.menu-readiness-bg {
+    height: 5px;
+    background: rgba(0, 255, 100, 0.1);
+    border-radius: 3px;
+    overflow: hidden;
+}
+.menu-readiness-fill {
+    height: 100%;
+    background: #0f0;
+    border-radius: 3px;
+    transition: width 0.5s ease;
+}
+
+/* Advisory / warning box */
+.menu-advisory {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    padding: 10px 12px;
+    border: 1px solid rgba(200, 140, 30, 0.4);
+    border-radius: 3px;
+    background: rgba(200, 140, 30, 0.06);
+    font-size: 11px;
+    color: rgba(220, 170, 60, 0.85);
+    line-height: 1.5;
+}
+.menu-advisory-icon { flex-shrink: 0; font-size: 13px; }
+
+/* ── Settings list ── */
+.menu-settings-list {
+    display: flex;
+    flex-direction: column;
+}
+
+.menu-srow {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 11px 0;
+    border-bottom: 1px solid rgba(0, 255, 100, 0.08);
+}
+.menu-srow:last-child { border-bottom: none; }
+
+.menu-srow--clickable { cursor: pointer; }
+.menu-srow--clickable:hover .menu-srow-key { color: #0ff; }
+.menu-srow--clickable:hover .menu-srow-val { color: #0ff; }
+
+.menu-srow-key {
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    color: rgba(0, 255, 150, 0.5);
+    transition: color 0.15s;
+}
+.menu-srow-val {
+    font-size: 11px;
+    letter-spacing: 0.06em;
+    color: rgba(0, 255, 150, 0.8);
+    transition: color 0.15s;
+}
+
+/* iOS-style toggle switch */
+.menu-toggle { position: relative; display: inline-flex; cursor: pointer; }
+.menu-toggle input { opacity: 0; width: 0; height: 0; position: absolute; }
+.menu-toggle-track {
+    display: block;
+    width: 40px; height: 22px;
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 11px;
+    position: relative;
+    transition: background 0.2s, border-color 0.2s;
+}
+.menu-toggle-track::after {
+    content: '';
+    position: absolute;
+    top: 3px; left: 3px;
+    width: 14px; height: 14px;
+    background: rgba(255, 255, 255, 0.3);
+    border-radius: 50%;
+    transition: transform 0.2s, background 0.2s;
+}
+.menu-toggle input:checked ~ .menu-toggle-track {
+    background: rgba(0, 200, 80, 0.25);
+    border-color: rgba(0, 255, 100, 0.6);
+}
+.menu-toggle input:checked ~ .menu-toggle-track::after {
+    transform: translateX(18px);
+    background: #0f0;
+}
+
+/* Hidden toggle buttons (for input.js compat) */
+.toggle-buttons { display: flex; gap: 4px; }
+.toggle-btn {
+    padding: 6px 10px;
+    background: #111;
+    border: 1px solid rgba(0, 255, 0, 0.4);
+    color: #0f0;
+    font-family: 'Courier New', monospace;
+    font-size: 11px;
+    cursor: pointer;
+    transition: all 0.15s;
+    border-radius: 2px;
+}
+.toggle-btn:hover { background: rgba(0, 255, 0, 0.15); border-color: #0f0; }
+.toggle-btn.active { background: #0f0; border-color: #0f0; color: #000; font-weight: bold; }
+
+/* Preserved for input.js */
+.setting-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+.setting-label { color: #0f0; font-size: 12px; }
+.setting-description { color: #555; font-size: 10px; margin: 0 0 10px; font-style: italic; line-height: 1.4; }
+
+/* ── Launch button ── */
+.menu-launch-btn {
+    width: 100%;
+    padding: 15px;
+    background: rgba(0, 255, 0, 0.08);
+    border: 1px solid rgba(0, 255, 0, 0.35);
+    color: rgba(0, 255, 0, 0.5);
+    font-family: 'Courier New', monospace;
+    font-size: 14px;
+    font-weight: bold;
+    letter-spacing: 0.14em;
+    cursor: default;
+    transition: all 0.2s;
+    border-radius: 3px;
+    flex-shrink: 0;
+}
+.menu-launch-btn:not(:disabled) {
+    background: rgba(0, 255, 0, 0.12);
+    border-color: #0f0;
+    color: #0f0;
+    cursor: pointer;
+}
+.menu-launch-btn:not(:disabled):hover {
+    background: #0f0;
+    color: #000;
+    box-shadow: 0 0 20px rgba(0, 255, 0, 0.3);
+}
+
+.menu-language-switcher {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+    width: 100%;
+    position: sticky;
+    bottom: -20px;
+    margin: 0 -20px;
+    padding: 8px 20px 12px;
+    background: rgba(4, 8, 6, 0.98);
+    border-top: 1px solid rgba(0, 255, 255, 0.15);
+    flex-shrink: 0;
+}
+
+.menu-language-switcher .lang-switcher-btn {
+    flex: 1;
+    min-height: 24px;
+    font-size: 10px;
+    padding: 3px 6px;
+}
+
+/* Preserved for rocket builder Done button */
+.menu-start-btn {
+    width: 100%;
+    padding: 12px;
+    background: #222;
+    border: 2px solid #0ff;
+    color: #0ff;
+    font-family: 'Courier New', monospace;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+.menu-start-btn:hover { background: #0ff; color: #000; }
+
+/* Rocket builder (hangar page — see hangar.css for layout) */
+.rocket-builder-panel {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    box-sizing: border-box;
+}
+
+.rocket-builder-tabs {
+    padding-top: 12px;
+    flex-shrink: 0;
+    display: flex;
+    gap: 0;
+    padding: 0 15px 10px;
+    border-bottom: 1px solid #333;
+}
+
+.rocket-builder-tab {
+    padding: 8px 20px;
+    background: #222;
+    border: 1px solid #444;
+    border-bottom: none;
+    border-radius: 4px 4px 0 0;
+    color: #888;
+    font-size: 13px;
+    cursor: pointer;
+    transition: all 0.2s;
+    margin-bottom: -1px;
+}
+
+.rocket-builder-tab:hover {
+    color: #0ff;
+    border-color: #0ff;
+}
+
+.rocket-builder-tab.active {
+    background: rgba(0, 255, 255, 0.1);
+    border-color: #0ff;
+    color: #0ff;
+}
+
+.rocket-builder-actions {
+    flex-shrink: 0;
+    padding: 0 15px 10px;
+}
+
+.rocket-builder-reset-btn {
+    padding: 8px 12px;
+    background: #333;
+    border: 1px solid #f80;
+    color: #f80;
+    font-size: 12px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.rocket-builder-reset-btn:hover {
+    background: #f80;
+    color: #000;
+}
+
+.rocket-builder-content {
+    flex: 1 1 0;
+    min-height: 0;
+    overflow: hidden;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    -webkit-overflow-scrolling: touch;
+}
+
+.rocket-builder-content.advanced-tab {
+    overflow-y: scroll;
+    overflow-x: hidden;
+    padding: 10px 15px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0 20px;
+    align-content: start;
+}
+
+/* Basic tab: single column params + fixed diagram (no scroll on diagram) */
+.rocket-builder-content.basic-tab {
+    display: flex;
+    flex-direction: row;
+    padding: 0;
+    overflow: hidden;
+}
+
+.rocket-builder-basic-layout {
+    display: flex;
+    flex: 1;
+    min-width: 0;
+    min-height: 0;
+    overflow: hidden;
+}
+
+.rocket-builder-params {
+    flex: 1;
+    min-width: 0;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding: 10px 15px;
+    -webkit-overflow-scrolling: touch;
+}
+
+.rocket-builder-resizer {
+    flex: 0 0 8px;
+    cursor: col-resize;
+    background: #222;
+    border-left: 1px solid #333;
+    border-right: 1px solid #333;
+    position: relative;
+}
+
+.rocket-builder-resizer::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 2px;
+    height: 24px;
+    background: #0ff;
+    border-radius: 1px;
+    opacity: 0.6;
+}
+
+.rocket-builder-resizer:hover {
+    background: rgba(0, 255, 255, 0.1);
+}
+
+.rocket-builder-resizer:hover::after {
+    opacity: 1;
+}
+
+.rocket-builder-diagram {
+    flex: 0 0 auto;
+    min-width: 120px;
+    border-left: 1px solid #333;
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0, 0, 0, 0.2);
+}
+
+.rocket-builder-diagram-hint {
+    font-size: 10px;
+    color: #888;
+    margin: 0 0 8px 0;
+    flex-shrink: 0;
+}
+
+.rocket-builder-diagram-canvas {
+    display: block;
+    flex: 1 1 0;
+    min-height: 160px;
+    width: 100%;
+    background: rgba(0, 255, 255, 0.08);
+    border: 1px solid #0ff;
+    border-radius: 4px;
+}
+
+.rocket-builder-section {
+    grid-column: 1 / -1;
+    margin: 15px 0 8px;
+    padding-bottom: 4px;
+    color: #0ff;
+    font-size: 14px;
+    border-bottom: 1px solid #333;
+}
+
+.rocket-builder-section:first-child {
+    margin-top: 0;
+}
+
+.rocket-builder-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 6px;
+}
+
+.rocket-builder-row label {
+    flex: 0 0 140px;
+    font-size: 11px;
+    color: #aaa;
+}
+
+.rocket-builder-row input {
+    flex: 1;
+    min-width: 0;
+    padding: 4px 8px;
+    background: #222;
+    border: 1px solid #444;
+    color: #0f0;
+    font-family: 'Courier New', monospace;
+    font-size: 12px;
+}
+
+.rocket-builder-row input:focus {
+    outline: none;
+    border-color: #0ff;
+}
+
+.rocket-builder-row input:disabled {
+    background: #1a1a1a;
+    border-color: #333;
+    color: #666;
+    cursor: not-allowed;
+}
+
+.rocket-builder-value {
+    flex: 0 0 52px;
+    font-size: 11px;
+    color: #888;
+}
+
+/* Manual Pitch Controls */
+#manual-pitch-controls {
+    position: fixed;
+    bottom: 20px;
+    right: 140px; /* Positioned to the left of quick actions */
+    color: #f80;
+    font-size: 12px;
+    background: rgba(0, 0, 0, 0.7);
+    padding: 15px;
+    border: 1px solid #f80;
+    border-radius: 5px;
+    width: 200px;
+}
+
+#manual-pitch-controls h3 {
+    margin-bottom: 10px;
+    border-bottom: 1px solid #f80;
+    padding-bottom: 5px;
+    color: #f80;
+}
+
+.pitch-display {
+    text-align: center;
+    margin-bottom: 15px;
+}
+
+#manual-pitch-display {
+    font-size: 32px;
+    color: #f80;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.guidance-recommendation {
+    font-size: 11px;
+    color: #888;
+    margin-top: 5px;
+}
+
+.guidance-recommendation span {
+    color: #0ff;
+}
+
+.pitch-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.pitch-buttons button {
+    width: 100%;
+    padding: 10px;
+    font-size: 11px;
+    background: #222;
+    border: 1px solid #f80;
+    color: #f80;
+}
+
+.pitch-buttons button:hover {
+    background: #f80;
+    color: #000;
+}
+
+/* Mobile Responsive Styles */
+@media screen and (max-width: 768px) {
+    html, body {
+        overflow: hidden;
+        position: fixed;
+        width: 100%;
+        height: 100%;
+    }
+
+    #canvas {
+        width: 100vw !important;
+        height: 100vh !important;
+    }
+
+    /* Show hamburger menu on mobile */
+    .mobile-hamburger {
+        display: flex;
+    }
+
+    /* Hide controls and other panels by default on mobile - they'll be in the slide-in panel */
+    /* Keep telemetry, events, t-minus display, quick actions, and burn controls visible */
+    #controls,
+    #top-links,
+    #pitch-program,
+    #manual-pitch-controls {
+        display: none !important;
+    }
+    
+    /* Show panels when inside mobile panel container */
+    .mobile-ui-panel #controls,
+    .mobile-ui-panel #top-links,
+    .mobile-ui-panel #pitch-program,
+    .mobile-ui-panel #manual-pitch-controls {
+        display: block !important;
+    }
+    
+    .mobile-ui-panel #controls {
+        display: flex !important;
+    }
+    
+    .mobile-ui-panel #top-links {
+        display: flex !important;
+    }
+    
+    /* Burn controls stay visible on mobile (not in hamburger) */
+    /* Note: JavaScript controls visibility based on orbit status */
+    /* On mobile, they're positioned at bottom left by default */
+
+    /* Telemetry - positioned below t-minus display on mobile */
+    #telemetry {
+        top: 80px; /* Below t-minus display */
+        left: 10px;
+        right: auto;
+        font-size: 10px;
+        padding: 8px;
+        min-width: auto;
+        max-width: calc(50% - 15px);
+        position: fixed;
+    }
+
+    #telemetry h3 {
+        font-size: 12px;
+        margin-bottom: 8px;
+    }
+
+    .telemetry-tabs {
+        gap: 4px;
+        margin-bottom: 8px;
+    }
+
+    .telemetry-tab {
+        padding: 5px 6px;
+        font-size: 9px;
+    }
+
+    #telemetry-rocket-canvas {
+        max-width: 180px;
+    }
+
+    .structural-panel--floating {
+        width: min(280px, calc(100vw - 20px));
+        max-height: 70vh;
+        font-size: 11px;
+    }
+
+    .section {
+        margin: 8px 0;
+        padding: 5px 0;
+    }
+
+    .label {
+        font-size: 9px;
+    }
+
+    .value {
+        font-size: 9px;
+    }
+
+    /* Events panel - positioned below t-minus display on mobile */
+    #events {
+        top: 80px; /* Below t-minus display */
+        right: 10px;
+        left: auto;
+        max-width: calc(50% - 15px);
+        max-height: 200px;
+        font-size: 10px;
+        padding: 8px;
+        position: fixed;
+    }
+    
+    /* Quick actions - bottom right on mobile */
+    #quick-actions {
+        bottom: 10px;
+        right: 10px;
+        flex-direction: column;
+        gap: 8px;
+    }
+    
+    #quick-actions button {
+        padding: 10px 16px;
+        font-size: 12px;
+        min-width: 90px;
+        min-height: 44px;
+    }
+
+    #events h3 {
+        font-size: 12px;
+        margin-bottom: 8px;
+    }
+
+    .event {
+        font-size: 9px;
+        margin: 3px 0;
+    }
+
+    /* Top links (docs, GitHub) - in mobile panel */
+    .mobile-ui-panel #top-links {
+        position: static;
+        display: flex !important;
+        margin-bottom: 15px;
+        gap: 8px;
+    }
+
+    .mobile-ui-panel #top-links .top-link {
+        width: 32px;
+        height: 32px;
+    }
+
+    .mobile-ui-panel #top-links #docs-link,
+    .mobile-ui-panel #top-links #hangar-link {
+        width: auto;
+        min-width: 72px;
+        height: auto;
+        min-height: 32px;
+        padding: 6px 10px;
+        font-size: 14px;
+        line-height: 1;
+    }
+
+    .mobile-ui-panel #top-links #learn-link,
+    .mobile-ui-panel #top-links .feedback-btn-link {
+        width: auto;
+        min-width: 74px;
+        padding: 0 10px;
+    }
+
+    .mobile-ui-panel #top-links .top-link svg {
+        width: 18px;
+        height: 18px;
+    }
+
+    /* Controls - in mobile panel */
+    #controls {
+        position: static;
+        flex-wrap: wrap;
+        gap: 8px;
+        justify-content: center;
+        margin-bottom: 15px;
+    }
+
+    .mobile-ui-panel #controls button {
+        padding: 10px 12px;
+        font-size: 11px;
+        min-height: 44px;
+        flex: 1 1 calc(50% - 4px);
+        min-width: calc(50% - 4px);
+    }
+
+    /* Pitch program - in mobile panel */
+    #pitch-program {
+        position: static;
+        width: 100%;
+        font-size: 10px;
+        padding: 10px;
+        margin-bottom: 15px;
+        background: rgba(0, 0, 0, 0.7);
+        border: 1px solid #f80;
+        border-radius: 5px;
+        display: none; /* Hidden by default, shown when needed */
+    }
+
+    #pitch-program h3 {
+        font-size: 11px;
+        margin-bottom: 8px;
+    }
+
+    /* Manual pitch controls - in mobile panel by default, but can be positioned in bottom right */
+    #manual-pitch-controls {
+        position: static;
+        width: 100%;
+        font-size: 10px;
+        padding: 10px;
+        margin-bottom: 15px;
+        background: rgba(0, 0, 0, 0.7);
+        border: 1px solid #f80;
+        border-radius: 5px;
+    }
+
+    /* When in manual mode on mobile, position in bottom right (above quick actions) */
+    #manual-pitch-controls.mobile-bottom-right {
+        position: fixed;
+        bottom: 140px; /* Position above quick actions (which are ~100px tall with gap) */
+        right: 10px;
+        width: 160px;
+        max-width: calc(50vw - 20px);
+        font-size: 10px;
+        padding: 8px;
+        margin-bottom: 0;
+        z-index: 1000;
+        display: block !important; /* Ensure visibility */
+    }
+
+    #manual-pitch-controls h3 {
+        font-size: 11px;
+        margin-bottom: 8px;
+    }
+
+    #manual-pitch-controls.mobile-bottom-right h3 {
+        font-size: 10px;
+        margin-bottom: 6px;
+    }
+
+    #manual-pitch-display {
+        font-size: 20px;
+    }
+
+    #manual-pitch-controls.mobile-bottom-right #manual-pitch-display {
+        font-size: 18px;
+    }
+
+    .pitch-buttons button {
+        padding: 10px;
+        font-size: 10px;
+        min-height: 44px;
+    }
+
+    #manual-pitch-controls.mobile-bottom-right .pitch-buttons button {
+        padding: 8px;
+        font-size: 9px;
+        min-height: 36px;
+    }
+
+    /* Burn controls - visible on mobile, not in panel */
+    #burn-controls {
+        position: fixed;
+        bottom: 10px;
+        left: 10px;
+        right: auto;
+        font-size: 10px;
+        padding: 6px;
+        min-width: 100px;
+        background: rgba(0, 0, 0, 0.7);
+        border: 1px solid #0ff;
+        border-radius: 5px;
+    }
+
+    /* When replacing manual pitch controls on mobile, position in bottom right */
+    #burn-controls.mobile-bottom-right {
+        bottom: 140px; /* Same position as manual pitch controls */
+        left: auto;
+        right: 10px;
+        width: 160px;
+        max-width: calc(50vw - 20px);
+        display: block !important; /* Ensure visibility */
+    }
+
+    #burn-controls h3 {
+        font-size: 10px;
+        margin-bottom: 4px;
+        padding-bottom: 3px;
+    }
+    
+    #burn-controls #burn-status {
+        margin-bottom: 4px;
+        font-size: 9px;
+        min-height: 18px;
+    }
+    
+    #burn-controls > div {
+        gap: 2px !important;
+    }
+
+    #burn-controls button {
+        padding: 4px 5px;
+        font-size: 9px;
+        min-height: 32px;
+        line-height: 1.1;
+    }
+
+    /* T-minus display - adjust size and position */
+    #tminus-display {
+        top: 10px;
+        left: 10px;
+        right: 10px;
+        transform: none;
+        font-size: 16px;
+        padding: 8px 12px;
+        width: auto;
+    }
+
+    #tminus-display .tminus-time {
+        font-size: 24px;
+    }
+
+    #tminus-display .tminus-event {
+        font-size: 12px;
+    }
+
+    /* Menu panel - full width on mobile */
+    #menu-panel {
+        width: 100%;
+        max-width: 100vw;
+        padding: 15px;
+        gap: 18px;
+        -webkit-overflow-scrolling: touch;
+        overflow-y: auto;
+    }
+
+    .menu-header h2 { font-size: 17px; }
+    .menu-mode-card { padding: 12px 10px; }
+    .menu-mode-card-label { font-size: 12px; }
+
+    .menu-input-group input {
+        padding: 10px;
+        font-size: 16px;
+        min-height: 44px;
+    }
+
+    .preset-btn { padding: 10px 4px; min-height: 44px; }
+
+    .menu-srow { padding: 13px 0; }
+    .menu-srow-key, .menu-srow-val { font-size: 12px; }
+    .menu-build-inline-btn { padding: 10px 14px; min-height: 40px; font-size: 12px; }
+
+    .menu-launch-btn { padding: 17px; font-size: 14px; min-height: 54px; }
+    .menu-start-btn { padding: 14px; font-size: 14px; min-height: 50px; }
+    .menu-close { width: 44px; height: 44px; font-size: 28px; }
+}
+
+/* Very small phones */
+@media screen and (max-width: 480px) {
+    #telemetry {
+        top: 70px; /* Below t-minus display */
+        font-size: 9px;
+        padding: 6px;
+        max-width: calc(50% - 15px);
+    }
+
+    #events {
+        top: 70px; /* Below t-minus display */
+        font-size: 9px;
+        padding: 6px;
+        max-height: 150px;
+        max-width: calc(50% - 15px);
+    }
+
+    #telemetry h3,
+    #events h3 {
+        font-size: 10px;
+    }
+
+    .label,
+    .value {
+        font-size: 8px;
+    }
+
+    #tminus-display {
+        font-size: 14px;
+        padding: 6px 10px;
+    }
+
+    #tminus-display .tminus-time {
+        font-size: 20px;
+    }
+
+    #quick-actions button {
+        padding: 8px 12px;
+        font-size: 11px;
+        min-width: 80px;
+    }
+
+    .mobile-ui-panel #controls button {
+        font-size: 10px;
+        padding: 8px 10px;
+        flex: 1 1 100%;
+        min-width: 100%;
+    }
+}
+
+/* Landscape orientation on mobile */
+@media screen and (max-width: 768px) and (orientation: landscape) {
+    #telemetry {
+        max-width: 200px;
+        font-size: 10px;
+    }
+
+    #events {
+        max-width: 200px;
+        max-height: 150px;
+    }
+
+    /* Top links - positioned next to events panel in landscape */
+    #top-links {
+        right: calc(10px + 200px + 10px); /* events right (10px) + events max-width (200px) + buffer (10px) */
+    }
+
+    #pitch-program,
+    #manual-pitch-controls,
+    #burn-controls {
+        width: 180px;
+        top: 10px;
+        bottom: auto;
+    }
+
+    #controls {
+        flex-wrap: nowrap;
+    }
+
+    button {
+        flex: 0 1 auto;
+        min-width: auto;
+        padding: 8px 12px;
+        font-size: 10px;
+    }
+}
+
+/* ── Language Switcher ─────────────────────────────────── */
+.lang-switcher-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 4px 9px;
+    border-radius: 4px;
+    font-family: 'Courier New', monospace;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    color: rgba(0, 255, 255, 0.55);
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    text-decoration: none;
+    transition: color 0.15s, background 0.15s;
+    white-space: nowrap;
+}
+
+.lang-switcher-btn:hover {
+    color: #0ff;
+    background: rgba(0, 255, 255, 0.1);
+}
+
+.lang-switcher-btn.lang-active {
+    color: #0ff;
+    background: rgba(0, 255, 255, 0.12);
+    cursor: default;
+}
+
+

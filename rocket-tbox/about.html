@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Cómo funciona el Simulador de Trayectoria de Lanzamiento de Cohetes: física, modos, controles y guiado.">
+    <title>Cómo funciona | Rocket TBox</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: #0a0a0a;
+            color: #ccc;
+            font-family: 'Courier New', monospace;
+            line-height: 1.6;
+            padding: 20px;
+            max-width: 720px;
+            margin: 0 auto;
+        }
+        a { color: #0ff; text-decoration: none; }
+        a:hover { color: #0f0; text-decoration: underline; }
+        h1 { color: #0ff; font-size: 1.4rem; margin-bottom: 8px; border-bottom: 1px solid #0ff; padding-bottom: 8px; }
+        h2 { color: #0f0; font-size: 1.1rem; margin-top: 24px; margin-bottom: 8px; }
+        h3 { color: #f80; font-size: 1rem; margin-top: 16px; margin-bottom: 6px; }
+        p { margin-bottom: 12px; font-size: 14px; }
+        ul { margin-left: 20px; margin-bottom: 12px; }
+        li { margin-bottom: 4px; font-size: 14px; }
+        .back { display: inline-block; margin-bottom: 20px; padding: 8px 12px; background: rgba(0,255,255,0.1); border: 1px solid #0ff; border-radius: 4px; color: #0ff; }
+        .back:hover { background: rgba(0,255,255,0.2); color: #0f0; text-decoration: none; }
+        table { width: 100%; border-collapse: collapse; margin: 12px 0; font-size: 13px; }
+        th, td { border: 1px solid #333; padding: 8px; text-align: left; }
+        th { color: #0ff; background: rgba(0,255,255,0.08); }
+        .muted { color: #666; font-size: 12px; }
+    </style>
+</head>
+<body>
+    <a href="index.html" class="back">← Volver al Simulador</a>
+    <a href="../index.html#rocket-tbox" class="back">← Volver a Nébula</a>
+
+    <h1>Rocket TBox — Cómo funciona</h1>
+    <p>Una simulación 2D interactiva de mecánica orbital y lanzamientos de cohetes desde la Tierra. Atmósfera realista, empuje variable, arrastre y un sistema de guiado de lazo cerrado.</p>
+
+    <h2>Modos de juego</h2>
+    <p>Elige un modo desde <strong>MENÚ</strong> antes de lanzar.</p>
+    <ul>
+        <li><strong>Control manual</strong> — Controlas el cabeceo con W/S (o botones en pantalla). El guiado muestra el cabeceo recomendado en cian. Ideal para aprender.</li>
+        <li><strong>Lanzamiento guiado</strong> — Define una altitud objetivo (150–2000 km). El sistema de guiado pilota el cohete y circulariza la órbita automáticamente.</li>
+        <li><strong>Modo orbital</strong> — Empieza ya en órbita (presets de 200–800 km). Practica quemados prógrados, retrógrados, normales, anti-normales, radiales y anti-radiales. Usa <strong>REPOSTAR</strong> para añadir propelente.</li>
+    </ul>
+
+    <h2>Controles</h2>
+    <table>
+        <tr><th>Acción</th><th>Control</th></tr>
+        <tr><td>Abrir menú</td><td>MENÚ</td></tr>
+        <tr><td>Lanzar</td><td>LANZAR</td></tr>
+        <tr><td>Pausar / Reanudar</td><td>PAUSA</td></tr>
+        <tr><td>Reiniciar misión</td><td>REINICIAR</td></tr>
+        <tr><td>Aceleración de tiempo</td><td>VELOCIDAD (1x → 1000x)</td></tr>
+        <tr><td>Zoom</td><td>ACERCAR / ALEJAR / ZOOM AUTO</td></tr>
+        <tr><td>Cámara</td><td>SEGUIR COHETE / CENTRAR TIERRA</td></tr>
+        <tr><td>Cabeceo (manual)</td><td>W / S o ↑ SUBIR CABECEO / ↓ BAJAR CABECEO</td></tr>
+        <tr><td>Quemados orbitales</td><td>Mantén PROGRADO, RETRÓGRADO, NORMAL, etc.</td></tr>
+    </table>
+
+    <h2>Hangar de Vehículos (cohete personalizado)</h2>
+    <p>Abre el <a href="builder.html">Hangar de Vehículos</a> para diseñar un cohete de dos etapas: etapas, carga útil, carenado, empuje y masa. Tu diseño se guarda en el navegador y se aplica la próxima vez que inicies una misión desde la plataforma de lanzamiento. Usa <strong>CONSTRUIR ›</strong> en Control de Misión o el enlace <strong>Hangar</strong> en la parte superior del simulador.</p>
+
+    <h2>Telemetría</h2>
+    <p>Datos en tiempo real: T+, etapa, altitud, alcance, velocidad (vertical/horizontal), aceleración, Max Q, presión dinámica, coeficiente de arrastre, Mach, masa, propelente, empuje, cabeceo, gimbal, velocidad de giro, apoastro, periastro.</p>
+
+    <h2>Física y modelo</h2>
+    <ul>
+        <li><strong>Mecánica orbital</strong> — Problema de los dos cuerpos, vis-viva, Kepler. Integración de Euler simpléctico.</li>
+        <li><strong>Atmósfera</strong> — Atmósfera Estándar de EE. UU. 1976, 7 capas, altitud geopotencial.</li>
+        <li><strong>Arrastre</strong> — Relativo a la velocidad, coeficiente de arrastre dependiente de Mach (subsónico → transónico → supersónico → hipersónico).</li>
+        <li><strong>Cohete</strong> — Similar al Falcon 9: dos etapas, empuje variable (nivel del mar/vacío), Isp variable, dinámica de gimbal.</li>
+    </ul>
+
+    <h2>Guiado (Lanzamiento guiado)</h2>
+    <p>Lazo cerrado, basado en prioridades. En atmósfera: ascenso vertical → giro gravitacional, protección Max-Q, límites de velocidad de giro. En vacío: elevar apoastro, mantener periastro seguro, circularizar en la altitud objetivo.</p>
+
+    <p class="muted">Para más detalle, consulta el README original del proyecto (¡una estrella se agradece si te gusta!) en <a href="https://github.com/donutTheJedi" target="_blank" rel="noopener noreferrer">GitHub</a>. Adaptado y traducido al español para Rocket TBox.</p>
+
+    <p style="margin-top: 32px;">
+        <a href="index.html" class="back">← Volver al Simulador</a>
+        &nbsp;·&nbsp;
+        <a href="builder.html" class="back">Hangar de Vehículos</a>
+    </p>
+</body>
+</html>

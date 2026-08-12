@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Diseña un cohete de dos etapas personalizado en el Hangar de Vehículos. Ajusta etapas, carga útil, carenado, empuje y masa — y luego vuela tu diseño en el simulador de trayectoria de lanzamiento.">
+    <title>Constructor de Cohetes | Hangar de Vehículos</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/hangar.css">
+</head>
+<body class="hangar-page">
+    <aside id="hangar-summary" class="hangar-stats-panel" aria-label="Estadísticas del vehículo">
+        <div class="hangar-rocket-name">
+            <span class="hangar-rocket-icon" aria-hidden="true">▲</span>
+            <span id="hangar-rocket-title">FALCON-9 MK1</span>
+        </div>
+        <div class="hangar-rocket-meta" id="hangar-rocket-meta">2 ETAPAS · KEROLOX</div>
+
+        <div class="hangar-metrics-block">
+            <p class="hangar-metrics-label">DIMENSIONES Y MASA</p>
+            <div class="hangar-metric-row">
+                <span class="hangar-metric-key">Masa total</span>
+                <span class="hangar-metric-val" id="hangar-stat-totalmass">—</span>
+            </div>
+            <div class="hangar-metric-row">
+                <span class="hangar-metric-key">Altura</span>
+                <span class="hangar-metric-val" id="hangar-stat-height">—</span>
+            </div>
+            <div class="hangar-metric-row">
+                <span class="hangar-metric-key">Ancho máx.</span>
+                <span class="hangar-metric-val" id="hangar-stat-width">—</span>
+            </div>
+        </div>
+
+        <div class="hangar-metrics-block">
+            <p class="hangar-metrics-label">EMPUJE (NIVEL DEL MAR)</p>
+            <div class="hangar-metric-row">
+                <span class="hangar-metric-key">Etapa 1</span>
+                <span class="hangar-metric-val" id="hangar-stat-thrust-s1">—</span>
+            </div>
+            <div class="hangar-metric-row">
+                <span class="hangar-metric-key">Etapa 2</span>
+                <span class="hangar-metric-val" id="hangar-stat-thrust-s2">—</span>
+            </div>
+        </div>
+
+        <div class="hangar-rocket-stats">
+            <div class="hangar-rocket-stat">
+                <div class="hangar-rocket-stat-val" id="hangar-stat-drymass">—</div>
+                <div class="hangar-rocket-stat-label">MASA SECA</div>
+            </div>
+            <div class="hangar-rocket-stat">
+                <div class="hangar-rocket-stat-val" id="hangar-stat-twr">—</div>
+                <div class="hangar-rocket-stat-label">TWR</div>
+            </div>
+            <div class="hangar-rocket-stat">
+                <div class="hangar-rocket-stat-val" id="hangar-stat-isp">—</div>
+                <div class="hangar-rocket-stat-label">ISP VAC</div>
+            </div>
+        </div>
+        <div class="hangar-readiness">
+            <div class="hangar-readiness-header">
+                <span>PREPARACIÓN DE LANZAMIENTO</span>
+                <span id="hangar-readiness-label">—</span>
+            </div>
+            <div class="hangar-readiness-bg">
+                <div class="hangar-readiness-fill" id="hangar-readiness-fill" style="width:0%"></div>
+            </div>
+        </div>
+        <div id="hangar-advisory" class="hangar-advisory" style="display:none">
+            <span class="hangar-advisory-icon" aria-hidden="true">⚠</span>
+            <span id="hangar-advisory-text"></span>
+        </div>
+    </aside>
+
+    <button type="button" id="hangar-hamburger" class="hangar-hamburger" aria-label="Abrir menú de ajustes" aria-expanded="false">
+        <span></span>
+        <span></span>
+        <span></span>
+    </button>
+
+    <aside id="hangar-menu-drawer" class="hangar-menu-drawer" aria-label="Ajustes del hangar">
+        <div class="hangar-drawer-header">
+            <span class="hangar-drawer-title">AJUSTES</span>
+            <button type="button" id="hangar-drawer-close" class="hangar-drawer-close" aria-label="Cerrar">×</button>
+        </div>
+        <div class="hangar-drawer-body">
+            <div class="hangar-global-block">
+                <p class="hangar-global-label">GLOBAL</p>
+                <div id="hangar-global-fields"></div>
+            </div>
+            <div class="hangar-drawer-actions">
+                <button type="button" id="rocket-builder-reset-btn" class="hangar-reset-btn">Restaurar por defecto</button>
+                <a href="index.html" id="hangar-launch-btn" class="hangar-launch-btn">Ir a la Plataforma de Lanzamiento</a>
+                <a href="../index.html#rocket-tbox" class="hangar-reset-btn" style="display:block;text-align:center;text-decoration:none;">← Volver a Nébula</a>
+            </div>
+        </div>
+    </aside>
+
+    <div id="hangar-backdrop" class="hangar-backdrop" hidden></div>
+
+    <a href="index.html" class="hangar-launch-pad-link" title="Volver al simulador">Plataforma de Lanzamiento</a>
+
+    <aside id="hangar-segment-drawers" class="hangar-segment-drawers" aria-label="Edición rápida de secciones">
+        <p class="hangar-segment-drawers-title">SECCIONES</p>
+        <p class="hangar-segment-drawers-hint">Números rápidos · haz clic en el cohete para el editor completo</p>
+        <details class="hangar-segment-drawer" data-segment-index="0">
+            <summary>Etapa 1</summary>
+            <div class="hangar-segment-drawer-inner">
+                <div id="hangar-drawer-body-0" class="hangar-segment-drawer-body"></div>
+                <button type="button" class="hangar-drawer-more-btn" data-segment-index="0">Ajustes avanzados ›</button>
+            </div>
+        </details>
+        <details class="hangar-segment-drawer" data-segment-index="1">
+            <summary>Etapa 2</summary>
+            <div class="hangar-segment-drawer-inner">
+                <div id="hangar-drawer-body-1" class="hangar-segment-drawer-body"></div>
+                <button type="button" class="hangar-drawer-more-btn" data-segment-index="1">Ajustes avanzados ›</button>
+            </div>
+        </details>
+        <details class="hangar-segment-drawer" data-segment-index="2">
+            <summary>Carga útil</summary>
+            <div class="hangar-segment-drawer-inner">
+                <div id="hangar-drawer-body-2" class="hangar-segment-drawer-body"></div>
+                <button type="button" class="hangar-drawer-more-btn" data-segment-index="2">Ajustes avanzados ›</button>
+            </div>
+        </details>
+        <details class="hangar-segment-drawer" data-segment-index="3">
+            <summary>Carenado</summary>
+            <div class="hangar-segment-drawer-inner">
+                <div id="hangar-drawer-body-3" class="hangar-segment-drawer-body"></div>
+                <button type="button" class="hangar-drawer-more-btn" data-segment-index="3">Ajustes avanzados ›</button>
+            </div>
+        </details>
+    </aside>
+
+    <div id="hangar-challenge-banner" class="hangar-challenge-banner" role="status" hidden>
+        <p class="hangar-challenge-banner-title">MODO DESAFÍO</p>
+        <p class="hangar-challenge-banner-text">
+            Partes del rendimiento <strong>mínimo</strong> en cada categoría — no del Falcon 9.
+            Rediseña aquí y vuelve a intentarlo hasta alcanzar la órbita; tus cambios se conservan al volver.
+            En la plataforma de lanzamiento se activan los ajustes más difíciles:
+            <strong>fuerzas aerodinámicas</strong>, <strong>control por gimbal</strong> y
+            <strong>explosión por fallo estructural</strong> (la misión termina si se sobrepasa el límite).
+            Vuela en modo <strong>Manual</strong>.
+        </p>
+    </div>
+
+    <main class="hangar-stage" aria-label="Cohete en el hangar">
+        <p class="hangar-hint">Haz clic en el cohete o usa los paneles de sección · arrastra los bordes para cambiar el tamaño</p>
+        <div id="hangar-canvas-wrap" class="hangar-canvas-wrap">
+            <canvas id="rocket-builder-canvas" class="rocket-builder-diagram-canvas"></canvas>
+        </div>
+    </main>
+
+    <div id="segment-popup" class="segment-popup" role="dialog" aria-modal="true" hidden>
+        <div class="segment-popup-header">
+            <h2 id="segment-popup-title" class="segment-popup-title">Etapa 1</h2>
+            <button type="button" id="segment-popup-close" class="segment-popup-close" aria-label="Cerrar">×</button>
+        </div>
+        <div class="segment-popup-tabs">
+            <button type="button" id="segment-popup-tab-basic" class="segment-popup-tab active">Básico</button>
+            <button type="button" id="segment-popup-tab-advanced" class="segment-popup-tab">Avanzado</button>
+        </div>
+        <div id="segment-popup-content" class="segment-popup-content"></div>
+    </div>
+
+    <div id="hangar-tutorial" class="hangar-tutorial" role="dialog" aria-labelledby="hangar-tutorial-title" aria-modal="true" hidden>
+        <div class="hangar-tutorial-scrim" aria-hidden="true"></div>
+        <div id="hangar-tutorial-spotlight" class="hangar-tutorial-spotlight" aria-hidden="true"></div>
+        <div id="hangar-tutorial-card" class="hangar-tutorial-card">
+            <p id="hangar-tutorial-step" class="hangar-tutorial-step">1 / 3</p>
+            <h2 id="hangar-tutorial-title" class="hangar-tutorial-title">Edita tu cohete</h2>
+            <p id="hangar-tutorial-text" class="hangar-tutorial-text"></p>
+            <div class="hangar-tutorial-actions">
+                <button type="button" id="hangar-tutorial-skip" class="hangar-tutorial-skip">Saltar recorrido</button>
+                <button type="button" id="hangar-tutorial-next" class="hangar-tutorial-next">Siguiente</button>
+            </div>
+        </div>
+    </div>
+
+    <script type="module" src="js/builder.js"></script>
+</body>
+</html>
