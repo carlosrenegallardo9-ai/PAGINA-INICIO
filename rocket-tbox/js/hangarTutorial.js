@@ -4,11 +4,21 @@ const STORAGE_KEY = 'rocket-hangar-tutorial-v1';
 
 const STEPS = [
     {
+        selectors: ['#hangar-canvas-wrap'],
+        cardPlacement: 'auto',
+        title: '¡Bienvenido al Hangar!',
+        text: 'Soy el Capitán Cósmico. Aquí armamos cohetes con orgullo salvadoreño 🇸🇻. Dame un momento y te muestro cómo funciona todo esto.',
+        onEnter: ({ setDrawerOpen }) => {
+            setDrawerOpen(false);
+            clearHangarTutorialHighlight();
+        },
+    },
+    {
         selectors: ['#hangar-canvas-wrap', '.hangar-segment-drawer[data-segment-index="0"]'],
         cardAnchorSelectors: ['#hangar-canvas-wrap'],
         cardPlacement: 'left',
         title: 'Edita tu cohete',
-        text: 'La Etapa 1 es el propulsor de la base. Haz clic en él sobre el cohete —o usa el panel Etapa 1— para cambiar el empuje, el tamaño y la masa. Arrastra los bordes de la sección para redimensionar.',
+        text: 'Mira, la Etapa 1 es el propulsor de la base. Haz clic en él sobre el cohete —o usa el panel Etapa 1— para cambiar el empuje, el tamaño y la masa. También puedes arrastrar los bordes de cada sección para redimensionar.',
         onEnter: ({ setDrawerOpen }) => {
             setDrawerOpen(false);
             setHangarTutorialHighlight(0);
@@ -17,7 +27,7 @@ const STEPS = [
     {
         selectors: ['#hangar-hamburger'],
         title: 'Menú de ajustes',
-        text: 'Abre el menú para opciones globales (densidad del propelente, altitud de eyección del carenado) y para restaurar tu diseño por defecto.',
+        text: 'Desde aquí abres las opciones globales —densidad del propelente, altitud de eyección del carenado— y puedes restaurar tu diseño al Falcon-9 de fábrica si algo sale mal.',
         onEnter: ({ setDrawerOpen }) => {
             setDrawerOpen(false);
             clearHangarTutorialHighlight();
@@ -25,14 +35,14 @@ const STEPS = [
     },
     {
         selectors: ['#hangar-launch-btn'],
-        title: 'Listo para volar',
-        text: 'Cuando tu vehículo esté listo, abre el menú y elige Ir a la Plataforma de Lanzamiento para volar tu cohete personalizado en el simulador.',
+        title: '¡Listo para el despegue!',
+        text: 'Cuando tu cohete esté a tu gusto, abre el menú y toca Ir a la Plataforma de Lanzamiento. Ahí te espero para la cuenta regresiva. ¡Nos vemos en el cielo! 🚀🇸🇻',
         onEnter: ({ setDrawerOpen }) => {
             clearHangarTutorialHighlight();
             setDrawerOpen(true);
         },
         onLeave: ({ setDrawerOpen }) => setDrawerOpen(false),
-        finishLabel: 'Entendido',
+        finishLabel: '¡Vamos!',
     },
 ];
 

@@ -764,6 +764,36 @@ body.hangar-tutorial-active {
     max-width: min(320px, calc(100vw - 32px));
 }
 
+.hangar-tutorial-captain {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 0 0 12px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid rgba(0, 255, 255, 0.25);
+}
+
+.hangar-tutorial-captain-avatar {
+    flex: none;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    line-height: 1;
+    background: radial-gradient(circle at 35% 30%, #163f8f, #051230);
+    border: 2px solid #e8ecf2;
+}
+
+.hangar-tutorial-captain-name {
+    font-size: 10px;
+    letter-spacing: 0.08em;
+    color: #5ec9ff;
+    font-weight: bold;
+}
+
 .hangar-tutorial-step {
     margin: 0 0 6px;
     font-size: 10px;
