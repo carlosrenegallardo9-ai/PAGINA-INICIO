@@ -7,6 +7,7 @@ import { addEvent, initEventsPanel } from './events.js';
 import { updateTelemetry } from './telemetry.js';
 import { getCanvas, resize } from './renderer.js';
 import { initStructuralPanel } from './structuralPanel.js';
+import { captainLaunchCountdown } from './cosmicCaptain.js';
 
 // Speed settings
 const speeds = [1, 2, 5, 10, 25, 50, 100, 500, 1000];
@@ -14,6 +15,9 @@ let speedIdx = 0;
 
 // Active burn button tracking
 let activeBurnButton = null;
+
+// Bumped whenever the mission is reset, to cancel a pending launch countdown.
+let launchSequence = 0;
 
 // Stop the current burn
 function stopBurn() {
@@ -105,17 +109,21 @@ export function initInput() {
     window.addEventListener('resize', resize);
     
     // Launch button
-    document.getElementById('launch-btn').addEventListener('click', () => {
+    document.getElementById('launch-btn').addEventListener('click', async () => {
         if (!state.running && state.time === 0 && state.gameMode !== null) {
+            const launchBtnEl = document.getElementById('launch-btn');
+            launchBtnEl.disabled = true;
             if (state.gameMode === 'orbital') {
                 state.running = true;
             } else {
+                const seq = ++launchSequence;
+                await captainLaunchCountdown();
+                if (seq !== launchSequence || state.running || state.gameMode === null) return;
                 state.running = true;
                 state.engineOn = true;
                 addEvent("¡DESPEGUE!");
             }
-            document.getElementById('launch-btn').disabled = true;
-            document.getElementById('launch-btn').style.display = 'none';
+            launchBtnEl.style.display = 'none';
             document.getElementById('pause-btn').style.display = 'inline-block';
         }
     });
@@ -135,6 +143,7 @@ export function initInput() {
     
     // Reset button
     document.getElementById('reset-btn').addEventListener('click', () => {
+        launchSequence++; // cancel any in-flight launch countdown
         resetCurrentMission();
         resetGuidance();
         if (state.gameMode === 'cubic') resetCubicGuidance();

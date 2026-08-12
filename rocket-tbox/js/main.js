@@ -15,6 +15,7 @@ import { updateTelemetry } from './telemetry.js';
 import { initRenderer, resize, render } from './renderer.js';
 import { initInput } from './input.js';
 import { registerMissionFailure, initMissionFailureDialog, dismissMissionFailureDialog } from './missionFailure.js';
+import { initCosmicCaptain } from './cosmicCaptain.js';
 import {
     loadPersistedSettings,
     isChallengeActive,
@@ -1141,6 +1142,7 @@ function init() {
         preselectChallengeManualMode();
     }
     updateTelemetry();
+    initCosmicCaptain();
     requestAnimationFrame(loop);
 }
 
