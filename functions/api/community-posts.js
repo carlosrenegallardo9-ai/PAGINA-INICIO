@@ -34,10 +34,11 @@ async function uploadImage(env, arrayBuffer, mimeType) {
     body: arrayBuffer,
   });
   if (!res.ok) {
-    console.error("Supabase storage upload error", res.status, await res.text().catch(() => ""));
-    return null;
+    const detail = await res.text().catch(() => "");
+    console.error("Supabase storage upload error", res.status, detail);
+    return { ok: false, error: `Supabase ${res.status}: ${detail}` };
   }
-  return `${env.SUPABASE_URL.replace(/\/$/, "")}/storage/v1/object/public/${BUCKET}/${path}`;
+  return { ok: true, url: `${env.SUPABASE_URL.replace(/\/$/, "")}/storage/v1/object/public/${BUCKET}/${path}` };
 }
 
 export async function onRequestGet({ env }) {
@@ -88,14 +89,16 @@ export async function onRequestPost({ request, env }) {
     }
 
     const arrayBuffer = await file.arrayBuffer();
-    const imageUrl = await uploadImage(env, arrayBuffer, file.type);
-    if (!imageUrl) return jsonResponse({ error: "No se pudo subir la imagen. Intenta de nuevo." }, 502);
+    const uploadResult = await uploadImage(env, arrayBuffer, file.type);
+    if (!uploadResult.ok) {
+      return jsonResponse({ error: "No se pudo subir la imagen — " + uploadResult.error }, 502);
+    }
 
     const insertResult = await supabaseInsert(env, "nebula_community_posts", {
       username,
       type: "photo",
       text_content: caption || null,
-      image_url: imageUrl,
+      image_url: uploadResult.url,
     });
     if (!insertResult.ok) {
       console.error("Supabase community insert error", insertResult.error);
