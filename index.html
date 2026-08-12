@@ -65,6 +65,18 @@ html.nal-lock-scroll,html.nal-lock-scroll body{overflow:hidden}
 .nal-logout{width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:var(--proton-silver);border:1px solid var(--cosmic-indigo-border);flex-shrink:0;transition:color var(--dur-fast),border-color var(--dur-fast)}
 .nal-logout:hover{color:var(--solar-ember);border-color:var(--solar-ember-dim)}
 .nal-logout svg{width:15px;height:15px}
+.nal-ep-widget{position:relative}
+.nal-ep-toggle{width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:var(--proton-silver);border:1px solid var(--cosmic-indigo-border);flex-shrink:0;background:transparent;transition:color var(--dur-fast),border-color var(--dur-fast)}
+.nal-ep-toggle:hover{color:var(--estelar-mist);border-color:var(--nebula-violet-soft)}
+.nal-ep-panel{position:absolute;top:calc(100% + var(--space-3));left:0;width:min(240px,80vw);background:var(--cosmic-indigo);border:1px solid var(--cosmic-indigo-border);border-radius:var(--radius-lg);padding:var(--space-5);box-shadow:0 30px 70px -20px rgba(0,0,0,.85);opacity:0;transform:translateY(-8px);pointer-events:none;transition:opacity var(--dur-fast) var(--ease-out),transform var(--dur-fast) var(--ease-out);z-index:5}
+.nal-ep-panel.is-open{opacity:1;transform:none;pointer-events:auto}
+.nal-ep-panel-title{font-family:var(--font-mono);font-size:.7rem;letter-spacing:.05em;text-transform:uppercase;color:var(--dorado-celestial);margin-bottom:var(--space-3)}
+.nal-ep-panel input{width:100%;background:var(--deep-void);border:1px solid var(--cosmic-indigo-border);border-radius:var(--radius-md);padding:.6rem .8rem;color:var(--estelar-mist);font-size:.86rem}
+.nal-ep-panel input:focus-visible{outline:0;border-color:var(--nebula-violet-soft)}
+.nal-ep-status{font-size:.74rem;margin-top:var(--space-2);min-height:1.1em}
+.nal-ep-status.is-error{color:var(--solar-ember-soft)}
+.nal-ep-status.is-success{color:#4ADE80}
+.nal-ep-actions{display:flex;gap:var(--space-2);justify-content:flex-end;margin-top:var(--space-3)}
 @media(max-width:640px){.nal-bar-greeting{display:none}.nal-bar{right:var(--space-3);padding:.4rem}}
 .nal-tooltip{position:fixed;z-index:var(--nal-z-tooltip);max-width:240px;background:var(--cosmic-indigo);border:1px solid var(--nebula-violet-soft);border-radius:var(--radius-md);padding:.6rem .8rem;font-size:.76rem;line-height:1.4;color:var(--estelar-mist);box-shadow:var(--shadow-glow-violet);opacity:0;transform:translateY(6px);transition:opacity var(--dur-fast) var(--ease-out),transform var(--dur-fast) var(--ease-out);pointer-events:none}
 .nal-tooltip.is-visible{opacity:1;transform:none}
@@ -310,6 +322,22 @@ html[data-nivel="principiante"] .section-head{border-left:2px solid var(--nebula
 .cm-post-share{background:transparent;border:none;cursor:pointer;padding:.25rem .5rem;margin:-0.25rem -0.5rem;border-radius:var(--radius-sm);transition:background var(--dur-fast),color var(--dur-fast)}
 .cm-post-share:hover{background:var(--cosmic-indigo-light);color:var(--estelar-mist)}
 .cm-feed-empty{color:var(--proton-silver);font-size:.9rem;text-align:center;padding:var(--space-6) 0}
+.cm-post-comments-toggle{cursor:pointer;background:transparent;border:none;font:inherit}
+.cm-post-comments{border-top:1px solid var(--cosmic-indigo-border);margin-top:var(--space-4);padding-top:var(--space-4);display:flex;flex-direction:column;gap:var(--space-3)}
+.cm-reply{display:flex;gap:var(--space-3)}
+.cm-reply .cm-avatar{width:24px;height:24px;font-size:.62rem}
+.cm-reply-body{flex:1;min-width:0}
+.cm-reply-header{display:flex;gap:var(--space-2);align-items:baseline;margin-bottom:.15rem}
+.cm-reply-user{font-family:var(--font-mono);font-size:.68rem;color:var(--dorado-celestial)}
+.cm-reply-time{font-family:var(--font-mono);font-size:.6rem;color:var(--proton-silver)}
+.cm-reply-text{font-size:.82rem;color:var(--estelar-mist);line-height:1.5}
+.cm-reply-empty{font-size:.8rem;color:var(--proton-silver)}
+.cm-reply-form{display:flex;gap:var(--space-2);margin-top:var(--space-1)}
+.cm-reply-input{flex:1;min-width:0;background:var(--deep-void);border:1px solid var(--cosmic-indigo-border);border-radius:var(--radius-md);padding:.55rem .8rem;color:var(--estelar-mist);font-size:.82rem}
+.cm-reply-input:focus-visible{outline:0;border-color:var(--nebula-violet-soft)}
+.cm-reply-submit{flex-shrink:0;padding:.5rem 1rem;border-radius:var(--radius-md);border:1px solid var(--solar-ember);background:var(--solar-ember);color:var(--deep-void);font-weight:700;font-size:.8rem;cursor:pointer}
+.cm-reply-submit:disabled{opacity:.6;cursor:default}
+.cm-reply-error{font-size:.74rem;color:var(--solar-ember-soft)}
 </style>
 
 </head> <body>
@@ -360,6 +388,21 @@ html[data-nivel="principiante"] .section-head{border-left:2px solid var(--nebula
 </div>
 <div class="nal-bar" id="nalBar" hidden aria-hidden="true">
 <span class="nal-bar-greeting" id="nalGreeting"></span>
+<div class="nal-ep-widget" id="nalEpWidget">
+<button type="button" class="nal-ep-toggle" id="nalEpToggle" aria-expanded="false" aria-controls="nalEpPanel" aria-label="Editar perfil" title="Editar perfil">
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" width="14" height="14"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 013 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+</button>
+<div class="nal-ep-panel" id="nalEpPanel" role="dialog" aria-label="Editar perfil">
+<div class="nal-ep-panel-title">Editar perfil</div>
+<label class="sr-only" for="nalEpUsername">Nombre de usuario</label>
+<input type="text" id="nalEpUsername" maxlength="40" placeholder="Nombre de usuario">
+<div class="nal-ep-status" id="nalEpStatus"></div>
+<div class="nal-ep-actions">
+<button type="button" class="btn btn-sm btn-ghost" id="nalEpCancel">Cancelar</button>
+<button type="button" class="btn btn-sm btn-primary" id="nalEpSave">Guardar</button>
+</div>
+</div>
+</div>
 <div class="nal-level-switch" role="group" aria-label="Cambiar nivel de experiencia">
 <button type="button" class="nal-lvl-btn" data-level="principiante">Princ.</button>
 <button type="button" class="nal-lvl-btn" data-level="intermedio">Interm.</button>
@@ -6353,6 +6396,61 @@ logoutBtn.addEventListener("click",function(){
   openModal();
 });
 
+var epWidget=document.getElementById("nalEpWidget");
+var epToggle=document.getElementById("nalEpToggle");
+var epPanel=document.getElementById("nalEpPanel");
+var epUsernameInput=document.getElementById("nalEpUsername");
+var epStatusEl=document.getElementById("nalEpStatus");
+var epCancelBtn=document.getElementById("nalEpCancel");
+var epSaveBtn=document.getElementById("nalEpSave");
+
+function epSetStatus(msg,type){
+  epStatusEl.textContent=msg||"";
+  epStatusEl.className="nal-ep-status"+(type?" is-"+type:"");
+}
+
+function epOpen(){
+  var session=getSession();
+  epUsernameInput.value=session?session.username:"";
+  epSetStatus("");
+  epPanel.classList.add("is-open");
+  epToggle.setAttribute("aria-expanded","true");
+  setTimeout(function(){epUsernameInput.focus();epUsernameInput.select()},80);
+}
+function epClose(){
+  epPanel.classList.remove("is-open");
+  epToggle.setAttribute("aria-expanded","false");
+}
+
+if(epWidget&&epToggle&&epPanel&&epUsernameInput){
+  epToggle.addEventListener("click",function(e){
+    e.stopPropagation();
+    if(epPanel.classList.contains("is-open"))epClose();else epOpen();
+  });
+  epCancelBtn.addEventListener("click",epClose);
+  document.addEventListener("click",function(e){
+    if(!epWidget.contains(e.target))epClose();
+  });
+  epPanel.addEventListener("keydown",function(e){
+    if(e.key==="Escape")epClose();
+  });
+  epSaveBtn.addEventListener("click",function(){
+    var session=getSession();
+    if(!session)return;
+    var newName=(epUsernameInput.value||"").trim();
+    if(newName.length<2){epSetStatus("Escribe al menos 2 caracteres.","error");epUsernameInput.focus();return}
+    session.username=newName;
+    saveSession(session);
+    saveSessionRemote(session);
+    applySession(session);
+    epSetStatus("¡Guardado!","success");
+    setTimeout(epClose,900);
+  });
+  epUsernameInput.addEventListener("keydown",function(e){
+    if(e.key==="Enter"){e.preventDefault();epSaveBtn.click()}
+  });
+}
+
 modal.addEventListener("keydown",function(evt){
   if(evt.key!=="Tab")return;
   var focusable=modal.querySelectorAll('input,button,[tabindex]:not([tabindex="-1"])');
@@ -7471,6 +7569,81 @@ function postScore(id){
 
 function postId(p){return p.id!=null?String(p.id):(p.username+"|"+p.created_at)}
 
+var repliesState={};
+function getReplyState(id){
+  if(!repliesState[id])repliesState[id]={loading:false,loaded:false,expanded:false,items:[],error:null};
+  return repliesState[id];
+}
+
+function fetchReplies(id){
+  var state=getReplyState(id);
+  state.loading=true;state.error=null;
+  renderFeed();
+  fetch("/api/community-replies?post_id="+encodeURIComponent(id))
+    .then(function(r){return r.json()})
+    .then(function(data){
+      state.loading=false;state.loaded=true;
+      state.items=data&&data.replies?data.replies:[];
+      renderFeed();
+    })
+    .catch(function(){
+      state.loading=false;state.error="No se pudieron cargar las respuestas.";
+      renderFeed();
+    });
+}
+
+function submitReply(id,text,btn){
+  var username=getUsername();
+  if(!username){getReplyState(id).error="Inicia sesión para responder.";renderFeed();return}
+  if(!text||text.trim().length<1)return;
+  var state=getReplyState(id);
+  btn.disabled=true;
+  fetch("/api/community-replies",{
+    method:"POST",
+    headers:{"Content-Type":"application/json"},
+    body:JSON.stringify({post_id:isNaN(Number(id))?id:Number(id),username:username,text:text.trim()})
+  }).then(function(r){return r.json().then(function(data){return{ok:r.ok,data:data}})})
+    .then(function(res){
+      btn.disabled=false;
+      if(res.ok&&res.data&&res.data.ok){
+        state.error=null;
+        fetchReplies(id);
+      }else{
+        state.error=(res.data&&res.data.error)||"No se pudo publicar la respuesta.";
+        renderFeed();
+      }
+    }).catch(function(){
+      btn.disabled=false;
+      state.error="No se pudo conectar. Intenta de nuevo.";
+      renderFeed();
+    });
+}
+
+function renderReplies(id){
+  var state=getReplyState(id);
+  if(!state.expanded)return"";
+  var list;
+  if(state.loading&&!state.loaded){
+    list='<p class="cm-reply-empty">Cargando…</p>';
+  }else if(!state.items.length){
+    list='<p class="cm-reply-empty">Todavía no hay respuestas. ¡Sé el primero!</p>';
+  }else{
+    list=state.items.map(function(r){
+      return'<div class="cm-reply">'+avatarHtml(r.username)+
+        '<div class="cm-reply-body">'+
+        '<div class="cm-reply-header"><span class="cm-reply-user">'+escapeHtml(r.username||"Anónimo")+'</span><span class="cm-reply-time">'+timeAgo(r.created_at)+'</span></div>'+
+        '<p class="cm-reply-text">'+escapeHtml(r.text_content||"")+'</p>'+
+        '</div></div>';
+    }).join("");
+  }
+  var errorHtml=state.error?'<p class="cm-reply-error">'+escapeHtml(state.error)+'</p>':"";
+  var formHtml='<div class="cm-reply-form">'+
+    '<input type="text" class="cm-reply-input" data-reply-input="'+escapeHtml(id)+'" maxlength="300" placeholder="Escribe una respuesta…">'+
+    '<button type="button" class="cm-reply-submit" data-reply-submit="'+escapeHtml(id)+'">Responder</button>'+
+    '</div>';
+  return'<div class="cm-post-comments">'+list+errorHtml+formHtml+'</div>';
+}
+
 function sortedPosts(){
   var list=cachedPosts.slice();
   if(sortMode==="top"){
@@ -7505,8 +7678,10 @@ function renderFeed(){
       '<div class="cm-post-meta"><span class="cm-post-user">'+escapeHtml(p.username||"Anónimo")+'</span><span class="cm-post-time">'+timeAgo(p.created_at)+'</span></div>'+
       '<span class="cm-post-badge">'+badge+'</span>'+
       '</div>';
+    var replyState=getReplyState(id);
+    var replyCountLabel=replyState.loaded?(replyState.items.length+" "+(replyState.items.length===1?"respuesta":"respuestas")):"Respuestas";
     var footerHtml='<div class="cm-post-footer">'+
-      '<span class="cm-post-footer-item">💬 0 respuestas</span>'+
+      '<button type="button" class="cm-post-footer-item cm-post-comments-toggle" data-post-id="'+escapeHtml(id)+'">💬 '+replyCountLabel+'</button>'+
       '<button type="button" class="cm-post-footer-item cm-post-share" data-share-id="'+escapeHtml(id)+'">↗ Compartir</button>'+
       '</div>';
     var bodyHtml;
@@ -7517,7 +7692,7 @@ function renderFeed(){
       bodyHtml='<p class="cm-post-text">'+escapeHtml(p.text_content||"")+'</p>';
     }
     return'<div class="cm-post cm-post-'+(p.type==="photo"?"photo-card":"question")+'">'+voteHtml+
-      '<div class="cm-post-main">'+headerHtml+bodyHtml+footerHtml+'</div></div>';
+      '<div class="cm-post-main">'+headerHtml+bodyHtml+footerHtml+renderReplies(id)+'</div></div>';
   }).join("");
 }
 
@@ -7537,6 +7712,32 @@ feedEl.addEventListener("click",function(evt){
     if(navigator.clipboard&&navigator.clipboard.writeText){
       navigator.clipboard.writeText(text).then(done).catch(function(){});
     }
+    return;
+  }
+  var commentsToggle=evt.target.closest&&evt.target.closest(".cm-post-comments-toggle");
+  if(commentsToggle){
+    var cid=commentsToggle.dataset.postId;
+    var cState=getReplyState(cid);
+    cState.expanded=!cState.expanded;
+    if(cState.expanded&&!cState.loaded&&!cState.loading){fetchReplies(cid);}
+    else{renderFeed();}
+    return;
+  }
+  var replySubmitBtn=evt.target.closest&&evt.target.closest(".cm-reply-submit");
+  if(replySubmitBtn){
+    var rid=replySubmitBtn.dataset.replySubmit;
+    var input=feedEl.querySelector('.cm-reply-input[data-reply-input="'+CSS.escape(rid)+'"]');
+    if(input)submitReply(rid,input.value,replySubmitBtn);
+    return;
+  }
+});
+feedEl.addEventListener("keydown",function(evt){
+  var input=evt.target.closest&&evt.target.closest(".cm-reply-input");
+  if(input&&evt.key==="Enter"){
+    evt.preventDefault();
+    var rid=input.dataset.replyInput;
+    var btn=feedEl.querySelector('.cm-reply-submit[data-reply-submit="'+CSS.escape(rid)+'"]');
+    if(btn)submitReply(rid,input.value,btn);
   }
 });
 
