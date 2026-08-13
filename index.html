@@ -7664,6 +7664,29 @@ function bindImageInputs(){
   });
 }
 
+function compressImage(file,maxDim,quality){
+  return new Promise(function(resolve,reject){
+    var url=URL.createObjectURL(file);
+    var img=new Image();
+    img.onload=function(){
+      URL.revokeObjectURL(url);
+      var w=img.naturalWidth,h=img.naturalHeight;
+      var scale=Math.min(1,maxDim/Math.max(w,h));
+      var outW=Math.max(1,Math.round(w*scale));
+      var outH=Math.max(1,Math.round(h*scale));
+      var canvas=document.createElement("canvas");
+      canvas.width=outW;canvas.height=outH;
+      var ctx=canvas.getContext("2d");
+      ctx.drawImage(img,0,0,outW,outH);
+      canvas.toBlob(function(blob){
+        if(blob)resolve(blob);else reject(new Error("No se pudo comprimir la imagen"));
+      },"image/jpeg",quality);
+    };
+    img.onerror=function(){URL.revokeObjectURL(url);reject(new Error("No se pudo leer la imagen"))};
+    img.src=url;
+  });
+}
+
 function handleImageUpload(target,file){
   var allowed=["image/jpeg","image/png","image/webp"];
   var statusEl=inner.querySelector('[data-image-status="'+target+'"]');
@@ -7671,17 +7694,20 @@ function handleImageUpload(target,file){
     if(statusEl)statusEl.textContent="Formato no soportado (usa JPG, PNG o WEBP).";
     return;
   }
-  if(file.size>5*1024*1024){
-    if(statusEl)statusEl.textContent="La imagen es muy grande (máx. 5 MB).";
+  if(file.size>25*1024*1024){
+    if(statusEl)statusEl.textContent="La imagen es muy grande (máx. 25 MB).";
     return;
   }
   var username=getUsername();
   if(!username){requireLogin();return;}
-  if(statusEl)statusEl.textContent="Subiendo…";
-  var fd=new FormData();
-  fd.append("username",username);
-  fd.append("image",file);
-  fetch("/api/course-image",{method:"POST",body:fd})
+  if(statusEl)statusEl.textContent="Comprimiendo imagen…";
+  compressImage(file,1280,.75).then(function(blob){
+    if(statusEl)statusEl.textContent="Subiendo… ("+Math.max(1,Math.round(blob.size/1024))+" KB)";
+    var fd=new FormData();
+    fd.append("username",username);
+    fd.append("image",blob,"image.jpg");
+    return fetch("/api/course-image",{method:"POST",body:fd});
+  })
     .then(function(r){return r.json().then(function(d){return{ok:r.ok,body:d}})})
     .then(function(res){
       if(!res.ok||!res.body||!res.body.url){
@@ -7693,7 +7719,7 @@ function handleImageUpload(target,file){
       renderBuilder();
     })
     .catch(function(){
-      if(statusEl)statusEl.textContent="Error de conexión al subir la imagen.";
+      if(statusEl)statusEl.textContent="No se pudo comprimir o subir la imagen. Intenta con otra.";
     });
 }
 
