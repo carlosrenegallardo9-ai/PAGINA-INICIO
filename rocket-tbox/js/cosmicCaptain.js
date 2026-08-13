@@ -38,6 +38,45 @@ function wait(ms) {
     return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
+/** Resalta (o quita el resalte de) el botón del Hangar en #top-links con un pulso y una etiqueta señalándolo. */
+function highlightHangarButton(on) {
+    const btn = document.getElementById('hangar-link');
+    if (btn) btn.classList.toggle('cc-highlight', on);
+}
+
+/**
+ * El menú de misión cubre #top-links y está abierto por defecto al cargar la
+ * página, así que resaltar el Hangar mientras tanto sería invisible. Se
+ * activa el resalte de una vez, y se espera a que el menú se cierre (con un
+ * respiro tras cerrarse) antes de apagarlo — con un límite de seguridad por
+ * si el menú nunca reporta como cerrado.
+ */
+function pointToHangarButton() {
+    highlightHangarButton(true);
+    const menu = document.getElementById('menu-panel');
+    let cleared = false;
+    function clearSoon() {
+        if (cleared) return;
+        cleared = true;
+        setTimeout(() => highlightHangarButton(false), 3000);
+    }
+    if (!menu || menu.style.display === 'none') {
+        clearSoon();
+        return;
+    }
+    const observer = new MutationObserver(() => {
+        if (menu.style.display === 'none') {
+            observer.disconnect();
+            clearSoon();
+        }
+    });
+    observer.observe(menu, { attributes: true, attributeFilter: ['style'] });
+    setTimeout(() => {
+        observer.disconnect();
+        clearSoon();
+    }, 20000);
+}
+
 /** Muestra una línea (o varias, en secuencia) en la burbuja del Capitán Cósmico. */
 export async function captainSay(lines, opts = {}) {
     if (!ensureEls()) return;
@@ -46,16 +85,18 @@ export async function captainSay(lines, opts = {}) {
     const duration = opts.duration ?? 4200;
     const gap = opts.gap ?? 350;
 
-    for (const line of arr) {
+    for (let i = 0; i < arr.length; i++) {
         if (token !== activeToken) return;
         rootEl.classList.remove('cosmic-captain--countdown');
-        textEl.textContent = line;
+        textEl.textContent = arr[i];
+        opts.onLine?.(i, arr[i]);
         reveal();
         await wait(duration);
         if (token !== activeToken) return;
         conceal();
         await wait(gap);
     }
+    if (token === activeToken) opts.onDone?.();
 }
 
 /** Cuenta regresiva de despegue narrada por el Capitán Cósmico (3 → 2 → 1 → ¡Despegue!). */
@@ -80,8 +121,14 @@ export function initCosmicCaptain() {
     closeBtn?.addEventListener('click', () => {
         activeToken++; // stop any in-progress sequence
         conceal();
+        highlightHangarButton(false);
     });
     setTimeout(() => {
-        captainSay(WELCOME_LINES, { duration: 4600, gap: 400 });
+        captainSay(WELCOME_LINES, {
+            duration: 4600,
+            gap: 400,
+            // La 2ª línea (índice 1) es la que menciona el Hangar: señala el botón justo entonces.
+            onLine: (i) => { if (i === 1) pointToHangarButton(); },
+        });
     }, 1200);
 }
