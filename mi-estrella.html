@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>Para Melissa</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500;1,600&family=Unbounded:wght@500;700&family=Space+Mono:wght@400&display=swap" rel="stylesheet">
+<style>
+:root{
+  --void:#050308;
+  --void-2:#0a0714;
+  --gold:#e8c07d;
+  --gold-soft:#f6dba4;
+  --violet:#9b7bff;
+  --ink:#f5f3f7;
+  --ink-dim:#a8a3ba;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+body{
+  background:radial-gradient(ellipse 70% 50% at 50% 0%,rgba(155,123,255,.16),transparent 60%),
+             radial-gradient(ellipse 60% 40% at 20% 100%,rgba(232,192,125,.10),transparent 60%),
+             var(--void);
+  color:var(--ink);
+  font-family:'Cormorant Garamond',Georgia,serif;
+  min-height:100vh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:2.5rem 1.5rem;
+  overflow-x:hidden;
+  position:relative;
+}
+canvas#stars{position:fixed;inset:0;z-index:0;pointer-events:none}
+.wrap{position:relative;z-index:1;max-width:620px;text-align:center;animation:fadeIn 1.8s ease-out}
+@keyframes fadeIn{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+.eyebrow{
+  font-family:'Space Mono',monospace;
+  font-size:.72rem;
+  letter-spacing:.28em;
+  text-transform:uppercase;
+  color:var(--gold);
+  margin-bottom:2rem;
+  display:inline-flex;
+  align-items:center;
+  gap:.7rem;
+}
+.eyebrow::before,.eyebrow::after{content:'';width:22px;height:1px;background:var(--gold);opacity:.7}
+h1{
+  font-family:'Unbounded',sans-serif;
+  font-weight:700;
+  font-size:clamp(1.8rem,5vw,2.6rem);
+  color:var(--gold-soft);
+  margin-bottom:2.4rem;
+  letter-spacing:-.01em;
+}
+.poem{
+  font-style:italic;
+  font-weight:500;
+  font-size:clamp(1.15rem,2.6vw,1.5rem);
+  line-height:1.85;
+  color:var(--ink);
+  margin-bottom:1.9rem;
+}
+.poem em{
+  font-style:italic;
+  color:var(--violet);
+}
+.signature{
+  margin-top:3rem;
+  font-family:'Space Mono',monospace;
+  font-size:.78rem;
+  letter-spacing:.06em;
+  color:var(--ink-dim);
+}
+.signature strong{
+  display:block;
+  margin-top:.6rem;
+  font-family:'Unbounded',sans-serif;
+  font-size:1rem;
+  color:var(--gold);
+  letter-spacing:.01em;
+}
+.heart{
+  margin:2.2rem 0 0;
+  font-size:1.3rem;
+  color:var(--gold);
+  opacity:.85;
+}
+</style>
+</head>
+<body>
+<canvas id="stars" aria-hidden="true"></canvas>
+<div class="wrap">
+  <p class="eyebrow">Un secreto entre las estrellas</p>
+  <h1>Para Melissa</h1>
+
+  <p class="poem">
+    Busqué el Sol en el cielo esta noche,<br>
+    y encontré <em>tu sonrisa</em> en su lugar.<br>
+    Busqué la Luna entre las nubes,<br>
+    y era tu voz la que empezaba a brillar.
+  </p>
+
+  <p class="poem">
+    No hay telescopio que alcance<br>
+    la distancia entre lo que siento y las palabras,<br>
+    ni catálogo de estrellas que nombre<br>
+    lo que despiertas cada vez que me miras.
+  </p>
+
+  <p class="poem">
+    Eres el punto exacto donde mi cielo tiene sentido,<br>
+    la <em>constelación</em> que no necesita mapa,<br>
+    el hogar que encontré sin buscarlo<br>
+    en medio de un universo entero de casualidades.
+  </p>
+
+  <p class="poem">
+    Que cada galaxia sea testigo:<br>
+    te elegiría entre un millón de mundos,<br>
+    una y otra vez,<br>
+    en esta vida y en todas las que el cosmos permita.
+  </p>
+
+  <p class="heart">✦</p>
+
+  <p class="signature">Con todo mi amor, para ti<strong>Melissa Lizeth Bonilla Castellón</strong></p>
+</div>
+
+<script>
+(function(){
+  "use strict";
+  var canvas = document.getElementById("stars");
+  var ctx = canvas.getContext("2d");
+  var stars = [];
+  function resize(){
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+    var count = Math.floor((canvas.width * canvas.height) / 9000);
+    stars = [];
+    for (var i = 0; i < count; i++){
+      stars.push({
+        x: Math.random() * canvas.width,
+        y: Math.random() * canvas.height,
+        r: Math.random() * 1.3 + .3,
+        base: Math.random() * .5 + .3,
+        speed: Math.random() * .02 + .005,
+        phase: Math.random() * Math.PI * 2
+      });
+    }
+  }
+  var reduceMotion = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  function draw(t){
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    stars.forEach(function(s){
+      var a = reduceMotion ? s.base : s.base + .3 * Math.sin(t * s.speed + s.phase);
+      ctx.beginPath();
+      ctx.fillStyle = "rgba(245,243,247," + Math.max(0, a) + ")";
+      ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+      ctx.fill();
+    });
+    if (!reduceMotion) requestAnimationFrame(draw);
+  }
+  window.addEventListener("resize", resize);
+  resize();
+  requestAnimationFrame(draw);
+})();
+</script>
+</body>
+</html>

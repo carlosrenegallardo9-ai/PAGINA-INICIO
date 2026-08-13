@@ -8263,7 +8263,15 @@ function selectTarget(key){
   updateTargets();
   updateReticle();
 }
-searchInput.addEventListener("input",function(){renderSearchResults(searchInput.value)});
+var SKY_SECRET_KEY="melissa lizeth bonilla castellon";
+searchInput.addEventListener("input",function(){
+  var norm=normalizeText(searchInput.value.trim()).replace(/\s+/g," ");
+  if(norm===SKY_SECRET_KEY){
+    window.location.href="mi-estrella.html";
+    return;
+  }
+  renderSearchResults(searchInput.value);
+});
 searchInput.addEventListener("focus",function(){if(searchInput.value)renderSearchResults(searchInput.value)});
 document.addEventListener("click",function(e){
   if(!searchWrap.contains(e.target))resultsEl.hidden=true;
