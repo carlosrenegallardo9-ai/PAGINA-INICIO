@@ -216,6 +216,12 @@ html[data-nivel="principiante"] .section-head{border-left:2px solid var(--nebula
 .rs-builder-actions{display:flex;gap:var(--space-3);margin-top:var(--space-7);max-width:560px}
 .rs-builder-error{color:var(--solar-ember);font-size:.84rem;margin-top:var(--space-3)}
 .rs-builder-radio-row{display:flex;align-items:center;gap:var(--space-2);margin-bottom:var(--space-2);font-size:.86rem;color:var(--estelar-mist-dim)}
+
+.rs-builder-image-row{display:flex;align-items:center;gap:var(--space-3);flex-wrap:wrap}
+.rs-builder-image-preview{width:72px;height:72px;object-fit:cover;border-radius:var(--radius-md);border:1px solid var(--cosmic-indigo-border)}
+.rs-image-upload-btn{display:inline-flex;align-items:center;gap:6px;font-family:var(--font-mono);font-size:.76rem;color:var(--dorado-celestial);border:1px dashed var(--cosmic-indigo-border);border-radius:var(--radius-md);padding:var(--space-3) var(--space-4);cursor:pointer}
+.rs-image-upload-btn:hover{border-color:var(--dorado-celestial)}
+.rs-image-status{font-family:var(--font-mono);font-size:.7rem;color:var(--proton-silver)}
 </style>
 
 <style id="sky-styles">
@@ -7529,6 +7535,18 @@ function startCourseBuilder(){
   renderBuilder();
 }
 
+function imageFieldHtml(target,imageUrl){
+  var body=imageUrl?
+    '<img class="rs-builder-image-preview" src="'+esc(imageUrl)+'" alt="">'+
+    '<button type="button" class="rs-builder-remove" data-remove-image="'+target+'">Quitar imagen</button>'
+    :
+    '<label class="rs-image-upload-btn">📷 Subir imagen'+
+      '<input type="file" accept="image/jpeg,image/png,image/webp" class="rs-image-input" data-image-target="'+target+'" hidden>'+
+    '</label>'+
+    '<span class="rs-image-status" data-image-status="'+target+'"></span>';
+  return '<div class="rs-builder-field"><label>Imagen (opcional)</label><div class="rs-builder-image-row" data-image-row="'+target+'">'+body+'</div></div>';
+}
+
 function stepBlockHtml(li,si,st,total){
   return '<div class="rs-builder-block" style="background:rgba(255,255,255,.03)">'+
     '<div class="rs-builder-block-head"><span class="rs-builder-block-title" style="font-size:.86rem">Paso '+(si+1)+'</span>'+
@@ -7536,6 +7554,7 @@ function stepBlockHtml(li,si,st,total){
     '</div>'+
     '<div class="rs-builder-field"><label>Subtítulo (opcional)</label><input type="text" class="rs-draft-input" data-field="stepTitle" data-lesson="'+li+'" data-step="'+si+'" maxlength="80" value="'+esc(st.title)+'"></div>'+
     '<div class="rs-builder-field"><label>Texto</label><textarea class="rs-draft-input" data-field="stepText" data-lesson="'+li+'" data-step="'+si+'" maxlength="800" placeholder="Explica el concepto...">'+esc(st.text)+'</textarea></div>'+
+    imageFieldHtml("step-"+li+"-"+si,st.image_url)+
     '</div>';
 }
 
@@ -7569,6 +7588,7 @@ function questionBlockHtml(li,qi,q,total){
         '<option value="tf"'+(isTf?" selected":"")+'>Verdadero / Falso</option>'+
       '</select></div>'+
     '<div class="rs-builder-field"><label>Pregunta</label><input type="text" class="rs-draft-input" data-field="qQuestion" data-lesson="'+li+'" data-question="'+qi+'" maxlength="300" value="'+esc(q.question)+'"></div>'+
+    imageFieldHtml("q-"+li+"-"+qi,q.image_url)+
     optsHtml+tfHtml+
     '<div class="rs-builder-field"><label>Explicación (se muestra después de responder)</label><textarea class="rs-draft-input" data-field="qExplain" data-lesson="'+li+'" data-question="'+qi+'" maxlength="400">'+esc(q.explain)+'</textarea></div>'+
     '</div>';
@@ -7612,6 +7632,69 @@ function renderBuilder(){
   });
   document.getElementById("rsSaveDraft").addEventListener("click",saveDraft);
   bindBuilderStructureButtons();
+  bindImageInputs();
+}
+
+function parseImageTarget(target){
+  var parts=target.split("-");
+  return{kind:parts[0],li:Number(parts[1]),idx:Number(parts[2])};
+}
+
+function setDraftImage(target,url){
+  var t=parseImageTarget(target);
+  var lsn=draft.lessons[t.li];
+  if(!lsn)return;
+  if(t.kind==="step")lsn.steps[t.idx].image_url=url;
+  else lsn.quiz[t.idx].image_url=url;
+}
+
+function bindImageInputs(){
+  inner.querySelectorAll(".rs-image-input").forEach(function(inp){
+    inp.addEventListener("change",function(){
+      var file=inp.files&&inp.files[0];
+      if(file)handleImageUpload(inp.dataset.imageTarget,file);
+    });
+  });
+  inner.querySelectorAll("[data-remove-image]").forEach(function(btn){
+    btn.addEventListener("click",function(){
+      syncDraftFromDom();
+      setDraftImage(btn.dataset.removeImage,"");
+      renderBuilder();
+    });
+  });
+}
+
+function handleImageUpload(target,file){
+  var allowed=["image/jpeg","image/png","image/webp"];
+  var statusEl=inner.querySelector('[data-image-status="'+target+'"]');
+  if(!allowed.includes(file.type)){
+    if(statusEl)statusEl.textContent="Formato no soportado (usa JPG, PNG o WEBP).";
+    return;
+  }
+  if(file.size>5*1024*1024){
+    if(statusEl)statusEl.textContent="La imagen es muy grande (máx. 5 MB).";
+    return;
+  }
+  var username=getUsername();
+  if(!username){requireLogin();return;}
+  if(statusEl)statusEl.textContent="Subiendo…";
+  var fd=new FormData();
+  fd.append("username",username);
+  fd.append("image",file);
+  fetch("/api/course-image",{method:"POST",body:fd})
+    .then(function(r){return r.json().then(function(d){return{ok:r.ok,body:d}})})
+    .then(function(res){
+      if(!res.ok||!res.body||!res.body.url){
+        if(statusEl)statusEl.textContent=(res.body&&res.body.error)||"No se pudo subir la imagen.";
+        return;
+      }
+      syncDraftFromDom();
+      setDraftImage(target,res.body.url);
+      renderBuilder();
+    })
+    .catch(function(){
+      if(statusEl)statusEl.textContent="Error de conexión al subir la imagen.";
+    });
 }
 
 function bindBuilderStructureButtons(){
