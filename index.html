@@ -224,6 +224,44 @@ html[data-nivel="principiante"] .section-head{border-left:2px solid var(--nebula
 .rs-image-status{font-family:var(--font-mono);font-size:.7rem;color:var(--proton-silver)}
 </style>
 
+<style id="showcase-styles">
+/* Foto real de fondo del hero, franja de accesos rápidos y muro de hitos espaciales. Aislado, prefijo "quick-"/"gallery-wall". */
+.hero-bg-photo{position:absolute;inset:0;z-index:-1;width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity 1.8s var(--ease-out)}
+.hero-bg-photo.is-loaded{opacity:.5}
+#starfield{mix-blend-mode:screen}
+
+.quick-access{padding:var(--space-7) 0;border-top:1px solid rgba(255,255,255,.08)}
+.quick-access-head{display:flex;justify-content:space-between;align-items:flex-end;gap:var(--space-4);flex-wrap:wrap;margin-bottom:var(--space-6)}
+.quick-access-row{display:grid;grid-template-columns:repeat(5,1fr);gap:var(--space-5)}
+.quick-access-item{display:flex;flex-direction:column;align-items:center;gap:var(--space-3);text-align:center;color:var(--proton-silver);transition:color var(--dur-med) var(--ease-out),transform var(--dur-med) var(--ease-out)}
+.quick-access-item:hover,.quick-access-item:focus-visible{color:var(--estelar-mist);transform:translateY(-4px)}
+.quick-access-icon{width:56px;height:56px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,.045);border:1px solid var(--cosmic-indigo-border);transition:border-color var(--dur-med) var(--ease-out)}
+.quick-access-item:hover .quick-access-icon,.quick-access-item:focus-visible .quick-access-icon{border-color:var(--nebula-violet-soft)}
+.quick-access-icon svg{width:22px;height:22px}
+.quick-access-label{font-size:.8rem;font-weight:500}
+@media(max-width:760px){.quick-access-row{grid-template-columns:repeat(3,1fr);gap:var(--space-5) var(--space-3)}}
+
+.gallery-wall-section{padding:var(--space-8) 0}
+.gallery-wall-head{max-width:640px;margin-bottom:var(--space-6)}
+.gallery-wall{display:grid;grid-template-columns:repeat(6,1fr);grid-auto-rows:130px;grid-auto-flow:dense;gap:14px}
+.gallery-frame{position:relative;overflow:hidden;border-radius:var(--radius-md);cursor:pointer;border:1px solid var(--cosmic-indigo-border);box-shadow:0 18px 32px -18px rgba(0,0,0,.65);background:linear-gradient(135deg,var(--cosmic-indigo-light),var(--deep-void-alt));padding:0;transition:transform var(--dur-med) var(--ease-out),box-shadow var(--dur-med) var(--ease-out),border-color var(--dur-med) var(--ease-out)}
+.gallery-frame:hover,.gallery-frame:focus-visible{transform:translateY(-5px) scale(1.02);box-shadow:0 32px 56px -20px rgba(0,0,0,.8);border-color:var(--nebula-violet-soft);z-index:2}
+.gallery-frame img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity 1s var(--ease-out),transform var(--dur-slow) var(--ease-out)}
+.gallery-frame img.is-loaded{opacity:1}
+.gallery-frame:hover img{transform:scale(1.06)}
+.gallery-frame-cap{position:absolute;left:0;right:0;bottom:0;padding:.9rem 1rem .8rem;background:linear-gradient(0deg,rgba(5,3,8,.88) 0%,rgba(5,3,8,.2) 70%,transparent 100%);display:flex;justify-content:space-between;align-items:baseline;gap:.6rem;text-align:left}
+.gallery-frame-cap b{font-family:var(--font-display);font-weight:700;font-size:.82rem;color:#fff;text-shadow:0 2px 8px rgba(0,0,0,.6)}
+.gallery-frame-cap small{font-family:var(--font-mono);font-size:10px;letter-spacing:.04em;color:var(--dorado-celestial);flex-shrink:0}
+.gallery-frame.size-lg{grid-column:span 3;grid-row:span 2}
+.gallery-frame.size-wide{grid-column:span 2;grid-row:span 1}
+.gallery-frame.size-tall{grid-column:span 2;grid-row:span 2}
+@media(max-width:980px){.gallery-wall{grid-template-columns:repeat(4,1fr);grid-auto-rows:120px}.gallery-frame.size-lg{grid-column:span 4;grid-row:span 2}.gallery-frame.size-tall{grid-column:span 2;grid-row:span 2}}
+@media(max-width:620px){.gallery-wall{grid-template-columns:repeat(2,1fr);grid-auto-rows:150px;gap:10px}.gallery-frame.size-lg{grid-column:span 2;grid-row:span 2}.gallery-frame.size-wide{grid-column:span 2;grid-row:span 1}.gallery-frame.size-tall{grid-column:span 1;grid-row:span 2}}
+.gallery-wall-modal-media{aspect-ratio:16/10;border-radius:var(--radius-md);overflow:hidden;margin-bottom:var(--space-5);position:relative;background:var(--cosmic-indigo-light)}
+.gallery-wall-modal-media img{width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity .8s var(--ease-out)}
+.gallery-wall-modal-media img.is-loaded{opacity:1}
+</style>
+
 <style id="sky-styles">
 /* Buscador Celeste — cámara + sensores para ubicar el Sol y la Luna en el cielo real. Aislado, prefijo "sky-". */
 .sky-cta{position:relative;display:flex;align-items:center;gap:var(--space-5);width:100%;max-width:640px;margin-top:var(--space-4);padding:var(--space-6) var(--space-7);background:linear-gradient(135deg,var(--cosmic-indigo),var(--cosmic-indigo-light));border:1px solid var(--cosmic-indigo-border);border-radius:var(--radius-lg);overflow:hidden;text-align:left;cursor:pointer;transition:transform var(--dur-fast) var(--ease-out),border-color var(--dur-fast),box-shadow var(--dur-fast)}
@@ -642,7 +680,7 @@ html[data-nivel="principiante"] .section-head{border-left:2px solid var(--nebula
 <a href="#rocket-tbox">Rocket TBox</a>
 <a href="#" data-open-ai>Guía interactiva</a>
 </div>
-</nav> <button id="observatoryToggle" class="btn-observatory" title="Modo Observatorio Nocturno"> <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"> <path d="M20.5 14.3A8.5 8.5 0 1110 3.2a7 7 0 0010.5 11.1z"></path> </svg> <span>Observatorio</span> </button> <div class="a11y-widget" id="a11yWidget"> <button type="button" class="a11y-toggle-btn" id="a11yToggleBtn" aria-expanded="false" aria-controls="a11yPanel" aria-label="Abrir opciones de accesibilidad"> <span aria-hidden="true">♿</span> </button> <div class="a11y-panel" id="a11yPanel" role="dialog" aria-label="Accesibilidad"> <span class="a11y-panel-title">Accesibilidad</span> <label class="a11y-panel-option"> <input type="checkbox" id="a11yVoiceToggle"> <span>Asistencia por voz guiada</span> </label> <p class="a11y-panel-hint">Lee en voz alta los mensajes del Capitán Cósmico, las lecciones de la Ruta Estelar y los avisos del Buscador Celeste.</p> </div> </div> <button class="nav-toggle" id="navToggle" aria-label="Abrir menú" aria-expanded="false" aria-controls="navLinks"> <span></span><span></span><span></span> </button> </div> </div> </header> <main id="main"> <section class="hero" id="inicio"> <canvas id="starfield" aria-hidden="true"></canvas> <div class="container"> <div class="hero-inner"> <span class="eyebrow">Observatorio digital interactivo</span> <h1>Explora el <em>cosmos</em> a tu propio ritmo</h1> <p>Un observatorio interactivo para descubrir planetas, escalas cósmicas y fenómenos extremos del universo, con una guía interactiva que orienta tu recorrido según lo que eliges.</p> <div class="hero-actions"> <a class="btn btn-primary" href="#explorador">Iniciar exploración</a> <a class="hero-link-secondary" href="#aprender">Ver módulos de aprendizaje <span aria-hidden="true">→</span></a> <button type="button" class="btn btn-ghost rs-launch-btn" id="rsLaunchBtn" data-open-ruta aria-haspopup="dialog" aria-controls="rsView"><span aria-hidden="true">🪐</span> Ruta Estelar</button> </div> <div class="df-card" id="dfCard">
+</nav> <button id="observatoryToggle" class="btn-observatory" title="Modo Observatorio Nocturno"> <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"> <path d="M20.5 14.3A8.5 8.5 0 1110 3.2a7 7 0 0010.5 11.1z"></path> </svg> <span>Observatorio</span> </button> <div class="a11y-widget" id="a11yWidget"> <button type="button" class="a11y-toggle-btn" id="a11yToggleBtn" aria-expanded="false" aria-controls="a11yPanel" aria-label="Abrir opciones de accesibilidad"> <span aria-hidden="true">♿</span> </button> <div class="a11y-panel" id="a11yPanel" role="dialog" aria-label="Accesibilidad"> <span class="a11y-panel-title">Accesibilidad</span> <label class="a11y-panel-option"> <input type="checkbox" id="a11yVoiceToggle"> <span>Asistencia por voz guiada</span> </label> <p class="a11y-panel-hint">Lee en voz alta los mensajes del Capitán Cósmico, las lecciones de la Ruta Estelar y los avisos del Buscador Celeste.</p> </div> </div> <button class="nav-toggle" id="navToggle" aria-label="Abrir menú" aria-expanded="false" aria-controls="navLinks"> <span></span><span></span><span></span> </button> </div> </div> </header> <main id="main"> <section class="hero" id="inicio"> <img class="hero-bg-photo" id="heroBgPhoto" alt="" aria-hidden="true" loading="eager"> <canvas id="starfield" aria-hidden="true"></canvas> <div class="container"> <div class="hero-inner"> <span class="eyebrow">Observatorio digital interactivo</span> <h1>Explora el <em>cosmos</em> a tu propio ritmo</h1> <p>Un observatorio interactivo para descubrir planetas, escalas cósmicas y fenómenos extremos del universo, con una guía interactiva que orienta tu recorrido según lo que eliges.</p> <div class="hero-actions"> <a class="btn btn-primary" href="#explorador">Iniciar exploración</a> <a class="hero-link-secondary" href="#aprender">Ver módulos de aprendizaje <span aria-hidden="true">→</span></a> <button type="button" class="btn btn-ghost rs-launch-btn" id="rsLaunchBtn" data-open-ruta aria-haspopup="dialog" aria-controls="rsView"><span aria-hidden="true">🪐</span> Ruta Estelar</button> </div> <div class="df-card" id="dfCard">
 <span class="df-card-icon" aria-hidden="true">🌌</span>
 <span>
 <span class="df-card-label">Dato curioso del día</span>
@@ -650,7 +688,7 @@ html[data-nivel="principiante"] .section-head{border-left:2px solid var(--nebula
 </span>
 </div>
 
-<div class="telemetry"> <div><strong>8</strong>planetas explorables</div> <div><strong>6</strong>módulos educativos</div> <div><strong>1</strong>guía cósmica interactiva</div> <div><strong>∞</strong>posibilidades por descubrir</div> </div> </div> </div> </section> <section class="section explorer-section" id="explorador"> <div class="container"> <div class="section-head reveal"> <span class="eyebrow">Sistema solar interactivo 360°</span> <h2>Explora el sistema solar en 3D</h2> <p>Arrastra para orbitar la cámara, usa la rueda o pellizca para hacer zoom, y toca un planeta para revelar sus datos, curiosidades y enlaces oficiales.</p> <button type="button" class="continue-chip" id="explorerContinueChip" hidden>Continuar en <span id="explorerContinueLabel"></span> <span aria-hidden="true">→</span></button> </div> <div class="solar-system-3d" id="solarSystem3D"> <div class="s3d-loading" id="s3dLoading"> <span class="s3d-ring" aria-hidden="true"></span> <p id="s3dLoadingText">Cargando sistema solar…</p> </div> <canvas id="s3dCanvas" aria-label="Visualizador 3D del sistema solar" role="img"></canvas> <button type="button" class="s3d-peek-btn s3d-peek-planets" id="s3dLegendToggle" aria-expanded="false" aria-controls="s3dLegend" hidden>Planetas</button> <nav class="s3d-legend" id="s3dLegend" aria-label="Selector rápido de planetas" hidden> <p class="s3d-legend-title">Planetas</p> </nav> <button type="button" class="s3d-peek-btn s3d-peek-settings" id="s3dControlsToggle" aria-expanded="false" aria-controls="s3dControls" hidden>Controles</button> <div class="s3d-controls" id="s3dControls" hidden> <button type="button" class="s3d-btn is-active" id="s3dAutoRotate">Auto-rotar</button> <span class="s3d-divider" aria-hidden="true"></span> <button type="button" class="s3d-btn" id="s3dSpeedDown" aria-label="Reducir velocidad">−</button> <span class="s3d-speed" id="s3dSpeedLabel">1×</span> <button type="button" class="s3d-btn" id="s3dSpeedUp" aria-label="Aumentar velocidad">+</button> <span class="s3d-divider" aria-hidden="true"></span> <button type="button" class="s3d-btn" id="s3dReset">Reiniciar vista</button> <span class="s3d-divider" aria-hidden="true"></span> <button type="button" class="s3d-btn is-active" id="s3dNebula">Nebulosa</button> </div> <div class="s3d-tooltip" id="s3dTooltip" aria-hidden="true"></div> </div> <p class="explorer-hint">Arrastra para rotar la vista · rueda o pellizca para hacer zoom · toca un planeta para ver sus datos</p> </div> </section> <section class="section" id="escala"> <div class="container"> <div class="section-head reveal"> <span class="eyebrow">De la Tierra al universo observable</span> <h2>Explorador de escala cósmica</h2> <p>Desliza el control para viajar desde nuestro planeta hasta los límites del universo conocido.</p> </div> <div class="scale-module reveal"> <div class="scale-stage" id="scaleStage" aria-hidden="true"> <div class="scale-circle" id="scaleCircle"></div> </div> <div class="scale-info"> <span class="eyebrow">Nivel de escala</span> <h3 id="scaleLabel">Tierra</h3> <p id="scaleText" class="scale-text">Nuestro hogar: 12.742 km de diámetro, con un 71% de su superficie cubierta por agua líquida.</p> <button type="button" class="scale-text-toggle" id="scaleTextToggle" aria-expanded="false" aria-controls="scaleText" hidden>+ detalle</button> <div class="telemetry" style="border:none;padding-top:0;margin-top:var(--space-5)"> <div><strong id="scaleReadout">1 : 1</strong>escala relativa</div> </div> <input type="range" class="range-slider" id="scaleSlider" min="1" max="8" value="1" step="1" aria-label="Selector de escala cósmica"> <div class="scale-ticks"><span>Tierra</span><span>Universo</span></div> </div> </div> </div> </section> <section class="section" id="minijuego"> <div class="container"> <div class="section-head reveal"> <span class="eyebrow">Simulador estelar interactivo</span> <h2>Minijuego: Constelación Viva</h2> <p>Combina cuerpos celestes vecinos, desata fenómenos cósmicos y desbloquea datos astronómicos reales mientras juegas.</p> </div> <div class="m3-shell reveal"> <div class="m3-modes-row" role="tablist" aria-label="Modos de juego"> <button class="m3-mode-btn" type="button" role="tab" data-mode="energia">Colecta de Energía Estelar</button> <button class="m3-mode-btn" type="button" role="tab" data-mode="polvo">Despejar Polvo Cósmico</button> <button class="m3-mode-btn" type="button" role="tab" data-mode="sondas">Descenso de Sondas Espaciales</button> </div> <div class="m3-hud"> <div class="m3-telemetry"> <div class="m3-stat">Movimientos<strong id="m3Moves">0</strong></div> <div class="m3-stat">Objetivo<strong id="m3GoalReadout">0 / 0</strong></div> <div class="m3-progress"><div class="m3-progress-fill" id="m3ProgressFill"></div></div> </div> <button class="btn btn-sm btn-ghost" id="m3Restart" type="button">Reiniciar</button> </div> <p class="m3-goal-text" id="m3GoalText"></p> <div class="m3-stage"> <canvas class="m3-fx" id="m3Fx" aria-hidden="true"></canvas> <div class="m3-board" id="m3Board" role="grid" aria-label="Tablero de constelaciones"></div> <div class="dust-board" id="dustBoard" role="grid" aria-label="Campo de polvo cósmico" hidden></div> <div class="probe-board" id="probeBoard" role="application" aria-label="Carriles de descenso de sondas" hidden></div> <div class="m3-overlay" id="m3Overlay" hidden> <div class="m3-overlay-card" role="alertdialog" aria-labelledby="m3OverlayTitle" aria-describedby="m3OverlayText"> <span class="eyebrow" id="m3OverlayEyebrow">Misión</span> <h3 id="m3OverlayTitle">Resultado</h3> <p id="m3OverlayText"></p> <button class="btn btn-primary btn-sm" id="m3OverlayRestart" type="button">Jugar de nuevo</button> </div> </div> </div> <p class="explorer-hint" id="m3Hint">Selecciona una ficha y luego una vecina para intercambiarlas · funciona con teclado y ratón</p> </div> </div> </section> <div class="rs-view" id="rsView" hidden aria-hidden="true" role="dialog" aria-modal="true" aria-label="Ruta Estelar — aprendizaje del universo por niveles">
+<div class="telemetry"> <div><strong>8</strong>planetas explorables</div> <div><strong>6</strong>módulos educativos</div> <div><strong>1</strong>guía cósmica interactiva</div> <div><strong>∞</strong>posibilidades por descubrir</div> </div> </div> </div> </section> <section class="quick-access"> <div class="container"> <div class="quick-access-head"> <div> <span class="eyebrow">Un mapa, sin ruido</span> <h2>Explora Cósmica</h2> </div> </div> <div class="quick-access-row" id="quickAccessRow"></div> </div> </section> <section class="section explorer-section" id="explorador"> <div class="container"> <div class="section-head reveal"> <span class="eyebrow">Sistema solar interactivo 360°</span> <h2>Explora el sistema solar en 3D</h2> <p>Arrastra para orbitar la cámara, usa la rueda o pellizca para hacer zoom, y toca un planeta para revelar sus datos, curiosidades y enlaces oficiales.</p> <button type="button" class="continue-chip" id="explorerContinueChip" hidden>Continuar en <span id="explorerContinueLabel"></span> <span aria-hidden="true">→</span></button> </div> <div class="solar-system-3d" id="solarSystem3D"> <div class="s3d-loading" id="s3dLoading"> <span class="s3d-ring" aria-hidden="true"></span> <p id="s3dLoadingText">Cargando sistema solar…</p> </div> <canvas id="s3dCanvas" aria-label="Visualizador 3D del sistema solar" role="img"></canvas> <button type="button" class="s3d-peek-btn s3d-peek-planets" id="s3dLegendToggle" aria-expanded="false" aria-controls="s3dLegend" hidden>Planetas</button> <nav class="s3d-legend" id="s3dLegend" aria-label="Selector rápido de planetas" hidden> <p class="s3d-legend-title">Planetas</p> </nav> <button type="button" class="s3d-peek-btn s3d-peek-settings" id="s3dControlsToggle" aria-expanded="false" aria-controls="s3dControls" hidden>Controles</button> <div class="s3d-controls" id="s3dControls" hidden> <button type="button" class="s3d-btn is-active" id="s3dAutoRotate">Auto-rotar</button> <span class="s3d-divider" aria-hidden="true"></span> <button type="button" class="s3d-btn" id="s3dSpeedDown" aria-label="Reducir velocidad">−</button> <span class="s3d-speed" id="s3dSpeedLabel">1×</span> <button type="button" class="s3d-btn" id="s3dSpeedUp" aria-label="Aumentar velocidad">+</button> <span class="s3d-divider" aria-hidden="true"></span> <button type="button" class="s3d-btn" id="s3dReset">Reiniciar vista</button> <span class="s3d-divider" aria-hidden="true"></span> <button type="button" class="s3d-btn is-active" id="s3dNebula">Nebulosa</button> </div> <div class="s3d-tooltip" id="s3dTooltip" aria-hidden="true"></div> </div> <p class="explorer-hint">Arrastra para rotar la vista · rueda o pellizca para hacer zoom · toca un planeta para ver sus datos</p> </div> </section> <section class="section" id="escala"> <div class="container"> <div class="section-head reveal"> <span class="eyebrow">De la Tierra al universo observable</span> <h2>Explorador de escala cósmica</h2> <p>Desliza el control para viajar desde nuestro planeta hasta los límites del universo conocido.</p> </div> <div class="scale-module reveal"> <div class="scale-stage" id="scaleStage" aria-hidden="true"> <div class="scale-circle" id="scaleCircle"></div> </div> <div class="scale-info"> <span class="eyebrow">Nivel de escala</span> <h3 id="scaleLabel">Tierra</h3> <p id="scaleText" class="scale-text">Nuestro hogar: 12.742 km de diámetro, con un 71% de su superficie cubierta por agua líquida.</p> <button type="button" class="scale-text-toggle" id="scaleTextToggle" aria-expanded="false" aria-controls="scaleText" hidden>+ detalle</button> <div class="telemetry" style="border:none;padding-top:0;margin-top:var(--space-5)"> <div><strong id="scaleReadout">1 : 1</strong>escala relativa</div> </div> <input type="range" class="range-slider" id="scaleSlider" min="1" max="8" value="1" step="1" aria-label="Selector de escala cósmica"> <div class="scale-ticks"><span>Tierra</span><span>Universo</span></div> </div> </div> </div> </section> <section class="section" id="minijuego"> <div class="container"> <div class="section-head reveal"> <span class="eyebrow">Simulador estelar interactivo</span> <h2>Minijuego: Constelación Viva</h2> <p>Combina cuerpos celestes vecinos, desata fenómenos cósmicos y desbloquea datos astronómicos reales mientras juegas.</p> </div> <div class="m3-shell reveal"> <div class="m3-modes-row" role="tablist" aria-label="Modos de juego"> <button class="m3-mode-btn" type="button" role="tab" data-mode="energia">Colecta de Energía Estelar</button> <button class="m3-mode-btn" type="button" role="tab" data-mode="polvo">Despejar Polvo Cósmico</button> <button class="m3-mode-btn" type="button" role="tab" data-mode="sondas">Descenso de Sondas Espaciales</button> </div> <div class="m3-hud"> <div class="m3-telemetry"> <div class="m3-stat">Movimientos<strong id="m3Moves">0</strong></div> <div class="m3-stat">Objetivo<strong id="m3GoalReadout">0 / 0</strong></div> <div class="m3-progress"><div class="m3-progress-fill" id="m3ProgressFill"></div></div> </div> <button class="btn btn-sm btn-ghost" id="m3Restart" type="button">Reiniciar</button> </div> <p class="m3-goal-text" id="m3GoalText"></p> <div class="m3-stage"> <canvas class="m3-fx" id="m3Fx" aria-hidden="true"></canvas> <div class="m3-board" id="m3Board" role="grid" aria-label="Tablero de constelaciones"></div> <div class="dust-board" id="dustBoard" role="grid" aria-label="Campo de polvo cósmico" hidden></div> <div class="probe-board" id="probeBoard" role="application" aria-label="Carriles de descenso de sondas" hidden></div> <div class="m3-overlay" id="m3Overlay" hidden> <div class="m3-overlay-card" role="alertdialog" aria-labelledby="m3OverlayTitle" aria-describedby="m3OverlayText"> <span class="eyebrow" id="m3OverlayEyebrow">Misión</span> <h3 id="m3OverlayTitle">Resultado</h3> <p id="m3OverlayText"></p> <button class="btn btn-primary btn-sm" id="m3OverlayRestart" type="button">Jugar de nuevo</button> </div> </div> </div> <p class="explorer-hint" id="m3Hint">Selecciona una ficha y luego una vecina para intercambiarlas · funciona con teclado y ratón</p> </div> </div> </section> <div class="rs-view" id="rsView" hidden aria-hidden="true" role="dialog" aria-modal="true" aria-label="Ruta Estelar — aprendizaje del universo por niveles">
 <button type="button" class="rs-view-close" id="rsViewClose" aria-label="Cerrar Ruta Estelar">✕</button>
 <div class="rs-view-inner" id="rsViewInner"></div>
 </div>
@@ -784,7 +822,7 @@ html[data-nivel="principiante"] .section-head{border-left:2px solid var(--nebula
 </div>
 
 
-<section class="section" id="aprender"> <div class="container"> <div class="section-head reveal"> <span class="eyebrow">Base de conocimiento</span> <h2>Fenómenos que definen el universo</h2> <p>Módulos breves para entender, desde lo esencial, los grandes misterios del cosmos.</p> </div> <div class="knowledge-grid" id="knowledgeGrid"></div> </div> </section> <section class="section" id="comunidad">
+<section class="section" id="aprender"> <div class="container"> <div class="section-head reveal"> <span class="eyebrow">Base de conocimiento</span> <h2>Fenómenos que definen el universo</h2> <p>Módulos breves para entender, desde lo esencial, los grandes misterios del cosmos.</p> </div> <div class="knowledge-grid" id="knowledgeGrid"></div> </div> </section> <section class="gallery-wall-section" id="hitosEspaciales"> <div class="container"> <div class="gallery-wall-head section-head reveal"> <span class="eyebrow">Galería Espacial</span> <h2>Once hitos. Un mismo asombro.</h2> <p>Desde el primer satélite hasta el telescopio que mira más lejos que ningún ojo humano.</p> </div> <div class="gallery-wall" id="galleryWall"></div> </div> </section> <div class="k-modal-overlay" id="galleryModalOverlay" hidden aria-hidden="true"> <div class="k-modal" id="galleryModal" role="dialog" aria-modal="true" aria-labelledby="galleryModalTitle"> <button type="button" class="detail-panel-close" id="galleryModalClose" aria-label="Cerrar">✕</button> <div id="galleryModalContent"></div> </div> </div> <section class="section" id="comunidad">
 <div class="container">
 <div class="section-head reveal">
 <span class="eyebrow">Comunidad Cósmica</span>
@@ -8897,6 +8935,96 @@ document.addEventListener("keydown",function(e){
 });
 document.querySelectorAll("[data-open-bitacora]").forEach(function(el){
   el.addEventListener("click",function(e){e.preventDefault();bcOpenView()});
+});
+})();
+</script>
+
+<script id="showcase-script">
+(function(){
+"use strict";
+function esc(s){
+  return String(s==null?"":s).replace(/[&<>"']/g,function(c){
+    return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c];
+  });
+}
+function WM(file){return "https://commons.wikimedia.org/wiki/Special:FilePath/"+encodeURIComponent(file)+"?width=1600"}
+function loadImageInto(imgEl,url){
+  if(!imgEl||!url)return;
+  imgEl.referrerPolicy="no-referrer";
+  imgEl.addEventListener("load",function(){imgEl.classList.add("is-loaded")},{once:true});
+  imgEl.src=url;
+}
+
+loadImageInto(document.getElementById("heroBgPhoto"),WM("Pillars_of_creation_2014_HST_WFC3-UVIS_full-res_denoised.jpg"));
+
+var QUICK_ITEMS=[
+  {label:"Sistema Solar",href:"#explorador",icon:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"><circle cx="12" cy="12" r="4.2"/><ellipse cx="12" cy="12" rx="10.2" ry="3.4"/></svg>'},
+  {label:"Ruta Estelar",href:"#",attr:"data-open-ruta",icon:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4l9 4.5-9 4.5-9-4.5z"/><path d="M6.5 11v5c0 1.4 2.5 3 5.5 3s5.5-1.6 5.5-3v-5"/></svg>'},
+  {label:"Galería espacial",href:"#hitosEspaciales",icon:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="6.5" width="15" height="11" rx="2"/><path d="M18 10l3.4-2v8L18 14"/><circle cx="8" cy="12" r="2.3"/></svg>'},
+  {label:"Escala cósmica",href:"#escala",icon:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="M4 15v5h5"/><path d="M20 9V4h-5"/><path d="M20 4L13 11"/><path d="M4 20l7-7"/></svg>'},
+  {label:"Aprender",href:"#aprender",icon:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4l9 4.5-9 4.5-9-4.5z"/><path d="M6.5 11v5c0 1.4 2.5 3 5.5 3s5.5-1.6 5.5-3v-5"/></svg>'}
+];
+var quickRow=document.getElementById("quickAccessRow");
+if(quickRow){
+  quickRow.innerHTML=QUICK_ITEMS.map(function(item){
+    return '<a class="quick-access-item" href="'+item.href+'"'+(item.attr?' '+item.attr:'')+'><span class="quick-access-icon" aria-hidden="true">'+item.icon+'</span><span class="quick-access-label">'+esc(item.label)+'</span></a>';
+  }).join("");
+}
+
+var MILESTONES=[
+  {year:"1957",title:"Sputnik 1",text:"El primer objeto humano en alcanzar la órbita terrestre. Un pitido de radio que anunció la era espacial.",img:WM("Sputnik_asm.jpg"),link:"https://es.wikipedia.org/wiki/Sputnik_1"},
+  {year:"1961",title:"Vostok 1",text:"Yuri Gagarin se convierte en el primer humano en ver la Tierra desde el espacio, en una sola órbita de 108 minutos.",img:WM("Yuri_Gagarin_Colour.jpg"),link:"https://es.wikipedia.org/wiki/Vostok_1"},
+  {year:"1969",title:"Apollo 11",text:"Neil Armstrong y Buzz Aldrin pisan la Luna. La primera vez que un ser humano camina sobre otro mundo.",img:WM("Apollo_11_Crew.jpg"),link:"https://es.wikipedia.org/wiki/Apolo_11"},
+  {year:"1977",title:"Voyager 1 y 2",text:"Lanzadas para sobrevolar los gigantes gaseosos, hoy son los objetos hechos por el hombre más lejanos del cosmos.",img:WM("Voyager_Golden_Record.jpg"),link:"https://es.wikipedia.org/wiki/Voyager_1"},
+  {year:"1990",title:"Telescopio Hubble",text:"Puesto en órbita para ver más allá de la atmósfera, redefinió nuestra imagen del universo profundo.",img:WM("HST-SM4.jpeg"),link:"https://es.wikipedia.org/wiki/Telescopio_espacial_Hubble"},
+  {year:"1990",title:"El Pequeño Punto Azul",text:"A petición de Carl Sagan, la Voyager 1 gira su cámara y fotografía a la Tierra desde 6 000 millones de km.",img:WM("Pale_Blue_Dot.png"),link:"https://es.wikipedia.org/wiki/Pale_Blue_Dot"},
+  {year:"1998",title:"Estación Espacial Internacional",text:"El primer módulo se ensambla en órbita: el inicio de una presencia humana continua fuera de la Tierra.",img:WM("International_Space_Station_after_undocking_of_STS-132.jpg"),link:"https://es.wikipedia.org/wiki/Estaci%C3%B3n_Espacial_Internacional"},
+  {year:"2012",title:"Curiosity en Marte",text:"Un laboratorio rodante desciende en el cráter Gale para estudiar si Marte pudo albergar vida.",img:WM("Mars_Curiosity_Rover.jpg"),link:"https://es.wikipedia.org/wiki/Curiosity"},
+  {year:"2021",title:"Telescopio James Webb",text:"El observatorio infrarrojo más potente jamás construido comienza a mirar hacia el amanecer del universo.",img:WM("James_Webb_Space_Telescope_2009_top.jpg"),link:"https://es.wikipedia.org/wiki/Telescopio_espacial_James_Webb"},
+  {year:"Hoy",title:"Regreso a la Luna",text:"El programa Artemis prepara el camino para una presencia humana sostenida más allá de la órbita terrestre.",img:WM("Full_Moon_Luc_Viatour.jpg"),link:"https://es.wikipedia.org/wiki/Programa_Artemisa"}
+];
+var WALL_SIZES=["size-lg","","size-tall","size-wide","","size-lg","size-wide","","size-tall",""];
+var wall=document.getElementById("galleryWall");
+if(wall){
+  MILESTONES.forEach(function(m,i){
+    var frame=document.createElement("button");
+    frame.type="button";
+    frame.className=("gallery-frame "+(WALL_SIZES[i%WALL_SIZES.length]||"")).trim();
+    frame.setAttribute("aria-label",m.title+" — "+m.year);
+    frame.innerHTML='<img alt="'+esc(m.title)+'" loading="lazy">'+
+      '<div class="gallery-frame-cap"><b>'+esc(m.title)+'</b><small>'+esc(m.year)+'</small></div>';
+    frame.addEventListener("click",function(){openMilestone(i)});
+    wall.appendChild(frame);
+    loadImageInto(frame.querySelector("img"),m.img);
+  });
+}
+
+var galleryOverlay=document.getElementById("galleryModalOverlay");
+var galleryContent=document.getElementById("galleryModalContent");
+var galleryClose=document.getElementById("galleryModalClose");
+function openMilestone(i){
+  var m=MILESTONES[i];
+  if(!m||!galleryOverlay)return;
+  galleryContent.innerHTML=
+    '<span class="detail-badge">'+esc(m.year)+'</span>'+
+    '<h3 id="galleryModalTitle" style="margin-top:var(--space-2)">'+esc(m.title)+'</h3>'+
+    '<div class="gallery-wall-modal-media"><img alt="" id="galleryModalImg"></div>'+
+    '<p>'+esc(m.text)+'</p>'+
+    '<div class="detail-links"><a href="'+esc(m.link)+'" target="_blank" rel="noopener">Ver fuente en Wikipedia <span aria-hidden="true">↗</span></a></div>';
+  loadImageInto(document.getElementById("galleryModalImg"),m.img);
+  galleryOverlay.hidden=false;
+  galleryOverlay.setAttribute("aria-hidden","false");
+  requestAnimationFrame(function(){galleryOverlay.classList.add("is-open")});
+}
+function closeMilestone(){
+  galleryOverlay.classList.remove("is-open");
+  galleryOverlay.setAttribute("aria-hidden","true");
+  setTimeout(function(){galleryOverlay.hidden=true},350);
+}
+if(galleryClose)galleryClose.addEventListener("click",closeMilestone);
+if(galleryOverlay)galleryOverlay.addEventListener("click",function(e){if(e.target===galleryOverlay)closeMilestone()});
+document.addEventListener("keydown",function(e){
+  if(e.key==="Escape"&&galleryOverlay&&galleryOverlay.classList.contains("is-open"))closeMilestone();
 });
 })();
 </script>
