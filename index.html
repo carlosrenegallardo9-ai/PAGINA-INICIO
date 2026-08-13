@@ -168,6 +168,54 @@ html[data-nivel="principiante"] .section-head{border-left:2px solid var(--nebula
 .rs-result-score{font-family:var(--font-mono);color:var(--proton-silver);margin-bottom:var(--space-4)}
 
 @media(max-width:560px){.rs-node{width:92px}.rs-node-circle{width:56px;height:56px;font-size:1.5rem}.rs-view-inner{padding:calc(var(--space-8) + var(--space-2)) var(--space-4) var(--space-7)}}
+
+.rs-progress-wrap{display:flex;align-items:center;gap:var(--space-4);margin-bottom:var(--space-4)}
+.rs-progress-track{flex:1;height:10px;border-radius:var(--radius-pill);background:var(--cosmic-indigo-light);overflow:hidden}
+.rs-progress-fill{height:100%;border-radius:var(--radius-pill);background:var(--solar-ember);transition:width var(--dur-med) var(--ease-out)}
+.rs-progress-label{font-family:var(--font-mono);font-size:.7rem;color:var(--proton-silver);white-space:nowrap}
+.rs-exit-btn{width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:var(--estelar-mist-dim);border:1px solid var(--cosmic-indigo-border);flex-shrink:0;background:none}
+.rs-exit-btn:hover{color:var(--solar-ember);border-color:var(--solar-ember)}
+
+.rs-step-image{width:100%;max-width:560px;border-radius:var(--radius-md);margin-bottom:var(--space-4);display:block}
+.rs-step-nav{display:flex;justify-content:space-between;align-items:center;margin-top:var(--space-6);max-width:560px}
+.rs-step-arrow{width:44px;height:44px;border-radius:50%;border:1px solid var(--cosmic-indigo-border);display:flex;align-items:center;justify-content:center;color:var(--estelar-mist);font-size:1.2rem;background:none}
+.rs-step-arrow:disabled{opacity:.3;cursor:not-allowed}
+.rs-step-arrow:hover:not(:disabled){border-color:var(--nebula-violet-soft)}
+.rs-step-counter{font-family:var(--font-mono);font-size:.72rem;color:var(--proton-silver)}
+
+.rs-quiz-opt{display:flex;align-items:center;gap:var(--space-3)}
+.rs-quiz-opt-num{width:26px;height:26px;border-radius:50%;background:var(--cosmic-indigo);display:flex;align-items:center;justify-content:center;font-family:var(--font-mono);font-size:.72rem;flex-shrink:0;color:var(--proton-silver)}
+.rs-quiz-opt.is-selected{border-color:var(--nebula-violet-soft);background:var(--nebula-violet-dim)}
+.rs-quiz-review-bar{margin-top:var(--space-6);max-width:560px}
+.rs-quiz-review-btn{width:100%}
+
+.rs-complete-check{width:88px;height:88px;border-radius:50%;background:rgba(74,222,128,.15);border:2px solid #4ADE80;display:flex;align-items:center;justify-content:center;font-size:2.4rem;margin-bottom:var(--space-5)}
+.rs-complete-actions{display:flex;flex-direction:column;gap:var(--space-3);max-width:360px;margin-top:var(--space-6)}
+
+.rs-mycourses{margin-top:var(--space-8);padding-top:var(--space-7);border-top:1px solid var(--cosmic-indigo-border)}
+.rs-mycourses-head{display:flex;align-items:center;justify-content:space-between;gap:var(--space-4);margin-bottom:var(--space-2);flex-wrap:wrap}
+.rs-course-grid{display:flex;flex-wrap:wrap;gap:var(--space-4)}
+.rs-course-card{width:180px;padding:var(--space-4);border:1px solid var(--cosmic-indigo-border);border-radius:var(--radius-md);background:var(--cosmic-indigo-light);text-align:left;display:flex;flex-direction:column;gap:var(--space-2)}
+.rs-course-card:hover{border-color:var(--nebula-violet-soft)}
+.rs-course-card-emoji{font-size:1.8rem}
+.rs-course-card-title{font-size:.88rem;color:var(--estelar-mist);line-height:1.3}
+.rs-course-card-meta{font-family:var(--font-mono);font-size:.62rem;color:var(--proton-silver)}
+.rs-course-card-del{align-self:flex-start;font-size:.7rem;color:var(--solar-ember);background:none}
+.rs-empty-note{color:var(--estelar-mist-dim);font-size:.86rem}
+
+.rs-builder-field{margin-bottom:var(--space-5);max-width:560px}
+.rs-builder-field label{display:block;font-family:var(--font-mono);font-size:.68rem;letter-spacing:.06em;text-transform:uppercase;color:var(--proton-silver);margin-bottom:var(--space-2)}
+.rs-builder-field input[type=text],.rs-builder-field textarea,.rs-builder-field select{width:100%;padding:var(--space-3);border-radius:var(--radius-md);border:1px solid var(--cosmic-indigo-border);background:var(--cosmic-indigo-light);color:var(--estelar-mist);font-family:var(--font-body);font-size:.9rem}
+.rs-builder-field textarea{min-height:80px;resize:vertical}
+.rs-builder-block{border:1px solid var(--cosmic-indigo-border);border-radius:var(--radius-md);padding:var(--space-5);margin-bottom:var(--space-5);max-width:620px}
+.rs-builder-block-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:var(--space-4);gap:var(--space-3)}
+.rs-builder-block-title{font-family:var(--font-display);font-size:1rem;color:var(--estelar-mist)}
+.rs-builder-remove{font-size:.72rem;color:var(--solar-ember);background:none;flex-shrink:0}
+.rs-builder-add{font-family:var(--font-mono);font-size:.76rem;color:var(--dorado-celestial);border:1px dashed var(--cosmic-indigo-border);border-radius:var(--radius-md);padding:var(--space-3) var(--space-4);width:100%;text-align:center;margin-top:var(--space-2);background:none;max-width:620px;display:block}
+.rs-builder-add:hover{border-color:var(--dorado-celestial)}
+.rs-builder-actions{display:flex;gap:var(--space-3);margin-top:var(--space-7);max-width:560px}
+.rs-builder-error{color:var(--solar-ember);font-size:.84rem;margin-top:var(--space-3)}
+.rs-builder-radio-row{display:flex;align-items:center;gap:var(--space-2);margin-bottom:var(--space-2);font-size:.86rem;color:var(--estelar-mist-dim)}
 </style>
 
 <style id="sky-styles">
@@ -7087,6 +7135,17 @@ lesson("Preguntas abiertas","Ni la materia oscura ni la energía oscura han sido
 ]}
 ];
 
+function esc(s){
+  return String(s==null?"":s).replace(/[&<>"']/g,function(c){
+    return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c];
+  });
+}
+
+function lessonSteps(lsn){
+  if(Array.isArray(lsn.steps))return lsn.steps;
+  return [{title:null,text:lsn.theory,image_url:null}];
+}
+
 var view=document.getElementById("rsView");
 var inner=document.getElementById("rsViewInner");
 var closeBtn=document.getElementById("rsViewClose");
@@ -7094,6 +7153,22 @@ if(!view||!inner||!closeBtn)return;
 
 var unlockedLevel=1;
 var current=null;
+var allCourses=[];
+var draft=null;
+
+function getUsername(){
+  var s=window.safeStorage&&window.safeStorage.get("nebula:session");
+  return s&&s.username?s.username:null;
+}
+function requireLogin(){
+  var wrap=document.getElementById("nalModalWrap");
+  var backdrop=document.getElementById("nalBackdrop");
+  if(!wrap||!backdrop)return;
+  wrap.hidden=false;
+  backdrop.hidden=false;
+  wrap.setAttribute("aria-hidden","false");
+  requestAnimationFrame(function(){wrap.classList.add("is-open");backdrop.classList.add("is-open")});
+}
 
 function levelState(n){
   if(n<unlockedLevel)return"completed";
@@ -7130,17 +7205,75 @@ function renderPath(){
     var disabled=state==="locked"?" disabled":"";
     return '<button type="button" class="rs-node" data-state="'+state+'" data-unit="'+n+'" role="listitem"'+disabled+'>'+
       '<span class="rs-node-circle" aria-hidden="true">'+u.emoji+'</span>'+
-      '<span class="rs-node-title">'+u.title+'</span>'+
+      '<span class="rs-node-title">'+esc(u.title)+'</span>'+
       '<span class="rs-node-badge">'+badge+'</span>'+
       '</button>';
   }).join("");
   inner.innerHTML=
     '<span class="rs-view-eyebrow">Ruta Estelar · aprendizaje por niveles</span>'+
     '<h2>Tu camino de aprendizaje espacial</h2>'+
-    '<p class="rs-view-lead">Cada unidad tiene 5 lecciones, cada una con su propia información y un quiz de 5 preguntas. Complétalas todas para desbloquear la siguiente unidad.</p>'+
-    '<div class="rs-path" id="rsPath" role="list" aria-label="Unidades de la Ruta Estelar">'+nodes+'</div>';
+    '<p class="rs-view-lead">Cada unidad tiene 5 lecciones, cada una con su propia información y un quiz. Complétalas todas para desbloquear la siguiente unidad.</p>'+
+    '<div class="rs-path" id="rsPath" role="list" aria-label="Unidades de la Ruta Estelar">'+nodes+'</div>'+
+    '<div class="rs-mycourses" id="rsMyCourses">'+
+      '<div class="rs-mycourses-head">'+
+        '<h3 style="font-family:var(--font-display);font-size:1.3rem;color:var(--estelar-mist)">Cursos de la tripulación</h3>'+
+        '<button type="button" class="btn btn-ghost" id="rsCreateCourseBtn">+ Crear curso</button>'+
+      '</div>'+
+      '<p class="rs-view-lead" style="margin-bottom:var(--space-5)">Cursos sobre el espacio creados por otros usuarios de Nébula — o crea el tuyo propio.</p>'+
+      '<div id="rsCourseGrid" class="rs-course-grid"><p class="rs-empty-note">Cargando cursos…</p></div>'+
+    '</div>';
   inner.querySelectorAll(".rs-node[data-state]:not([data-state=\"locked\"])").forEach(function(btn){
     btn.addEventListener("click",function(){openUnit(Number(btn.dataset.unit))});
+  });
+  document.getElementById("rsCreateCourseBtn").addEventListener("click",startCourseBuilder);
+  loadCourses();
+}
+
+function loadCourses(){
+  fetch("/api/courses").then(function(r){return r.json()}).then(function(data){
+    allCourses=(data&&data.courses)||[];
+    renderCourseGrid();
+  }).catch(function(){
+    var grid=document.getElementById("rsCourseGrid");
+    if(grid)grid.innerHTML='<p class="rs-empty-note">No se pudieron cargar los cursos.</p>';
+  });
+}
+
+function renderCourseGrid(){
+  var grid=document.getElementById("rsCourseGrid");
+  if(!grid)return;
+  if(allCourses.length===0){
+    grid.innerHTML='<p class="rs-empty-note">Todavía no hay cursos creados. ¡Sé el primero en crear uno!</p>';
+    return;
+  }
+  var me=getUsername();
+  grid.innerHTML=allCourses.map(function(c){
+    var lessonCount=(c.content&&c.content.lessons&&c.content.lessons.length)||0;
+    var delBtn=(me&&c.username===me)?'<button type="button" class="rs-course-card-del" data-del-course="'+esc(c.id)+'">Borrar</button>':"";
+    return '<div class="rs-course-card">'+
+      '<span class="rs-course-card-emoji" aria-hidden="true">'+esc(c.emoji||"🚀")+'</span>'+
+      '<span class="rs-course-card-title">'+esc(c.title)+'</span>'+
+      '<span class="rs-course-card-meta">por '+esc(c.username)+' · '+lessonCount+' lecciones</span>'+
+      '<button type="button" class="btn btn-ghost" data-play-course="'+esc(c.id)+'">Jugar</button>'+
+      delBtn+
+      '</div>';
+  }).join("");
+  grid.querySelectorAll("[data-play-course]").forEach(function(btn){
+    btn.addEventListener("click",function(){
+      var c=allCourses.filter(function(x){return String(x.id)===btn.dataset.playCourse})[0];
+      if(c)openCourse(c);
+    });
+  });
+  grid.querySelectorAll("[data-del-course]").forEach(function(btn){
+    btn.addEventListener("click",function(){
+      if(!window.confirm("¿Borrar este curso? Esta acción no se puede deshacer."))return;
+      var id=btn.dataset.delCourse;
+      var me2=getUsername();
+      if(!me2)return;
+      fetch("/api/courses?id="+encodeURIComponent(id)+"&username="+encodeURIComponent(me2),{method:"DELETE"})
+        .then(function(){allCourses=allCourses.filter(function(x){return String(x.id)!==id});renderCourseGrid();})
+        .catch(function(){});
+    });
   });
 }
 
@@ -7151,13 +7284,9 @@ function bindBack(){
   var b=document.getElementById("rsBackToPath");
   if(b)b.addEventListener("click",renderPath);
 }
-
-function lessonDotsHtml(lessonIndex){
-  var u=UNITS[current.unit-1];
-  return u.lessons.map(function(_,i){
-    var cls=i<lessonIndex?"is-done":i===lessonIndex?"is-current":"";
-    return'<span class="rs-lesson-dot '+cls+'"></span>';
-  }).join("");
+function bindExit(){
+  var b=document.getElementById("rsExitLesson");
+  if(b)b.addEventListener("click",renderPath);
 }
 
 function openUnit(n){
@@ -7165,69 +7294,136 @@ function openUnit(n){
   inner.innerHTML=
     backBtnHtml()+
     '<span class="rs-unit-emoji" aria-hidden="true">'+u.emoji+'</span>'+
-    '<h2>Unidad '+n+': '+u.title+'</h2>'+
-    '<p class="rs-unit-meta">5 lecciones · cada una con su quiz de 5 preguntas</p>'+
+    '<h2>Unidad '+n+': '+esc(u.title)+'</h2>'+
+    '<p class="rs-unit-meta">'+u.lessons.length+' lecciones · cada una con su quiz</p>'+
     '<button type="button" class="btn btn-primary" id="rsStartUnit">Comenzar</button>';
   bindBack();
   document.getElementById("rsStartUnit").addEventListener("click",function(){
-    current={unit:n,lessonIndex:0,qIndex:0};
-    renderLessonIntro();
+    current={kind:"unit",unitIndex:n,lessons:u.lessons,title:u.title,lessonIndex:0,stepIndex:0,qIndex:0,selectedOpt:null,phase:"steps"};
+    renderStep();
   });
 }
 
-function renderLessonIntro(){
-  var u=UNITS[current.unit-1];
-  var lesson=u.lessons[current.lessonIndex];
+function openCourse(c){
+  var lessons=(c.content&&c.content.lessons)||[];
+  if(lessons.length===0)return;
   inner.innerHTML=
     backBtnHtml()+
-    '<div class="rs-lesson-progress">'+lessonDotsHtml(current.lessonIndex)+'</div>'+
-    '<h2>'+lesson.title+'</h2>'+
-    '<div class="rs-fact-card"><p>'+lesson.theory+'</p></div>'+
-    '<button type="button" class="btn btn-primary" id="rsStartQuiz">Comenzar Quiz (5 preguntas)</button>';
+    '<span class="rs-unit-emoji" aria-hidden="true">'+esc(c.emoji||"🚀")+'</span>'+
+    '<h2>'+esc(c.title)+'</h2>'+
+    (c.description?'<p class="rs-view-lead">'+esc(c.description)+'</p>':'')+
+    '<p class="rs-unit-meta">Por '+esc(c.username)+' · '+lessons.length+' lecciones</p>'+
+    '<button type="button" class="btn btn-primary" id="rsStartUnit">Comenzar</button>';
   bindBack();
-  if(window.a11ySpeak)window.a11ySpeak(lesson.title+". "+lesson.theory);
-  document.getElementById("rsStartQuiz").addEventListener("click",function(){
-    current.qIndex=0;
-    renderQuestion();
+  document.getElementById("rsStartUnit").addEventListener("click",function(){
+    current={kind:"course",courseObj:c,lessons:lessons,title:c.title,lessonIndex:0,stepIndex:0,qIndex:0,selectedOpt:null,phase:"steps"};
+    renderStep();
+  });
+}
+
+function lessonDotsHtml(){
+  return current.lessons.map(function(_,i){
+    var cls=i<current.lessonIndex?"is-done":i===current.lessonIndex?"is-current":"";
+    return'<span class="rs-lesson-dot '+cls+'"></span>';
+  }).join("");
+}
+
+function progressPercent(){
+  var total=current.lessons.length;
+  var lsn=current.lessons[current.lessonIndex];
+  var steps=lessonSteps(lsn);
+  var units=steps.length+lsn.quiz.length;
+  var done=current.phase==="steps"?current.stepIndex:(steps.length+current.qIndex);
+  var within=units>0?done/units:0;
+  return Math.min(100,Math.round(((current.lessonIndex+within)/total)*100));
+}
+
+function screenHeader(){
+  return '<div class="rs-progress-wrap">'+
+    '<button type="button" class="rs-exit-btn" id="rsExitLesson" aria-label="Salir">✕</button>'+
+    '<div class="rs-progress-track"><div class="rs-progress-fill" style="width:'+progressPercent()+'%"></div></div>'+
+    '<span class="rs-progress-label">Lección '+(current.lessonIndex+1)+' de '+current.lessons.length+'</span>'+
+    '</div>'+
+    '<div class="rs-lesson-progress">'+lessonDotsHtml()+'</div>';
+}
+
+function renderStep(){
+  current.phase="steps";
+  var lsn=current.lessons[current.lessonIndex];
+  var steps=lessonSteps(lsn);
+  var step=steps[current.stepIndex];
+  var isFirst=current.stepIndex===0;
+  var isLast=current.stepIndex>=steps.length-1;
+  var img=step.image_url?'<img class="rs-step-image" src="'+esc(step.image_url)+'" alt="">':"";
+  inner.innerHTML=
+    screenHeader()+
+    (step.title?'<h2>'+esc(step.title)+'</h2>':(isFirst?'<h2>'+esc(lsn.title)+'</h2>':''))+
+    img+
+    '<div class="rs-fact-card"><p>'+esc(step.text)+'</p></div>'+
+    (steps.length>1?
+      '<div class="rs-step-nav">'+
+        '<button type="button" class="rs-step-arrow" id="rsStepPrev"'+(isFirst?" disabled":"")+' aria-label="Paso anterior">‹</button>'+
+        '<span class="rs-step-counter">'+(current.stepIndex+1)+' / '+steps.length+'</span>'+
+        '<button type="button" class="rs-step-arrow" id="rsStepNext" aria-label="Siguiente paso">'+(isLast?"✓":"›")+'</button>'+
+      '</div>'
+      :
+      '<button type="button" class="btn btn-primary" id="rsStepNext">Comenzar Quiz</button>'
+    );
+  bindExit();
+  if(window.a11ySpeak)window.a11ySpeak((step.title||lsn.title)+". "+step.text);
+  var prevBtn=document.getElementById("rsStepPrev");
+  if(prevBtn)prevBtn.addEventListener("click",function(){current.stepIndex--;renderStep()});
+  document.getElementById("rsStepNext").addEventListener("click",function(){
+    if(!isLast){current.stepIndex++;renderStep();}
+    else{current.qIndex=0;renderQuestion();}
   });
 }
 
 function renderQuestion(){
-  var u=UNITS[current.unit-1];
-  var lesson=u.lessons[current.lessonIndex];
-  var q=lesson.quiz[current.qIndex];
+  current.phase="quiz";
+  current.selectedOpt=null;
+  var lsn=current.lessons[current.lessonIndex];
+  var q=lsn.quiz[current.qIndex];
   var options=q.type==="tf"?["Verdadero","Falso"]:q.options;
+  var img=q.image_url?'<img class="rs-step-image" src="'+esc(q.image_url)+'" alt="">':"";
   inner.innerHTML=
-    backBtnHtml()+
-    '<div class="rs-lesson-progress">'+lessonDotsHtml(current.lessonIndex)+'</div>'+
-    '<p class="rs-quiz-meta">Pregunta '+(current.qIndex+1)+' de '+lesson.quiz.length+' · '+lesson.title+'</p>'+
-    '<p class="rs-quiz-q">'+q.question+'</p>'+
-    '<div class="rs-quiz-options" id="rsQuizOptions"></div>';
-  bindBack();
+    screenHeader()+
+    '<p class="rs-quiz-meta">Pregunta '+(current.qIndex+1)+' de '+lsn.quiz.length+' · '+esc(lsn.title)+'</p>'+
+    img+
+    '<p class="rs-quiz-q">'+esc(q.question)+'</p>'+
+    '<div class="rs-quiz-options" id="rsQuizOptions"></div>'+
+    '<div class="rs-quiz-review-bar"><button type="button" class="btn btn-primary rs-quiz-review-btn" id="rsReviewBtn" disabled>Revisar</button></div>';
+  bindExit();
   if(window.a11ySpeak)window.a11ySpeak(q.question+". Opciones: "+options.join(", "));
   var optsWrap=document.getElementById("rsQuizOptions");
+  var reviewBtn=document.getElementById("rsReviewBtn");
   options.forEach(function(label,i){
     var b=document.createElement("button");
     b.type="button";
     b.className="rs-quiz-opt";
-    b.textContent=label;
-    b.addEventListener("click",function(){answerQuestion(i,optsWrap)});
+    b.innerHTML='<span class="rs-quiz-opt-num">'+(i+1)+'</span><span>'+esc(label)+'</span>';
+    b.addEventListener("click",function(){
+      optsWrap.querySelectorAll(".rs-quiz-opt").forEach(function(o){o.classList.remove("is-selected")});
+      b.classList.add("is-selected");
+      current.selectedOpt=i;
+      reviewBtn.disabled=false;
+    });
     optsWrap.appendChild(b);
   });
+  reviewBtn.addEventListener("click",function(){revealAnswer(q,optsWrap,reviewBtn)});
 }
 
-function answerQuestion(i,optsWrap){
-  var u=UNITS[current.unit-1];
-  var lesson=u.lessons[current.lessonIndex];
-  var q=lesson.quiz[current.qIndex];
+function revealAnswer(q,optsWrap,reviewBtn){
+  if(current.selectedOpt==null)return;
   var correctIndex=q.type==="tf"?(q.answer?0:1):q.answer;
   var buttons=optsWrap.querySelectorAll(".rs-quiz-opt");
   buttons.forEach(function(b,idx){
     b.disabled=true;
+    b.classList.remove("is-selected");
     if(idx===correctIndex)b.classList.add("is-correct");
-    else if(idx===i)b.classList.add("is-wrong");
+    else if(idx===current.selectedOpt)b.classList.add("is-wrong");
   });
-  var correct=i===correctIndex;
+  var correct=current.selectedOpt===correctIndex;
 
   var explain=document.createElement("div");
   explain.className="rs-quiz-explain";
@@ -7235,35 +7431,62 @@ function answerQuestion(i,optsWrap){
   optsWrap.parentNode.insertBefore(explain,optsWrap.nextSibling);
   if(window.a11ySpeak)window.a11ySpeak(explain.textContent);
 
-  var isLastQuestion=current.qIndex>=lesson.quiz.length-1;
-  var isLastLesson=current.lessonIndex>=u.lessons.length-1;
-  var nextBtn=document.createElement("button");
-  nextBtn.type="button";
-  nextBtn.className="btn btn-primary rs-quiz-next";
-  nextBtn.textContent=!isLastQuestion?"Siguiente pregunta":isLastLesson?"Finalizar unidad":"Siguiente lección";
-  nextBtn.addEventListener("click",function(){
-    if(!isLastQuestion){
-      current.qIndex++;
-      renderQuestion();
-    }else if(!isLastLesson){
-      current.lessonIndex++;
-      current.qIndex=0;
-      renderLessonIntro();
+  var reviewBar=reviewBtn.parentNode;
+  var newBtn=document.createElement("button");
+  newBtn.type="button";
+  newBtn.className="btn btn-primary rs-quiz-review-btn";
+  newBtn.textContent="Continuar";
+  reviewBar.replaceChild(newBtn,reviewBtn);
+  newBtn.addEventListener("click",advanceAfterQuestion);
+}
+
+function advanceAfterQuestion(){
+  var lsn=current.lessons[current.lessonIndex];
+  var isLastQuestion=current.qIndex>=lsn.quiz.length-1;
+  if(!isLastQuestion){
+    current.qIndex++;
+    renderQuestion();
+  }else{
+    renderLessonComplete();
+  }
+}
+
+function renderLessonComplete(){
+  var isLastLesson=current.lessonIndex>=current.lessons.length-1;
+  var lsn=current.lessons[current.lessonIndex];
+  var pct=Math.round(((current.lessonIndex+1)/current.lessons.length)*100);
+  var actionLabel=isLastLesson?(current.kind==="unit"?"Finalizar unidad":"Finalizar curso"):"Siguiente lección";
+  inner.innerHTML=
+    '<span class="rs-complete-check" aria-hidden="true">✓</span>'+
+    '<h2>¡Lección completada!</h2>'+
+    '<p class="rs-result-score">'+esc(lsn.title)+' · '+lessonSteps(lsn).length+(lessonSteps(lsn).length===1?' paso · ':' pasos · ')+lsn.quiz.length+(lsn.quiz.length===1?' pregunta':' preguntas')+'</p>'+
+    '<div class="rs-progress-wrap" style="max-width:400px"><div class="rs-progress-track"><div class="rs-progress-fill" style="width:'+pct+'%"></div></div></div>'+
+    '<div class="rs-complete-actions">'+
+      '<button type="button" class="btn btn-primary" id="rsLessonAction">'+actionLabel+'</button>'+
+      '<button type="button" class="btn btn-ghost" id="rsLessonExit">Salir</button>'+
+    '</div>';
+  if(window.a11ySpeak)window.a11ySpeak("¡Lección completada! "+esc(lsn.title));
+  document.getElementById("rsLessonExit").addEventListener("click",renderPath);
+  document.getElementById("rsLessonAction").addEventListener("click",function(){
+    if(isLastLesson){
+      if(current.kind==="unit")finishUnit();
+      else finishCourse();
     }else{
-      finishUnit();
+      current.lessonIndex++;
+      current.stepIndex=0;
+      current.qIndex=0;
+      renderStep();
     }
   });
-  explain.parentNode.insertBefore(nextBtn,explain.nextSibling);
 }
 
 function finishUnit(){
-  var n=current.unit;
+  var n=current.unitIndex;
   var u=UNITS[n-1];
   var wasCurrent=n===unlockedLevel;
   if(wasCurrent){
     unlockedLevel=Math.min(n+1,UNITS.length+1);
-    var nalSession=window.safeStorage&&window.safeStorage.get("nebula:session");
-    var username=nalSession&&nalSession.username;
+    var username=getUsername();
     if(username){
       fetch("/api/level-complete",{
         method:"POST",
@@ -7272,15 +7495,263 @@ function finishUnit(){
       }).catch(function(){});
     }
   }
-  var finishMsg=n<UNITS.length?"Desbloqueaste la Unidad "+(n+1)+": "+UNITS[n].title+". ¡Adelante, tripulante!":"¡Completaste toda la Ruta Estelar! Eres oficialmente un experto cósmico.";
+  var finishMsg=n<UNITS.length?"Desbloqueaste la Unidad "+(n+1)+": "+esc(UNITS[n].title)+". ¡Adelante, tripulante!":"¡Completaste toda la Ruta Estelar! Eres oficialmente un experto cósmico.";
   if(window.a11ySpeak)window.a11ySpeak("¡Unidad completada! "+finishMsg);
   inner.innerHTML=
     '<span class="rs-result-emoji" aria-hidden="true">🎉</span>'+
     '<h2>¡Unidad completada!</h2>'+
-    '<p class="rs-result-score">'+u.title+' · 5 / 5 lecciones · 25 preguntas respondidas</p>'+
+    '<p class="rs-result-score">'+esc(u.title)+' · '+u.lessons.length+' lecciones</p>'+
     '<p class="rs-view-lead">'+finishMsg+'</p>'+
     '<button type="button" class="btn btn-primary" id="rsBackToPathFromResult">Volver al mapa</button>';
   document.getElementById("rsBackToPathFromResult").addEventListener("click",renderPath);
+}
+
+function finishCourse(){
+  var c=current.courseObj;
+  if(window.a11ySpeak)window.a11ySpeak("¡Completaste el curso "+c.title+"!");
+  inner.innerHTML=
+    '<span class="rs-result-emoji" aria-hidden="true">🎉</span>'+
+    '<h2>¡Curso completado!</h2>'+
+    '<p class="rs-result-score">'+esc(c.title)+' · '+current.lessons.length+' lecciones</p>'+
+    '<p class="rs-view-lead">Completaste "'+esc(c.title)+'", creado por '+esc(c.username)+'.</p>'+
+    '<button type="button" class="btn btn-primary" id="rsBackToPathFromResult">Volver al mapa</button>';
+  document.getElementById("rsBackToPathFromResult").addEventListener("click",renderPath);
+}
+
+function makeDraftStep(){return{title:"",text:"",image_url:""}}
+function makeDraftQuestion(){return{type:"mcq",question:"",options:["",""],answer:0,explain:"",image_url:""}}
+function makeDraftLesson(){return{title:"",steps:[makeDraftStep()],quiz:[makeDraftQuestion()]}}
+
+function startCourseBuilder(){
+  var username=getUsername();
+  if(!username){requireLogin();return;}
+  draft={title:"",emoji:"🚀",description:"",lessons:[makeDraftLesson()]};
+  renderBuilder();
+}
+
+function stepBlockHtml(li,si,st,total){
+  return '<div class="rs-builder-block" style="background:rgba(255,255,255,.03)">'+
+    '<div class="rs-builder-block-head"><span class="rs-builder-block-title" style="font-size:.86rem">Paso '+(si+1)+'</span>'+
+      (total>1?'<button type="button" class="rs-builder-remove" data-remove-step="'+li+'-'+si+'">Quitar</button>':'')+
+    '</div>'+
+    '<div class="rs-builder-field"><label>Subtítulo (opcional)</label><input type="text" class="rs-draft-input" data-field="stepTitle" data-lesson="'+li+'" data-step="'+si+'" maxlength="80" value="'+esc(st.title)+'"></div>'+
+    '<div class="rs-builder-field"><label>Texto</label><textarea class="rs-draft-input" data-field="stepText" data-lesson="'+li+'" data-step="'+si+'" maxlength="800" placeholder="Explica el concepto...">'+esc(st.text)+'</textarea></div>'+
+    '</div>';
+}
+
+function questionBlockHtml(li,qi,q,total){
+  var isTf=q.type==="tf";
+  var optsHtml=isTf?"":(
+    '<div class="rs-builder-field"><label>Opciones (marca la correcta)</label>'+
+    q.options.map(function(opt,oi){
+      return '<div class="rs-builder-radio-row">'+
+        '<input type="radio" name="rsAns-'+li+'-'+qi+'" data-field="qAnswer" data-lesson="'+li+'" data-question="'+qi+'" value="'+oi+'"'+(q.answer===oi?" checked":"")+'>'+
+        '<input type="text" class="rs-draft-input" data-field="qOption" data-lesson="'+li+'" data-question="'+qi+'" data-opt="'+oi+'" maxlength="150" placeholder="Opción '+(oi+1)+'" value="'+esc(opt)+'" style="flex:1;padding:8px 10px;border-radius:6px;border:1px solid var(--cosmic-indigo-border);background:var(--cosmic-indigo-light);color:var(--estelar-mist)">'+
+        (q.options.length>2?'<button type="button" data-remove-option="'+li+'-'+qi+'-'+oi+'" style="color:var(--solar-ember);font-size:.7rem">✕</button>':'')+
+      '</div>';
+    }).join("")+
+    (q.options.length<5?'<button type="button" class="rs-builder-add" data-add-option="'+li+'-'+qi+'" style="margin-top:4px">+ Opción</button>':'')+
+    '</div>'
+  );
+  var tfHtml=!isTf?"":(
+    '<div class="rs-builder-field"><label>Respuesta correcta</label>'+
+      '<div class="rs-builder-radio-row"><input type="radio" name="rsTf-'+li+'-'+qi+'" data-field="qTfAnswer" data-lesson="'+li+'" data-question="'+qi+'" value="true"'+(q.answer===true?" checked":"")+'> Verdadero</div>'+
+      '<div class="rs-builder-radio-row"><input type="radio" name="rsTf-'+li+'-'+qi+'" data-field="qTfAnswer" data-lesson="'+li+'" data-question="'+qi+'" value="false"'+(q.answer===false?" checked":"")+'> Falso</div>'+
+    '</div>'
+  );
+  return '<div class="rs-builder-block" style="background:rgba(255,255,255,.03)">'+
+    '<div class="rs-builder-block-head"><span class="rs-builder-block-title" style="font-size:.86rem">Pregunta '+(qi+1)+'</span>'+
+      (total>1?'<button type="button" class="rs-builder-remove" data-remove-question="'+li+'-'+qi+'">Quitar</button>':'')+
+    '</div>'+
+    '<div class="rs-builder-field"><label>Tipo</label>'+
+      '<select class="rs-draft-input" data-field="qType" data-lesson="'+li+'" data-question="'+qi+'" style="padding:8px 10px;border-radius:6px;border:1px solid var(--cosmic-indigo-border);background:var(--cosmic-indigo-light);color:var(--estelar-mist)">'+
+        '<option value="mcq"'+(isTf?"":" selected")+'>Opción múltiple</option>'+
+        '<option value="tf"'+(isTf?" selected":"")+'>Verdadero / Falso</option>'+
+      '</select></div>'+
+    '<div class="rs-builder-field"><label>Pregunta</label><input type="text" class="rs-draft-input" data-field="qQuestion" data-lesson="'+li+'" data-question="'+qi+'" maxlength="300" value="'+esc(q.question)+'"></div>'+
+    optsHtml+tfHtml+
+    '<div class="rs-builder-field"><label>Explicación (se muestra después de responder)</label><textarea class="rs-draft-input" data-field="qExplain" data-lesson="'+li+'" data-question="'+qi+'" maxlength="400">'+esc(q.explain)+'</textarea></div>'+
+    '</div>';
+}
+
+function lessonBlockHtml(lsn,li){
+  return '<div class="rs-builder-block">'+
+    '<div class="rs-builder-block-head"><span class="rs-builder-block-title">Lección '+(li+1)+'</span>'+
+      (draft.lessons.length>1?'<button type="button" class="rs-builder-remove" data-remove-lesson="'+li+'">Quitar lección</button>':'')+
+    '</div>'+
+    '<div class="rs-builder-field"><label>Título de la lección</label><input type="text" class="rs-draft-input" data-field="lessonTitle" data-lesson="'+li+'" maxlength="80" placeholder="Ej: El motor del cohete" value="'+esc(lsn.title)+'"></div>'+
+    '<p style="font-family:var(--font-mono);font-size:.68rem;letter-spacing:.06em;text-transform:uppercase;color:var(--proton-silver);margin-bottom:var(--space-3)">Pasos de información</p>'+
+    lsn.steps.map(function(st,si){return stepBlockHtml(li,si,st,lsn.steps.length)}).join("")+
+    '<button type="button" class="rs-builder-add" data-add-step="'+li+'">+ Añadir paso</button>'+
+    '<p style="font-family:var(--font-mono);font-size:.68rem;letter-spacing:.06em;text-transform:uppercase;color:var(--proton-silver);margin:var(--space-5) 0 var(--space-3)">Preguntas del quiz</p>'+
+    lsn.quiz.map(function(q,qi){return questionBlockHtml(li,qi,q,lsn.quiz.length)}).join("")+
+    '<button type="button" class="rs-builder-add" data-add-question="'+li+'">+ Añadir pregunta</button>'+
+    '</div>';
+}
+
+function renderBuilder(){
+  inner.innerHTML=
+    backBtnHtml()+
+    '<h2>Crear curso nuevo</h2>'+
+    '<p class="rs-view-lead">Empieza con la info de cada lección y luego añade su quiz. Se guardará en la nube para que cualquiera pueda jugarlo.</p>'+
+    '<div class="rs-builder-field"><label>Emoji del curso</label><input type="text" id="rsDraftEmoji" maxlength="4" value="'+esc(draft.emoji)+'"></div>'+
+    '<div class="rs-builder-field"><label>Título del curso</label><input type="text" id="rsDraftTitle" maxlength="80" placeholder="Ej: Cohetes y lanzamientos" value="'+esc(draft.title)+'"></div>'+
+    '<div class="rs-builder-field"><label>Descripción (opcional)</label><textarea id="rsDraftDesc" maxlength="300" placeholder="De qué trata tu curso...">'+esc(draft.description)+'</textarea></div>'+
+    draft.lessons.map(lessonBlockHtml).join("")+
+    '<button type="button" class="rs-builder-add" id="rsAddLesson">+ Añadir lección</button>'+
+    '<div class="rs-builder-actions">'+
+      '<button type="button" class="btn btn-primary" id="rsSaveDraft">Guardar curso</button>'+
+      '<button type="button" class="btn btn-ghost" id="rsCancelDraft">Cancelar</button>'+
+    '</div>'+
+    '<div id="rsBuilderError"></div>';
+  bindBack();
+  document.getElementById("rsCancelDraft").addEventListener("click",function(){draft=null;renderPath();});
+  document.getElementById("rsAddLesson").addEventListener("click",function(){
+    syncDraftFromDom();
+    if(draft.lessons.length<12){draft.lessons.push(makeDraftLesson());renderBuilder();}
+  });
+  document.getElementById("rsSaveDraft").addEventListener("click",saveDraft);
+  bindBuilderStructureButtons();
+}
+
+function bindBuilderStructureButtons(){
+  inner.querySelectorAll("[data-remove-lesson]").forEach(function(b){
+    b.addEventListener("click",function(){
+      syncDraftFromDom();
+      if(draft.lessons.length<=1)return;
+      draft.lessons.splice(Number(b.dataset.removeLesson),1);
+      renderBuilder();
+    });
+  });
+  inner.querySelectorAll("[data-add-step]").forEach(function(b){
+    b.addEventListener("click",function(){
+      syncDraftFromDom();
+      var li=Number(b.dataset.addStep);
+      if(draft.lessons[li].steps.length<8){draft.lessons[li].steps.push(makeDraftStep());renderBuilder();}
+    });
+  });
+  inner.querySelectorAll("[data-remove-step]").forEach(function(b){
+    b.addEventListener("click",function(){
+      syncDraftFromDom();
+      var parts=b.dataset.removeStep.split("-");
+      var li=Number(parts[0]),si=Number(parts[1]);
+      if(draft.lessons[li].steps.length<=1)return;
+      draft.lessons[li].steps.splice(si,1);
+      renderBuilder();
+    });
+  });
+  inner.querySelectorAll("[data-add-question]").forEach(function(b){
+    b.addEventListener("click",function(){
+      syncDraftFromDom();
+      var li=Number(b.dataset.addQuestion);
+      if(draft.lessons[li].quiz.length<8){draft.lessons[li].quiz.push(makeDraftQuestion());renderBuilder();}
+    });
+  });
+  inner.querySelectorAll("[data-remove-question]").forEach(function(b){
+    b.addEventListener("click",function(){
+      syncDraftFromDom();
+      var parts=b.dataset.removeQuestion.split("-");
+      var li=Number(parts[0]),qi=Number(parts[1]);
+      if(draft.lessons[li].quiz.length<=1)return;
+      draft.lessons[li].quiz.splice(qi,1);
+      renderBuilder();
+    });
+  });
+  inner.querySelectorAll("[data-add-option]").forEach(function(b){
+    b.addEventListener("click",function(){
+      syncDraftFromDom();
+      var parts=b.dataset.addOption.split("-");
+      var li=Number(parts[0]),qi=Number(parts[1]);
+      var q=draft.lessons[li].quiz[qi];
+      if(q.options.length<5){q.options.push("");renderBuilder();}
+    });
+  });
+  inner.querySelectorAll("[data-remove-option]").forEach(function(b){
+    b.addEventListener("click",function(){
+      syncDraftFromDom();
+      var parts=b.dataset.removeOption.split("-");
+      var li=Number(parts[0]),qi=Number(parts[1]),oi=Number(parts[2]);
+      var q=draft.lessons[li].quiz[qi];
+      if(q.options.length<=2)return;
+      q.options.splice(oi,1);
+      if(q.answer>=q.options.length)q.answer=q.options.length-1;
+      renderBuilder();
+    });
+  });
+}
+
+function syncDraftFromDom(){
+  var titleEl=document.getElementById("rsDraftTitle");
+  var emojiEl=document.getElementById("rsDraftEmoji");
+  var descEl=document.getElementById("rsDraftDesc");
+  if(titleEl)draft.title=titleEl.value;
+  if(emojiEl)draft.emoji=emojiEl.value;
+  if(descEl)draft.description=descEl.value;
+
+  inner.querySelectorAll(".rs-draft-input").forEach(function(el){
+    var field=el.dataset.field;
+    var li=Number(el.dataset.lesson);
+    var lsn=draft.lessons[li];
+    if(!lsn)return;
+    if(field==="lessonTitle")lsn.title=el.value;
+    else if(field==="stepTitle")lsn.steps[Number(el.dataset.step)].title=el.value;
+    else if(field==="stepText")lsn.steps[Number(el.dataset.step)].text=el.value;
+    else if(field==="qType"){
+      var q=lsn.quiz[Number(el.dataset.question)];
+      if(q){
+        q.type=el.value;
+        if(q.type==="mcq"&&(!Array.isArray(q.options)||q.options.length<2))q.options=["",""];
+        if(q.type==="mcq"&&typeof q.answer!=="number")q.answer=0;
+        if(q.type==="tf"&&typeof q.answer!=="boolean")q.answer=true;
+      }
+    }
+    else if(field==="qQuestion")lsn.quiz[Number(el.dataset.question)].question=el.value;
+    else if(field==="qOption")lsn.quiz[Number(el.dataset.question)].options[Number(el.dataset.opt)]=el.value;
+    else if(field==="qExplain")lsn.quiz[Number(el.dataset.question)].explain=el.value;
+    else if(field==="qAnswer"&&el.checked)lsn.quiz[Number(el.dataset.question)].answer=Number(el.value);
+    else if(field==="qTfAnswer"&&el.checked)lsn.quiz[Number(el.dataset.question)].answer=(el.value==="true");
+  });
+}
+
+function saveDraft(){
+  syncDraftFromDom();
+  var errEl=document.getElementById("rsBuilderError");
+  var username=getUsername();
+  if(!username){requireLogin();return;}
+  if(!draft.title.trim()){errEl.innerHTML='<p class="rs-builder-error">Ponle un título al curso.</p>';return;}
+  var hasValidLesson=draft.lessons.some(function(l){
+    return l.title.trim()&&l.steps.some(function(s){return s.text.trim()})&&l.quiz.some(function(q){return q.question.trim();});
+  });
+  if(!hasValidLesson){errEl.innerHTML='<p class="rs-builder-error">Agrega al menos una lección con título, un paso de información y una pregunta.</p>';return;}
+  var saveBtn=document.getElementById("rsSaveDraft");
+  saveBtn.disabled=true;
+  saveBtn.textContent="Guardando…";
+  errEl.innerHTML="";
+  fetch("/api/courses",{
+    method:"POST",
+    headers:{"Content-Type":"application/json"},
+    body:JSON.stringify({
+      username:username,
+      title:draft.title,
+      emoji:draft.emoji,
+      description:draft.description,
+      content:{lessons:draft.lessons}
+    })
+  }).then(function(r){return r.json().then(function(d){return{ok:r.ok,body:d}})})
+  .then(function(res){
+    if(!res.ok||!res.body||res.body.error){
+      errEl.innerHTML='<p class="rs-builder-error">'+esc((res.body&&res.body.error)||"No se pudo guardar el curso.")+'</p>';
+      saveBtn.disabled=false;
+      saveBtn.textContent="Guardar curso";
+      return;
+    }
+    draft=null;
+    renderPath();
+  }).catch(function(){
+    errEl.innerHTML='<p class="rs-builder-error">Error de conexión. Intenta de nuevo.</p>';
+    saveBtn.disabled=false;
+    saveBtn.textContent="Guardar curso";
+  });
 }
 
 function applyProgress(prog){

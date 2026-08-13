@@ -47,6 +47,26 @@ export async function supabaseSelect(env, table, query) {
   }
 }
 
+export async function supabaseDelete(env, table, query) {
+  const url = env.SUPABASE_URL;
+  const key = env.SUPABASE_SERVICE_ROLE_KEY;
+  if (!url || !key) return { ok: false, error: "Supabase no configurado" };
+
+  try {
+    const res = await fetch(`${url.replace(/\/$/, "")}/rest/v1/${table}?${query}`, {
+      method: "DELETE",
+      headers: { apikey: key, Authorization: `Bearer ${key}` },
+    });
+    if (!res.ok) {
+      const text = await res.text().catch(() => "");
+      return { ok: false, error: `Supabase ${res.status}: ${text}` };
+    }
+    return { ok: true };
+  } catch (err) {
+    return { ok: false, error: String(err) };
+  }
+}
+
 export async function supabaseUpsert(env, table, row, onConflict) {
   const url = env.SUPABASE_URL;
   const key = env.SUPABASE_SERVICE_ROLE_KEY;
