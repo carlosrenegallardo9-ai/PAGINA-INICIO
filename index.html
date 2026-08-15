@@ -271,6 +271,14 @@ html[data-nivel="principiante"] .section-head{border-left:2px solid var(--nebula
 </style>
 
 <style id="libs3d-styles">
+/* Fondo espacial global — estrellas en movimiento + planetas a la deriva */
+#spaceBackdrop{position:fixed;inset:0;z-index:-1;overflow:hidden;pointer-events:none}
+#spaceStars{position:absolute;inset:0;width:100%;height:100%;mix-blend-mode:screen}
+.sb-planet{position:absolute;border-radius:50%;opacity:0;transition:opacity 1.6s var(--ease-out);will-change:transform}
+.sb-planet.is-active{opacity:1}
+.sb-planet-ring{position:absolute;inset:-30%;border-radius:50%;border:1px solid currentColor;opacity:.35;transform:rotate(-18deg) scaleY(.32)}
+@media(max-width:640px){.sb-planet{filter:blur(.3px)}}
+
 /* Swiper Cube — carrusel 3D de hitos espaciales */
 .gw-swiper{width:100%;height:min(58vh,480px);margin-top:var(--space-2)}
 .gw-slide{width:100%;height:100%;background:var(--surface-panel);display:flex;flex-direction:column;overflow-y:auto;padding-right:2px}
@@ -615,6 +623,7 @@ html[data-nivel="principiante"] .section-head{border-left:2px solid var(--nebula
 </style>
 
 </head> <body>
+<div id="spaceBackdrop" aria-hidden="true"><canvas id="spaceStars"></canvas></div>
 <div class="nal-root" id="nalRoot">
 <div class="nal-backdrop" id="nalBackdrop" hidden></div>
 <div class="nal-modal-wrap" id="nalModalWrap" hidden aria-hidden="true">
@@ -9322,6 +9331,124 @@ document.addEventListener("keydown",function(e){
     }
   }).catch(function(err){
     console.error("[Star Web] No se pudo cargar la animación de scroll:",err);
+  });
+})();
+
+})();
+</script>
+
+<script id="space-backdrop-script">
+(function(){
+"use strict";
+
+(function starfieldGlobal(){
+  var canvas=document.getElementById("spaceStars");
+  if(!canvas)return;
+  var ctx=canvas.getContext("2d");
+  var reduced=window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  var w,h,dpr,stars=[],running=false,raf=null,last=0;
+  var FRAME=1000/30;
+  function size(){
+    dpr=Math.min(window.devicePixelRatio||1,2);
+    w=canvas.width=Math.round(window.innerWidth*dpr);
+    h=canvas.height=Math.round(window.innerHeight*dpr);
+    var count=Math.min(220,Math.floor((w*h)/16000));
+    stars=Array.from({length:count},function(){
+      return {
+        x:Math.random()*w,
+        y:Math.random()*h,
+        r:1.4*Math.random()+0.3,
+        base:0.55*Math.random()+0.25,
+        twSpeed:0.02*Math.random()+0.006,
+        phase:Math.random()*Math.PI*2,
+        dx:(Math.random()-0.5)*0.05*dpr,
+        dy:(Math.random()*0.09+0.02)*dpr
+      };
+    });
+    if(reduced)draw(0,true);
+  }
+  function draw(t,staticFrame){
+    if(!staticFrame){
+      if(!running)return;
+      raf=requestAnimationFrame(draw);
+      if(t-last<FRAME)return;
+      last=t;
+    }
+    ctx.clearRect(0,0,w,h);
+    for(var i=0;i<stars.length;i++){
+      var s=stars[i];
+      if(!staticFrame){
+        s.x+=s.dx;s.y+=s.dy;
+        if(s.x<0)s.x=w;if(s.x>w)s.x=0;
+        if(s.y<0)s.y=h;if(s.y>h)s.y=0;
+      }
+      var op=reduced?s.base:s.base+0.3*Math.sin(t*s.twSpeed+s.phase);
+      ctx.beginPath();
+      ctx.fillStyle="rgba(237,234,247,"+Math.max(0,op)+")";
+      ctx.arc(s.x,s.y,s.r,0,2*Math.PI);
+      ctx.fill();
+    }
+  }
+  function start(){if(!running){running=true;last=0;raf=requestAnimationFrame(draw);}}
+  function stop(){running=false;if(raf)cancelAnimationFrame(raf);}
+  window.addEventListener("resize",size);
+  document.addEventListener("visibilitychange",function(){
+    document.hidden?stop():(reduced?draw(0,true):start());
+  });
+  size();
+  reduced?draw(0,true):start();
+})();
+
+(function planetsBackdrop(){
+  var root=document.getElementById("spaceBackdrop");
+  if(!root)return;
+  var PLANETS=[
+    {size:150,top:"12%",left:"78%",from:"#3a2f66",to:"#0d0a1a",ring:false,dx:26,dy:16,rot:6,duration:19000},
+    {size:90,top:"62%",left:"6%",from:"#5c3a22",to:"#120c08",ring:true,dx:-18,dy:-22,rot:-8,duration:23000},
+    {size:60,top:"22%",left:"14%",from:"#2f4a5c",to:"#0a1216",ring:false,dx:14,dy:24,rot:10,duration:16000},
+    {size:110,top:"78%",left:"84%",from:"#4a2f52",to:"#0f0a12",ring:true,dx:-22,dy:14,rot:-6,duration:21000}
+  ];
+  var reduced=window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  var els=PLANETS.map(function(p){
+    var el=document.createElement("div");
+    el.className="sb-planet";
+    el.style.width=p.size+"px";
+    el.style.height=p.size+"px";
+    el.style.top=p.top;
+    el.style.left=p.left;
+    el.style.color=p.from;
+    el.style.background="radial-gradient(circle at 32% 28%,"+p.from+","+p.to+" 72%)";
+    if(p.ring){
+      var ring=document.createElement("span");
+      ring.className="sb-planet-ring";
+      el.appendChild(ring);
+    }
+    root.appendChild(el);
+    return el;
+  });
+  requestAnimationFrame(function(){
+    els.forEach(function(el){el.classList.add("is-active")});
+  });
+  if(reduced)return;
+  SPACE.loadScript(
+    "vendor/animejs/anime.umd.min.js",
+    function(){return Boolean(window.anime&&window.anime.animate)}
+  ).then(function(){
+    els.forEach(function(el,i){
+      var p=PLANETS[i];
+      window.anime.animate(el,{
+        x:[0,p.dx],
+        y:[0,p.dy],
+        rotate:[0,p.rot],
+        duration:p.duration,
+        delay:i*500,
+        ease:"inOutSine",
+        loop:true,
+        alternate:true
+      });
+    });
+  }).catch(function(err){
+    console.error("[Star Web] No se pudo animar los planetas de fondo:",err);
   });
 })();
 
