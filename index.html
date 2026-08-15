@@ -274,9 +274,11 @@ html[data-nivel="principiante"] .section-head{border-left:2px solid var(--nebula
 /* Fondo espacial global — estrellas en movimiento + planetas a la deriva */
 #spaceBackdrop{position:fixed;inset:0;z-index:-1;overflow:hidden;pointer-events:none}
 #spaceStars{position:absolute;inset:0;width:100%;height:100%;mix-blend-mode:screen}
-.sb-planet{position:absolute;border-radius:50%;opacity:0;transition:opacity 1.6s var(--ease-out);will-change:transform}
+.sb-planet{position:absolute;border-radius:50%;opacity:0;transition:opacity 1.6s var(--ease-out);will-change:transform;box-shadow:0 0 50px -6px currentColor}
 .sb-planet.is-active{opacity:1}
-.sb-planet-ring{position:absolute;inset:-30%;border-radius:50%;border:1px solid currentColor;opacity:.35;transform:rotate(-18deg) scaleY(.32)}
+.sb-planet-photo{position:absolute;inset:0;width:100%;height:100%;border-radius:50%;object-fit:cover;opacity:0;transition:opacity 1.4s var(--ease-out)}
+.sb-planet-photo.is-loaded{opacity:.92}
+.sb-planet-ring{position:absolute;inset:-30%;border-radius:50%;border:1px solid currentColor;opacity:.35;transform:rotate(-18deg) scaleY(.32);z-index:1}
 @media(max-width:640px){.sb-planet{filter:blur(.3px)}}
 
 /* Swiper Cube — carrusel 3D de hitos espaciales */
@@ -9402,11 +9404,22 @@ document.addEventListener("keydown",function(e){
 (function planetsBackdrop(){
   var root=document.getElementById("spaceBackdrop");
   if(!root)return;
+  function WM(file){return "https://commons.wikimedia.org/wiki/Special:FilePath/"+encodeURIComponent(file)+"?width=800"}
+  function loadImageInto(imgEl,url){
+    if(!imgEl||!url)return;
+    imgEl.referrerPolicy="no-referrer";
+    imgEl.addEventListener("load",function(){imgEl.classList.add("is-loaded")},{once:true});
+    imgEl.src=url;
+  }
   var PLANETS=[
-    {size:150,top:"12%",left:"78%",from:"#3a2f66",to:"#0d0a1a",ring:false,dx:26,dy:16,rot:6,duration:19000},
-    {size:90,top:"62%",left:"6%",from:"#5c3a22",to:"#120c08",ring:true,dx:-18,dy:-22,rot:-8,duration:23000},
-    {size:60,top:"22%",left:"14%",from:"#2f4a5c",to:"#0a1216",ring:false,dx:14,dy:24,rot:10,duration:16000},
-    {size:110,top:"78%",left:"84%",from:"#4a2f52",to:"#0f0a12",ring:true,dx:-22,dy:14,rot:-6,duration:21000}
+    {size:150,top:"12%",left:"78%",from:"#7a6a4a",to:"#241d12",ring:true,dx:26,dy:16,rot:6,duration:19000,
+      img:WM("PIA05380_-_Saturn_from_Cassini_Orbiter_(square).jpg"),name:"Saturno"},
+    {size:100,top:"62%",left:"6%",from:"#9c6a3f",to:"#241708",ring:false,dx:-18,dy:-22,rot:-8,duration:23000,
+      img:WM("Jupiter_and_its_shrunken_Great_Red_Spot.jpg"),name:"Júpiter"},
+    {size:64,top:"22%",left:"14%",from:"#2f4a7c",to:"#080f1c",ring:false,dx:14,dy:24,rot:10,duration:16000,
+      img:WM("Neptune_Full.jpg"),name:"Neptuno"},
+    {size:110,top:"78%",left:"84%",from:"#a4502f",to:"#200f08",ring:false,dx:-22,dy:14,rot:-6,duration:21000,
+      img:WM("Mars_Hubble.jpg"),name:"Marte"}
   ];
   var reduced=window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   var els=PLANETS.map(function(p){
@@ -9418,6 +9431,12 @@ document.addEventListener("keydown",function(e){
     el.style.left=p.left;
     el.style.color=p.from;
     el.style.background="radial-gradient(circle at 32% 28%,"+p.from+","+p.to+" 72%)";
+    var photo=document.createElement("img");
+    photo.className="sb-planet-photo";
+    photo.alt="";
+    photo.loading="lazy";
+    el.appendChild(photo);
+    loadImageInto(photo,p.img);
     if(p.ring){
       var ring=document.createElement("span");
       ring.className="sb-planet-ring";
