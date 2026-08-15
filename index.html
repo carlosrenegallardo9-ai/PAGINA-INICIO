@@ -271,10 +271,17 @@ html[data-nivel="principiante"] .section-head{border-left:2px solid var(--nebula
 </style>
 
 <style id="libs3d-styles">
-/* Explora nuestra Vía Láctea — iframe del simulador de Solar System Scope */
-.vl-frame-wrap{position:relative;width:100%;max-width:900px;min-width:280px;margin:0 auto;aspect-ratio:5/4;border-radius:var(--radius-lg);overflow:hidden;border:2px solid #0f5c6e;box-shadow:0 30px 70px -30px rgba(0,0,0,.7),0 0 40px -10px rgba(15,92,110,.5);background:var(--cosmic-indigo)}
-.vl-frame-wrap iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
-@media(max-width:640px){.vl-frame-wrap{aspect-ratio:4/5}}
+/* Explora nuestra Vía Láctea — acceso directo al explorador 3D propio */
+.vl-cta{position:relative;display:flex;align-items:center;gap:var(--space-5);width:100%;max-width:640px;margin:var(--space-2) auto 0;padding:var(--space-6) var(--space-7);background:linear-gradient(135deg,var(--cosmic-indigo),var(--cosmic-indigo-light));border:1px solid var(--cosmic-indigo-border);border-radius:var(--radius-lg);overflow:hidden;transition:transform var(--dur-fast),border-color var(--dur-fast),box-shadow var(--dur-fast)}
+.vl-cta:hover{transform:translateY(-2px);border-color:var(--nebula-violet-soft);box-shadow:var(--shadow-card)}
+.vl-cta-glow{position:absolute;inset:-40% -10%;z-index:0;background:radial-gradient(circle,var(--nebula-violet-dim),transparent 60%);opacity:.5;transition:opacity var(--dur-med);pointer-events:none}
+.vl-cta:hover .vl-cta-glow{opacity:1}
+.vl-cta-icon{position:relative;z-index:1;flex-shrink:0;width:56px;height:56px;border-radius:var(--radius-md);display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,var(--nebula-violet-dim),var(--solar-ember-dim));color:var(--nebula-violet-soft)}
+.vl-cta-text{position:relative;z-index:1;flex:1;display:flex;flex-direction:column;gap:2px}
+.vl-cta-text b{font-size:1.05rem}
+.vl-cta-text small{color:var(--estelar-mist-dim);font-size:.85rem}
+.vl-cta-arrow{position:relative;z-index:1;font-size:1.3rem;color:var(--nebula-violet-soft);flex-shrink:0}
+@media(max-width:640px){.vl-cta{flex-wrap:wrap;padding:var(--space-5)}}
 
 /* Fondo espacial global — estrellas en movimiento + planetas a la deriva */
 #spaceBackdrop{position:fixed;inset:0;z-index:-1;overflow:hidden;pointer-events:none}
@@ -889,9 +896,12 @@ html[data-nivel="principiante"] .section-head{border-left:2px solid var(--nebula
 <h2>Explora nuestra Vía Láctea</h2>
 <p>Un modelo interactivo del sistema solar en tiempo real: arrastra para orbitar, acerca la vista y descubre el movimiento real de los planetas.</p>
 </div>
-<div class="vl-frame-wrap reveal">
-<iframe src="https://www.solarsystemscope.com/iframe" title="Explora nuestra Vía Láctea — simulador del sistema solar" loading="lazy" allowfullscreen></iframe>
-</div>
+<a class="vl-cta reveal" href="#explorador">
+<span class="vl-cta-glow" aria-hidden="true"></span>
+<span class="vl-cta-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><circle cx="12" cy="12" r="4.2"/><ellipse cx="12" cy="12" rx="10.2" ry="3.4"/><ellipse cx="12" cy="12" rx="10.2" ry="3.4" transform="rotate(60 12 12)"/></svg></span>
+<span class="vl-cta-text"><b>Abrir el explorador 3D</b><small>Sistema solar interactivo, 100% propio · arrastra, haz zoom y toca cada planeta</small></span>
+<span class="vl-cta-arrow" aria-hidden="true">→</span>
+</a>
 </div>
 </section>
 
