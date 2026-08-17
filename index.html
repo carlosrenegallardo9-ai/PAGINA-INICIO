@@ -611,6 +611,27 @@ html[data-nivel="principiante"] .section-head{border-left:2px solid var(--nebula
 .an-codex-tags{display:flex;gap:8px;flex-wrap:wrap}
 .an-codex-tag{font-family:var(--font-mono);font-size:11px;padding:5px 12px;border-radius:100px;border:1px solid var(--an-glass-border);color:var(--an-stone)}
 @media(max-width:760px){.an-codex-panel{grid-template-columns:1fr;padding:26px}.an-codex-glyph svg{max-width:170px}}
+.an-wheel-layout{display:grid;grid-template-columns:1.15fr 1fr;gap:40px;align-items:center}
+.an-wheel-dial{position:relative;aspect-ratio:480/280;padding:22px 8px 4px;touch-action:none;cursor:grab;-webkit-user-select:none;user-select:none;-webkit-tap-highlight-color:transparent}
+.an-wheel-dial:active{cursor:grabbing}
+.an-wheel-dial:focus-visible{outline:2px solid var(--an-gold);outline-offset:8px;border-radius:16px}
+.an-wheel-dial svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible;pointer-events:none}
+.an-wheel-arc{fill:none;stroke:url(#anWheelGrad);stroke-width:22;stroke-linecap:round;opacity:.9}
+.an-wheel-tick{stroke:var(--an-glass-border);stroke-width:2}
+.an-wheel-needle{stroke:var(--an-parchment);stroke-width:3;stroke-linecap:round}
+.an-wheel-pivot{fill:var(--an-gold);stroke:var(--an-void);stroke-width:2}
+.an-wheel-node{position:absolute;transform:translate(-50%,-50%);width:20px;height:20px;border-radius:50%;background:var(--an-void-2);border:2px solid var(--an-glass-border);cursor:pointer;transition:border-color .25s ease,background .25s ease,transform .25s ease;padding:0}
+.an-wheel-node:hover{border-color:var(--an-gold)}
+.an-wheel-node.is-active{background:var(--an-gold);border-color:var(--an-gold);transform:translate(-50%,-50%) scale(1.3);box-shadow:0 0 16px 2px var(--an-gold-dim)}
+.an-wheel-label{position:absolute;transform:translate(-50%,-50%);font-family:var(--font-mono);font-size:11.5px;color:var(--an-stone);white-space:nowrap;pointer-events:none;transition:color .25s ease,font-weight .25s ease}
+.an-wheel-label.is-active{color:var(--an-gold-soft);font-weight:700}
+.an-wheel-card{background:var(--an-glass);border:1px solid var(--an-glass-border);border-radius:20px;padding:30px;min-height:220px}
+.an-wheel-card-type{font-family:var(--font-mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--an-gold-soft);margin-bottom:10px;display:block}
+.an-wheel-card h3{font-size:1.5rem;margin:0 0 14px}
+.an-wheel-card p{color:var(--an-parchment);opacity:.92;line-height:1.7;font-size:14.5px;margin-bottom:18px}
+.an-wheel-card-tags{display:flex;flex-wrap:wrap;gap:8px}
+@media(max-width:820px){.an-wheel-layout{grid-template-columns:1fr;gap:30px}}
+@media(max-width:480px){.an-wheel-label{font-size:10px}}
 .an-mon-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(270px,1fr));gap:22px}
 .an-mon-card{background:var(--an-glass);border:1px solid var(--an-glass-border);border-radius:20px;padding:22px;display:flex;flex-direction:column;gap:14px}
 .an-mon-stage{position:relative;height:140px;border-radius:14px;overflow:hidden;background:linear-gradient(180deg,#241a12,#120e10)}
@@ -995,6 +1016,7 @@ html[data-nivel="principiante"] .section-head{border-left:2px solid var(--nebula
 <div class="an-wrap an-toolbar-inner" id="anTabs">
 <button type="button" class="an-tab" data-an-goto="anHero">Portada</button>
 <button type="button" class="an-tab" data-an-goto="anCosmovisiones">Cosmovisiones</button>
+<button type="button" class="an-tab" data-an-goto="anCalendarios">Calendarios</button>
 <button type="button" class="an-tab" data-an-goto="anPiedra">Piedra Viva</button>
 <button type="button" class="an-tab" data-an-goto="anSabios">Sabios</button>
 <button type="button" class="an-tab" data-an-goto="anSalvador">El Salvador</button>
@@ -1010,6 +1032,7 @@ html[data-nivel="principiante"] .section-head{border-left:2px solid var(--nebula
 <div class="an-hstat"><b>4</b><span>Cosmovisiones</span></div>
 <div class="an-hstat"><b>4</b><span>Observatorios de piedra</span></div>
 <div class="an-hstat"><b>5</b><span>Sabios del cielo</span></div>
+<div class="an-hstat"><b>6</b><span>Calendarios antiguos</span></div>
 <div class="an-hstat"><b>3000+</b><span>Años de observación</span></div>
 </div>
 <div class="an-hero-arch" aria-hidden="true" style="background-image:var(--ms-arch);background-repeat:no-repeat;background-position:center;height:70px"></div>
@@ -1057,10 +1080,55 @@ html[data-nivel="principiante"] .section-head{border-left:2px solid var(--nebula
 </div>
 </section>
 
+<section class="an-section an-divider" id="anCalendarios">
+<div class="an-wrap">
+<div class="an-section-head">
+<span class="an-eyebrow">Sector 2 · La Rueda del Tiempo</span>
+<h2>Calendarios del mundo antiguo</h2>
+<p>Gira el semicírculo —o toca un punto, o usa las flechas del teclado— para descubrir cómo seis civilizaciones distintas dividieron el año.</p>
+</div>
+<div class="an-wheel-layout">
+<div class="an-wheel-dial" id="anWheelDial" tabindex="0" role="slider" aria-valuemin="0" aria-valuemax="5" aria-valuenow="2" aria-valuetext="Grecia" aria-label="Selector de calendario antiguo">
+<svg viewBox="0 0 480 280" aria-hidden="true">
+<defs>
+<linearGradient id="anWheelGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+<stop offset="0%" style="stop-color:var(--an-jade)"></stop>
+<stop offset="50%" style="stop-color:var(--an-gold)"></stop>
+<stop offset="100%" style="stop-color:var(--an-terracotta)"></stop>
+</linearGradient>
+</defs>
+<path class="an-wheel-arc" d="M60,240 A180,180 0 0 1 420,240"></path>
+<line class="an-wheel-tick" x1="45" y1="240" x2="32" y2="240"></line>
+<line class="an-wheel-tick" x1="82.24" y1="125.34" x2="71.73" y2="117.7"></line>
+<line class="an-wheel-tick" x1="179.74" y1="54.55" x2="175.73" y2="42.2"></line>
+<line class="an-wheel-tick" x1="300.26" y1="54.55" x2="304.27" y2="42.2"></line>
+<line class="an-wheel-tick" x1="397.76" y1="125.34" x2="408.27" y2="117.7"></line>
+<line class="an-wheel-tick" x1="435" y1="240" x2="448" y2="240"></line>
+<line class="an-wheel-needle" id="anWheelNeedle" x1="240" y1="240" x2="191.18" y2="89.74"></line>
+<circle class="an-wheel-pivot" cx="240" cy="240" r="9"></circle>
+</svg>
+<button type="button" class="an-wheel-node" id="anWheelNode0" tabindex="-1" style="left:12.5%;top:85.71%" aria-label="Babilonia"></button>
+<button type="button" class="an-wheel-node" id="anWheelNode1" tabindex="-1" style="left:19.66%;top:47.91%" aria-label="Egipto"></button>
+<button type="button" class="an-wheel-node" id="anWheelNode2" tabindex="-1" style="left:38.41%;top:24.58%" aria-label="Grecia"></button>
+<button type="button" class="an-wheel-node" id="anWheelNode3" tabindex="-1" style="left:61.59%;top:24.58%" aria-label="Celta"></button>
+<button type="button" class="an-wheel-node" id="anWheelNode4" tabindex="-1" style="left:80.34%;top:47.91%" aria-label="Roma"></button>
+<button type="button" class="an-wheel-node" id="anWheelNode5" tabindex="-1" style="left:87.5%;top:85.71%" aria-label="China"></button>
+<span class="an-wheel-label" id="anWheelLabel0" style="left:5%;top:85.71%">Babilonia</span>
+<span class="an-wheel-label" id="anWheelLabel1" style="left:13.6%;top:40.36%">Egipto</span>
+<span class="an-wheel-label" id="anWheelLabel2" style="left:36.1%;top:12.36%">Grecia</span>
+<span class="an-wheel-label" id="anWheelLabel3" style="left:63.9%;top:12.36%">Celta</span>
+<span class="an-wheel-label" id="anWheelLabel4" style="left:86.4%;top:40.36%">Roma</span>
+<span class="an-wheel-label" id="anWheelLabel5" style="left:95%;top:85.71%">China</span>
+</div>
+<div class="an-wheel-card" id="anWheelCard"></div>
+</div>
+</div>
+</section>
+
 <section class="an-section an-divider" id="anPiedra">
 <div class="an-wrap">
 <div class="an-section-head">
-<span class="an-eyebrow">Sector 2 · Arqueoastronomía en piedra</span>
+<span class="an-eyebrow">Sector 3 · Arqueoastronomía en piedra</span>
 <h2>Observatorios de piedra</h2>
 <p>Desliza el «paso del sol» en cada monumento y observa cómo la luz se alinea con la arquitectura en los días clave del año.</p>
 </div>
@@ -1071,7 +1139,7 @@ html[data-nivel="principiante"] .section-head{border-left:2px solid var(--nebula
 <section class="an-section an-divider" id="anSabios">
 <div class="an-wrap">
 <div class="an-section-head">
-<span class="an-eyebrow">Sector 3 · Diálogos con los sabios del pasado</span>
+<span class="an-eyebrow">Sector 4 · Diálogos con los sabios del pasado</span>
 <h2>Sabios y pioneros del cielo</h2>
 <p>Toca o pasa el cursor sobre cada tarjeta-códice para revelar su legado.</p>
 </div>
@@ -1082,7 +1150,7 @@ html[data-nivel="principiante"] .section-head{border-left:2px solid var(--nebula
 <section class="an-section an-divider" id="anSalvador">
 <div class="an-wrap">
 <div class="an-section-head">
-<span class="an-eyebrow">Sector 4 · Raíces propias</span>
+<span class="an-eyebrow">Sector 5 · Raíces propias</span>
 <h2>El maíz, las Pléyades y el cielo de Centroamérica</h2>
 </div>
 <div class="an-sv-grid">
@@ -9505,6 +9573,97 @@ if(sabiosGrid){
       card.setAttribute("aria-expanded",String(flipped));
     });
   });
+}
+
+var WHEEL_CULTURES=[
+  {angle:180,short:"Babilonia",name:"Calendario Babilónico",type:"Lunisolar · 12 meses + intercalación",text:"Cada mes comenzaba con el avistamiento de la luna nueva y el año arrancaba en primavera, con el mes de Nisannu. Cuando el calendario se desalineaba del ciclo solar, los sacerdotes-astrónomos añadían un mes extra —Addaru II— para corregirlo. De aquí heredamos también la semana de siete días, uno por cada astro errante conocido.",tags:["Nisannu · Año nuevo","Semana de 7 astros","Mes intercalar"]},
+  {angle:144,short:"Egipto",name:"Calendario Civil Egipcio",type:"Solar · 365 días exactos",text:"Doce meses de 30 días, organizados en tres estaciones de cuatro meses cada una —inundación, siembra y cosecha—, más cinco días «fuera del tiempo» dedicados a los dioses al final del año. El nuevo año se anunciaba con la crecida anual del Nilo y el orto helíaco de la estrella Sopdet (Sirio).",tags:["Crecida del Nilo","5 días epagómenos","Orto de Sirio"]},
+  {angle:108,short:"Grecia",name:"Calendario Ático (Helénico)",type:"Lunisolar · variable por polis",text:"Cada ciudad-estado griega llevaba su propio calendario, con distintos nombres de mes y fechas de inicio de año. En Atenas, el año comenzaba con la primera luna nueva tras el solsticio de verano, y se insertaban meses intercalares para mantenerlo alineado con las estaciones y las grandes fiestas religiosas.",tags:["Calendario Ático","Panateneas","Un calendario por polis"]},
+  {angle:72,short:"Celta",name:"La Rueda del Año",type:"Estacional · 8 puntos del ciclo solar",text:"Ocho festividades equidistantes marcan los solsticios, los equinoccios y los cuatro puntos intermedios entre ellos: Samhain, Yule, Imbolc, Ostara, Beltane, Litha, Lughnasad y Mabon. Combina festividades gaélicas y anglosajonas mucho más antiguas; esta «Rueda del Año» unificada se popularizó en el siglo XX como símbolo del ciclo agrícola y espiritual celta.",tags:["8 sabbats","Samhain · año nuevo","Ciclo agrícola"]},
+  {angle:36,short:"Roma",name:"Calendario Juliano",type:"Solar · 365.25 días",text:"El calendario romano original, de apenas diez meses, fue reformado por Numa Pompilio y, siglos después, por Julio César en el 46 a.C.: 365 días repartidos en doce meses, con un día extra cada cuatro años. Fue el calendario más usado en Occidente durante más de 1600 años y es el ancestro directo del calendario que usamos hoy.",tags:["Reforma de Julio César","Año bisiesto","Ancestro del calendario actual"]},
+  {angle:0,short:"China",name:"Calendario Chino Tradicional",type:"Lunisolar · ciclo de 12 animales",text:"Los meses siguen las fases de la luna y el año nuevo llega con la segunda luna nueva tras el solsticio de invierno. Cada año recibe el nombre de uno de los doce animales del zodiaco en un ciclo que se repite, y un mes intercalar se añade cada dos o tres años para no perder el paso con las estaciones. Sigue en uso hoy junto al calendario gregoriano.",tags:["Zodiaco de 12 animales","Año Nuevo Lunar","Aún vigente hoy"]}
+];
+
+var wheelDial=document.getElementById("anWheelDial");
+var wheelNeedle=document.getElementById("anWheelNeedle");
+var wheelCard=document.getElementById("anWheelCard");
+if(wheelDial&&wheelNeedle&&wheelCard){
+  var wheelActive=2;
+  var WCX=240,WCY=240,WNR=158;
+
+  function setNeedleAngle(a){
+    var rad=a*Math.PI/180;
+    var x2=WCX+WNR*Math.cos(rad);
+    var y2=WCY-WNR*Math.sin(rad);
+    wheelNeedle.setAttribute("x2",x2.toFixed(2));
+    wheelNeedle.setAttribute("y2",y2.toFixed(2));
+  }
+
+  function renderWheel(){
+    var c=WHEEL_CULTURES[wheelActive];
+    setNeedleAngle(c.angle);
+    WHEEL_CULTURES.forEach(function(cc,i){
+      var node=document.getElementById("anWheelNode"+i);
+      var label=document.getElementById("anWheelLabel"+i);
+      if(node)node.classList.toggle("is-active",i===wheelActive);
+      if(label)label.classList.toggle("is-active",i===wheelActive);
+    });
+    wheelCard.innerHTML='<span class="an-wheel-card-type">'+c.type+'</span><h3>'+c.name+'</h3><p>'+c.text+'</p><div class="an-wheel-card-tags">'+c.tags.map(function(t){return '<span class="an-codex-tag">'+t+"</span>"}).join("")+"</div>";
+    wheelDial.setAttribute("aria-valuenow",String(wheelActive));
+    wheelDial.setAttribute("aria-valuetext",c.short);
+  }
+
+  function setActiveByAngle(angle){
+    var nearest=0,best=999;
+    WHEEL_CULTURES.forEach(function(c,i){var d=Math.abs(c.angle-angle);if(d<best){best=d;nearest=i}});
+    wheelActive=nearest;
+    renderWheel();
+  }
+
+  WHEEL_CULTURES.forEach(function(c,i){
+    var node=document.getElementById("anWheelNode"+i);
+    if(node)node.addEventListener("click",function(){wheelActive=i;renderWheel()});
+  });
+
+  function angleFromPoint(clientX,clientY){
+    var rect=wheelDial.getBoundingClientRect();
+    var pivotX=rect.left+rect.width*(WCX/480);
+    var pivotY=rect.top+rect.height*(WCY/280);
+    var dx=clientX-pivotX;
+    var dy=pivotY-clientY;
+    var a=Math.atan2(dy,dx)*180/Math.PI;
+    if(a<0)a=dx>=0?0:180;
+    if(a>180)a=180;
+    return a;
+  }
+
+  var wheelDragging=false;
+  function onWheelPointerMove(e){
+    if(!wheelDragging)return;
+    setNeedleAngle(angleFromPoint(e.clientX,e.clientY));
+  }
+  function onWheelPointerUp(e){
+    if(!wheelDragging)return;
+    wheelDragging=false;
+    setActiveByAngle(angleFromPoint(e.clientX,e.clientY));
+    document.removeEventListener("pointermove",onWheelPointerMove);
+    document.removeEventListener("pointerup",onWheelPointerUp);
+  }
+  wheelDial.addEventListener("pointerdown",function(e){
+    wheelDragging=true;
+    wheelDial.focus();
+    setNeedleAngle(angleFromPoint(e.clientX,e.clientY));
+    document.addEventListener("pointermove",onWheelPointerMove);
+    document.addEventListener("pointerup",onWheelPointerUp);
+    e.preventDefault();
+  });
+  wheelDial.addEventListener("keydown",function(e){
+    if(e.key==="ArrowRight"){e.preventDefault();wheelActive=Math.min(WHEEL_CULTURES.length-1,wheelActive+1);renderWheel()}
+    else if(e.key==="ArrowLeft"){e.preventDefault();wheelActive=Math.max(0,wheelActive-1);renderWheel()}
+    else if(e.key==="Home"){e.preventDefault();wheelActive=0;renderWheel()}
+    else if(e.key==="End"){e.preventDefault();wheelActive=WHEEL_CULTURES.length-1;renderWheel()}
+  });
+  renderWheel();
 }
 })();
 </script>
