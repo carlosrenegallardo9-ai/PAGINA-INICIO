@@ -8805,6 +8805,7 @@ function anOpenView(){
   view.setAttribute("aria-hidden","false");
   document.documentElement.classList.add("nal-lock-scroll");
   requestAnimationFrame(function(){view.classList.add("is-open")});
+  view.querySelectorAll(".reveal").forEach(function(el){el.classList.add("is-visible")});
 }
 function anCloseView(){
   view.classList.remove("is-open");
