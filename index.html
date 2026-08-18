@@ -8118,10 +8118,26 @@ function esc(s){
   });
 }
 function WM(file){return "https://commons.wikimedia.org/wiki/Special:FilePath/"+encodeURIComponent(file)+"?width=1600"}
+var wikiThumbCache={};
+function WP(title,fallback){
+  return function(){
+    if(!wikiThumbCache[title]){
+      wikiThumbCache[title]=fetch("https://es.wikipedia.org/api/rest_v1/page/summary/"+encodeURIComponent(title))
+        .then(function(r){return r.json()})
+        .then(function(d){return(d&&d.originalimage&&d.originalimage.source)||(d&&d.thumbnail&&d.thumbnail.source)||fallback||null})
+        .catch(function(){return fallback||null});
+    }
+    return wikiThumbCache[title];
+  };
+}
 function loadImageInto(imgEl,url){
   if(!imgEl||!url)return;
   imgEl.referrerPolicy="no-referrer";
   imgEl.addEventListener("load",function(){imgEl.classList.add("is-loaded")},{once:true});
+  if(typeof url==="function"){
+    url().then(function(resolved){if(resolved)imgEl.src=resolved}).catch(function(){});
+    return;
+  }
   imgEl.src=url;
 }
 function loadStyle(url){
@@ -8156,7 +8172,7 @@ if(quickRow){
 
 var MILESTONES=[
   {year:"1957",title:"Sputnik 1",text:"El primer objeto humano en alcanzar la órbita terrestre. Un pitido de radio que anunció la era espacial.",img:WM("Sputnik_asm.jpg"),link:"https://es.wikipedia.org/wiki/Sputnik_1"},
-  {year:"1961",title:"Vostok 1",text:"Yuri Gagarin se convierte en el primer humano en ver la Tierra desde el espacio, en una sola órbita de 108 minutos.",img:WM("Bundesarchiv_Bild_183-72131-0001,_Juri_Gagarin.jpg"),link:"https://es.wikipedia.org/wiki/Vostok_1"},
+  {year:"1961",title:"Vostok 1",text:"Yuri Gagarin se convierte en el primer humano en ver la Tierra desde el espacio, en una sola órbita de 108 minutos.",img:WP("Yuri Gagarin",WM("Bundesarchiv_Bild_183-72131-0001,_Juri_Gagarin.jpg")),link:"https://es.wikipedia.org/wiki/Vostok_1"},
   {year:"1969",title:"Apollo 11",text:"Neil Armstrong y Buzz Aldrin pisan la Luna. La primera vez que un ser humano camina sobre otro mundo.",img:WM("Apollo_11_Crew.jpg"),link:"https://es.wikipedia.org/wiki/Apolo_11"},
   {year:"1977",title:"Voyager 1 y 2",text:"Lanzadas para sobrevolar los gigantes gaseosos, hoy son los objetos hechos por el hombre más lejanos del cosmos.",img:WM("Voyager_Golden_Record.jpg"),link:"https://es.wikipedia.org/wiki/Voyager_1"},
   {year:"1990",title:"Telescopio Hubble",text:"Puesto en órbita para ver más allá de la atmósfera, redefinió nuestra imagen del universo profundo.",img:WM("HST-SM4.jpeg"),link:"https://es.wikipedia.org/wiki/Telescopio_espacial_Hubble"},
