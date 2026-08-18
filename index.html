@@ -565,8 +565,9 @@ html[data-nivel="principiante"] .section-head{border-left:2px solid var(--nebula
 .an-view-close{position:fixed;top:var(--space-5);right:var(--space-5);z-index:110;width:42px;height:42px;border-radius:50%;background:rgba(15,14,19,.75);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);border:1px solid var(--an-glass-border);display:flex;align-items:center;justify-content:center;color:var(--an-parchment);font-size:1.1rem}
 .an-view-close:hover{border-color:var(--an-gold);color:var(--an-gold)}
 .an-toolbar{position:sticky;top:0;z-index:20;-webkit-backdrop-filter:blur(18px) saturate(140%);backdrop-filter:blur(18px) saturate(140%);background:rgba(15,14,19,.82);border-bottom:1px solid var(--an-glass-border);padding:14px 0}
-.an-toolbar-inner{display:flex;gap:10px;flex-wrap:nowrap;overflow-x:auto;padding-right:52px}
-.an-tab{font-family:var(--font-mono);font-size:12.5px;letter-spacing:.02em;padding:9px 15px;border-radius:100px;border:1px solid var(--an-glass-border);background:var(--an-glass);color:var(--an-stone);cursor:pointer;white-space:nowrap;transition:all .18s ease}
+.an-toolbar-inner{display:flex;gap:8px;flex-wrap:nowrap;overflow-x:auto;padding-right:52px;-webkit-mask-image:linear-gradient(90deg,transparent,#000 20px,#000 calc(100% - 44px),transparent);mask-image:linear-gradient(90deg,transparent,#000 20px,#000 calc(100% - 44px),transparent);scrollbar-width:none}
+.an-toolbar-inner::-webkit-scrollbar{display:none}
+.an-tab{font-family:var(--font-mono);font-size:11.5px;letter-spacing:.02em;padding:8px 13px;border-radius:100px;border:1px solid var(--an-glass-border);background:var(--an-glass);color:var(--an-stone);cursor:pointer;white-space:nowrap;transition:all .18s ease;flex-shrink:0}
 .an-tab:hover{border-color:var(--an-gold-dim);color:var(--an-parchment)}
 .an-tab.is-active{background:var(--an-gold);color:#1a1208;border-color:var(--an-gold);font-weight:700}
 .an-hero{position:relative;z-index:1;padding:60px 0 44px;overflow:hidden}
@@ -625,7 +626,10 @@ html[data-nivel="principiante"] .section-head{border-left:2px solid var(--nebula
 .an-wheel-node.is-active{background:var(--an-gold);border-color:var(--an-gold);transform:translate(-50%,-50%) scale(1.3);box-shadow:0 0 16px 2px var(--an-gold-dim)}
 .an-wheel-label{position:absolute;transform:translate(-50%,-50%);font-family:var(--font-mono);font-size:11.5px;color:var(--an-stone);white-space:nowrap;pointer-events:none;transition:color .25s ease,font-weight .25s ease}
 .an-wheel-label.is-active{color:var(--an-gold-soft);font-weight:700}
-.an-wheel-card{background:var(--an-glass);border:1px solid var(--an-glass-border);border-radius:20px;padding:30px;min-height:220px}
+.an-wheel-card{background:var(--an-glass);border:1px solid var(--an-glass-border);border-radius:20px;overflow:hidden;min-height:220px}
+.an-wheel-banner{height:108px;color:var(--an-gold-soft);background:linear-gradient(180deg,var(--an-void-2),var(--an-void-3));position:relative}
+.an-wheel-banner svg{width:100%;height:100%;display:block}
+.an-wheel-card-body{padding:24px 30px 30px}
 .an-wheel-card-type{font-family:var(--font-mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--an-gold-soft);margin-bottom:10px;display:block}
 .an-wheel-card h3{font-size:1.5rem;margin:0 0 14px}
 .an-wheel-card p{color:var(--an-parchment);opacity:.92;line-height:1.7;font-size:14.5px;margin-bottom:18px}
@@ -653,13 +657,15 @@ html[data-nivel="principiante"] .section-head{border-left:2px solid var(--nebula
 .an-sabio{background:transparent;border:none;padding:0;perspective:1200px;height:280px;cursor:pointer;text-align:left;color:inherit;font:inherit;display:block;width:100%}
 .an-sabio-inner{position:relative;width:100%;height:100%;transition:transform .6s cubic-bezier(.2,.9,.3,1.1);transform-style:preserve-3d}
 .an-sabio.is-flipped .an-sabio-inner{transform:rotateY(180deg)}
-.an-sabio-face{position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;border-radius:18px;border:1px solid var(--an-glass-border);background:var(--an-glass);padding:22px;display:flex;flex-direction:column}
-.an-sabio-front{align-items:center;justify-content:center;text-align:center;gap:12px}
-.an-sabio-medal{width:82px;height:82px}
+.an-sabio-face{position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;border-radius:18px;border:1px solid var(--an-glass-border);background:var(--an-glass);display:flex;flex-direction:column;overflow:hidden}
+.an-sabio-front{align-items:stretch;text-align:center;gap:0;padding:0}
+.an-sabio-portrait{flex-shrink:0;height:62%;display:flex;align-items:center;justify-content:center;background:radial-gradient(circle at 50% 35%,var(--an-void-3),var(--an-void-2) 75%)}
+.an-sabio-medal{width:118px;height:118px}
+.an-sabio-text{padding:12px 16px 16px;display:flex;flex-direction:column;gap:4px;flex:1}
 .an-sabio-name{font-size:1.02rem;margin:0}
 .an-sabio-role{font-family:var(--font-mono);font-size:10.5px;color:var(--an-stone);letter-spacing:.03em}
 .an-sabio-hint{margin-top:auto;font-family:var(--font-mono);font-size:9.5px;color:var(--an-gold-soft);opacity:.75;text-transform:uppercase;letter-spacing:.08em}
-.an-sabio-back{transform:rotateY(180deg);justify-content:center;background:linear-gradient(150deg,var(--an-void-3),var(--an-void-2));border-color:var(--an-gold-dim)}
+.an-sabio-back{transform:rotateY(180deg);justify-content:center;padding:22px;background:linear-gradient(150deg,var(--an-void-3),var(--an-void-2));border-color:var(--an-gold-dim)}
 .an-sabio-back-era{font-family:var(--font-mono);font-size:10.5px;color:var(--an-gold-soft);margin-bottom:10px}
 .an-sabio-back-role{font-size:12.5px;color:var(--an-jade-soft);margin-bottom:8px;font-weight:600}
 .an-sabio-back-text{font-size:12.5px;line-height:1.6;color:var(--an-parchment);opacity:.92;margin:0}
@@ -709,16 +715,18 @@ html[data-nivel="principiante"] .section-head{border-left:2px solid var(--nebula
 .an-myth{background:transparent;border:none;padding:0;perspective:1300px;height:300px;cursor:pointer;text-align:left;color:inherit;font:inherit;width:100%}
 .an-myth-inner{position:relative;width:100%;height:100%;transition:transform .7s cubic-bezier(.2,.9,.3,1.1);transform-style:preserve-3d}
 .an-myth.is-flipped .an-myth-inner{transform:rotateY(180deg)}
-.an-myth-face{position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;border-radius:18px;border:1px solid var(--an-glass-border);padding:22px;display:flex;flex-direction:column;gap:10px}
-.an-myth-front{background:linear-gradient(160deg,rgba(200,90,50,.12),var(--an-glass));align-items:center;text-align:center;justify-content:center}
+.an-myth-face{position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;border-radius:18px;border:1px solid var(--an-glass-border);overflow:hidden;display:flex;flex-direction:column}
+.an-myth-front{background:var(--an-glass)}
+.an-myth-image{position:relative;height:56%;flex-shrink:0;display:flex;align-items:center;justify-content:center;background:linear-gradient(165deg,var(--an-void-2),var(--an-void-3));color:var(--an-gold-soft)}
+.an-myth-image svg{width:76%;height:76%}
 .an-myth-badge{font-family:var(--font-mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;padding:4px 12px;border-radius:100px}
-.an-myth-front .an-myth-badge{background:rgba(200,90,50,.18);color:var(--an-terracotta-soft);border:1px solid rgba(200,90,50,.35)}
+.an-myth-front .an-myth-badge{position:absolute;top:12px;left:12px;background:rgba(200,90,50,.22);color:var(--an-terracotta-soft);border:1px solid rgba(200,90,50,.4);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px)}
 .an-myth-back .an-myth-badge{background:rgba(42,157,143,.18);color:var(--an-jade-soft);border:1px solid rgba(42,157,143,.35);align-self:flex-start}
-.an-myth-glyph{width:88px;height:88px}
+.an-myth-body{padding:16px 20px 18px;display:flex;flex-direction:column;gap:6px;flex:1;text-align:left}
 .an-myth-culture{font-family:var(--font-mono);font-size:11px;color:var(--an-stone)}
 .an-myth-title{font-size:1.08rem;margin:0}
 .an-myth-hint{margin-top:auto;font-family:var(--font-mono);font-size:9.5px;color:var(--an-terracotta-soft);opacity:.8;text-transform:uppercase;letter-spacing:.06em}
-.an-myth-back{transform:rotateY(180deg);background:linear-gradient(160deg,rgba(42,157,143,.1),var(--an-void-2));justify-content:flex-start}
+.an-myth-back{transform:rotateY(180deg);background:linear-gradient(160deg,rgba(42,157,143,.1),var(--an-void-2));padding:22px;gap:10px}
 .an-myth-back p{font-size:12.8px;line-height:1.6;color:var(--an-parchment);opacity:.92;margin:0}
 @media(hover:hover){.an-myth:hover .an-myth-inner{transform:rotateY(180deg)}}
 .an-nova-card{background:linear-gradient(150deg,var(--an-void-3),var(--an-void-2));border:1px solid var(--an-gold-dim);border-radius:22px;padding:32px;display:grid;grid-template-columns:220px 1fr;gap:32px;align-items:center}
@@ -1128,7 +1136,7 @@ html[data-nivel="principiante"] .section-head{border-left:2px solid var(--nebula
 
 <section class="an-section" id="anCosmovisiones">
 <div class="an-wrap">
-<div class="an-section-head">
+<div class="an-section-head reveal">
 <span class="an-eyebrow">Sector 1 · El Códice Estelar Multicultural</span>
 <h2>Cosmovisiones del mundo</h2>
 <p>Elige un astro y cambia la lente cultural: la misma agrupación de estrellas cuenta historias muy distintas según quién la mira.</p>
@@ -1152,7 +1160,7 @@ html[data-nivel="principiante"] .section-head{border-left:2px solid var(--nebula
 </div>
 </div>
 </div>
-<div class="an-codex-panel" id="anCodexPanel">
+<div class="an-codex-panel reveal" id="anCodexPanel">
 <div class="an-codex-glyph" id="anCodexGlyph"></div>
 <div class="an-codex-body">
 <span class="an-codex-culture-tag" id="anCodexCultureTag"></span>
@@ -1167,12 +1175,12 @@ html[data-nivel="principiante"] .section-head{border-left:2px solid var(--nebula
 
 <section class="an-section an-divider" id="anCalendarios">
 <div class="an-wrap">
-<div class="an-section-head">
+<div class="an-section-head reveal">
 <span class="an-eyebrow">Sector 2 · La Rueda del Tiempo</span>
 <h2>Calendarios del mundo antiguo</h2>
 <p>Gira el semicírculo —o toca un punto, o usa las flechas del teclado— para descubrir cómo seis civilizaciones distintas dividieron el año.</p>
 </div>
-<div class="an-wheel-layout">
+<div class="an-wheel-layout reveal">
 <div class="an-wheel-dial" id="anWheelDial" tabindex="0" role="slider" aria-valuemin="0" aria-valuemax="5" aria-valuenow="2" aria-valuetext="Grecia" aria-label="Selector de calendario antiguo">
 <svg viewBox="0 0 480 280" aria-hidden="true">
 <defs>
@@ -1212,7 +1220,7 @@ html[data-nivel="principiante"] .section-head{border-left:2px solid var(--nebula
 
 <section class="an-section an-divider" id="anPiedra">
 <div class="an-wrap">
-<div class="an-section-head">
+<div class="an-section-head reveal">
 <span class="an-eyebrow">Sector 3 · Arqueoastronomía en piedra</span>
 <h2>Observatorios de piedra</h2>
 <p>Desliza el «paso del sol» en cada monumento y observa cómo la luz se alinea con la arquitectura en los días clave del año.</p>
@@ -1223,13 +1231,13 @@ html[data-nivel="principiante"] .section-head{border-left:2px solid var(--nebula
 
 <section class="an-section an-divider" id="anInstrumentos">
 <div class="an-wrap">
-<div class="an-section-head">
+<div class="an-section-head reveal">
 <span class="an-eyebrow">Sector 4 · Toca y experimenta</span>
 <h2>Laboratorio de instrumentos antiguos</h2>
 <p>Antes del telescopio, la humanidad construyó máquinas de latón y piedra para leer el cielo. Tócalas.</p>
 </div>
 <div class="an-lab-grid">
-<div class="an-lab-card">
+<div class="an-lab-card reveal">
 <div class="an-lab-stage">
 <div class="an-astro-disc" id="anAstroDisc" tabindex="0" role="slider" aria-valuemin="0" aria-valuemax="359" aria-valuenow="40" aria-label="Girar la red del astrolabio para calcular la hora">
 <svg viewBox="0 0 200 200" aria-hidden="true">
@@ -1257,7 +1265,7 @@ html[data-nivel="principiante"] .section-head{border-left:2px solid var(--nebula
 <p class="an-lab-hint">Gira la red de estrellas (arrastra o usa las flechas) para simular cómo se calculaba la hora nocturna alineando el puntero con una estrella conocida.</p>
 <p class="an-lab-caption" id="anAstroCaption">Alineado con una estrella de referencia</p>
 </div>
-<div class="an-lab-card">
+<div class="an-lab-card reveal">
 <div class="an-lab-stage">
 <div class="an-mirror-stage" id="anMirrorStage">
 <div class="an-mirror-sky" id="anMirrorSky"></div>
@@ -1275,13 +1283,13 @@ html[data-nivel="principiante"] .section-head{border-left:2px solid var(--nebula
 
 <section class="an-section an-divider" id="anMitos">
 <div class="an-wrap">
-<div class="an-section-head">
+<div class="an-section-head reveal">
 <span class="an-eyebrow">Sector 5 · Mito y revelación</span>
 <h2>Mitos ancestrales vs. eventos reales</h2>
 <p>Toca cada tarjeta-códice para pasar del mito a la ciencia que lo explica.</p>
 </div>
 <div class="an-myth-grid" id="anMythGrid"></div>
-<div class="an-nova-card">
+<div class="an-nova-card reveal">
 <div class="an-nova-visual" aria-hidden="true">
 <svg viewBox="0 0 200 200">
 <circle cx="100" cy="100" r="90" fill="none" style="stroke:var(--an-glass-border)" stroke-width="1"></circle>
@@ -1322,7 +1330,7 @@ html[data-nivel="principiante"] .section-head{border-left:2px solid var(--nebula
 
 <section class="an-section an-divider" id="anCronicas">
 <div class="an-wrap">
-<div class="an-section-head">
+<div class="an-section-head reveal">
 <span class="an-eyebrow">Sector 6 · El cielo en las crónicas</span>
 <h2>Eclipses que cambiaron la historia</h2>
 <p>Toca un punto de la línea de tiempo para leer su historia completa.</p>
@@ -1334,12 +1342,12 @@ html[data-nivel="principiante"] .section-head{border-left:2px solid var(--nebula
 
 <section class="an-section an-divider" id="anPrecesion">
 <div class="an-wrap">
-<div class="an-section-head">
+<div class="an-section-head reveal">
 <span class="an-eyebrow">Sector 7 · El viajero del tiempo estelar</span>
 <h2>La estrella polar cambia con los milenios</h2>
 <p>La Tierra se «bambolea» como un trompo en un ciclo de casi 26.000 años: la estrella que marca el norte celeste no siempre fue —ni será siempre— Polaris.</p>
 </div>
-<div class="an-prec-layout">
+<div class="an-prec-layout reveal">
 <div class="an-prec-dial">
 <svg viewBox="0 0 300 170" aria-hidden="true">
 <defs>
@@ -1379,7 +1387,7 @@ html[data-nivel="principiante"] .section-head{border-left:2px solid var(--nebula
 
 <section class="an-section an-divider" id="anSabios">
 <div class="an-wrap">
-<div class="an-section-head">
+<div class="an-section-head reveal">
 <span class="an-eyebrow">Sector 8 · Diálogos con los sabios del pasado</span>
 <h2>Sabios y pioneros del cielo</h2>
 <p>Toca o pasa el cursor sobre cada tarjeta-códice para revelar su legado.</p>
@@ -1390,11 +1398,11 @@ html[data-nivel="principiante"] .section-head{border-left:2px solid var(--nebula
 
 <section class="an-section an-divider" id="anSalvador">
 <div class="an-wrap">
-<div class="an-section-head">
+<div class="an-section-head reveal">
 <span class="an-eyebrow">Sector 9 · Raíces propias</span>
 <h2>El maíz, las Pléyades y el cielo de Centroamérica</h2>
 </div>
-<div class="an-sv-grid">
+<div class="an-sv-grid reveal">
 <div class="an-sv-text">
 <p>Mucho antes de que existieran fronteras, el territorio que hoy es El Salvador formaba parte del mundo mesoamericano, donde el cielo y la milpa estaban profundamente conectados. Cuando las Pléyades desaparecían del cielo del atardecer a finales de abril —su «ocultamiento heliaco»— y reaparecían al alba unas semanas después, los agricultores mesoamericanos sabían que era momento de preparar la tierra para la siembra del maíz, justo antes del inicio de la temporada de lluvias.</p>
 <p>En sitios como Joya de Cerén —la «Pompeya de América», sepultada por ceniza volcánica hace más de 1400 años— y las plataformas de Tazumal y San Andrés, la vida cotidiana giraba en torno al mismo calendario agrícola-celeste que regía en toda Mesoamérica: el maíz no se sembraba por capricho, sino en diálogo con el cielo.</p>
@@ -9688,12 +9696,18 @@ var MONUMENTS=[
 ];
 
 var SABIOS=[
-  {initial:"H",name:"Hipatia de Alejandría",role:"Matemática, astrónoma y filósofa",era:"Alejandría, Egipto · c. 355–415 d.C.",roleBack:"Astronomía y matemáticas",text:"Dirigió la escuela neoplatónica de Alejandría y perfeccionó el astrolabio, el instrumento que permitía calcular la posición de las estrellas y el tiempo con solo mirar el cielo.",accent:"gold"},
-  {initial:"K",name:"Ah K'in",role:"Sacerdote-astrónomo maya",era:"Mesoamérica maya · Periodo Clásico, 250–900 d.C.",roleBack:"Vigilantes del cielo",text:"Desde observatorios como El Caracol, los Ah K'in registraron los ciclos de Venus con precisión de horas a lo largo de siglos, y ajustaron el calendario ritual de 260 días con el ciclo solar.",accent:"jade"},
-  {initial:"S",name:"Abd al-Rahman Al-Sufi",role:"Astrónomo persa",era:"Persia · 903–986 d.C.",roleBack:"El Libro de las Estrellas Fijas",text:"Registró la primera observación documentada de la galaxia de Andrómeda, describiéndola como una «pequeña nube» once siglos antes de que los telescopios modernos revelaran su verdadera naturaleza.",accent:"terracotta"},
-  {initial:"N",name:"Nezahualcóyotl",role:"Poeta, arquitecto y astrónomo-rey",era:"Texcoco, México · 1402–1472",roleBack:"El observatorio de Tláloc",text:"Ordenó construir un observatorio astronómico en el Monte Tláloc y organizó un calendario civil basado en observaciones solares, además de dejar una vasta obra poética sobre el cosmos.",accent:"bronze"},
-  {initial:"G",name:"Galileo Galilei",role:"Astrónomo y físico",era:"Pisa, Italia · 1564–1642",roleBack:"El telescopio al cielo",text:"Fue de los primeros en apuntar un telescopio al firmamento, descubriendo las lunas de Júpiter, las fases de Venus y los cráteres lunares: observaciones que cambiaron para siempre la forma en que entendemos nuestro lugar en el universo.",accent:"gold"}
+  {initial:"H",name:"Hipatia de Alejandría",role:"Matemática, astrónoma y filósofa",era:"Alejandría, Egipto · c. 355–415 d.C.",roleBack:"Astronomía y matemáticas",text:"Dirigió la escuela neoplatónica de Alejandría y perfeccionó el astrolabio, el instrumento que permitía calcular la posición de las estrellas y el tiempo con solo mirar el cielo.",accent:"gold",
+   headwear:'<path d="M22 30 C22 8 34 0 50 0 C66 0 78 8 78 30 C78 30 68 23 62 26 C58 11 54 7 50 7 C46 7 42 11 38 26 C32 23 22 30 22 30Z"></path>'},
+  {initial:"K",name:"Ah K'in",role:"Sacerdote-astrónomo maya",era:"Mesoamérica maya · Periodo Clásico, 250–900 d.C.",roleBack:"Vigilantes del cielo",text:"Desde observatorios como El Caracol, los Ah K'in registraron los ciclos de Venus con precisión de horas a lo largo de siglos, y ajustaron el calendario ritual de 260 días con el ciclo solar.",accent:"jade",
+   headwear:'<g><path d="M50 26 Q46 8 50 2 Q54 8 50 26Z" transform="rotate(-32 50 26)"></path><path d="M50 26 Q46 8 50 2 Q54 8 50 26Z" transform="rotate(-16 50 26)"></path><path d="M50 26 Q46 6 50 0 Q54 6 50 26Z"></path><path d="M50 26 Q46 8 50 2 Q54 8 50 26Z" transform="rotate(16 50 26)"></path><path d="M50 26 Q46 8 50 2 Q54 8 50 26Z" transform="rotate(32 50 26)"></path></g>'},
+  {initial:"S",name:"Abd al-Rahman Al-Sufi",role:"Astrónomo persa",era:"Persia · 903–986 d.C.",roleBack:"El Libro de las Estrellas Fijas",text:"Registró la primera observación documentada de la galaxia de Andrómeda, describiéndola como una «pequeña nube» once siglos antes de que los telescopios modernos revelaran su verdadera naturaleza.",accent:"terracotta",
+   headwear:'<path d="M24 28 C24 6 34 1 50 1 C66 1 76 6 76 28 L68 28 C68 12 60 6 50 6 C40 6 32 12 32 28Z"></path><path d="M50 6 C57 6 61 11 61 17 L53 17 C53 13 51 11 49 11Z"></path>'},
+  {initial:"N",name:"Nezahualcóyotl",role:"Poeta, arquitecto y astrónomo-rey",era:"Texcoco, México · 1402–1472",roleBack:"El observatorio de Tláloc",text:"Ordenó construir un observatorio astronómico en el Monte Tláloc y organizó un calendario civil basado en observaciones solares, además de dejar una vasta obra poética sobre el cosmos.",accent:"bronze",
+   headwear:'<path d="M24 27 L30 6 L40 17 L50 2 L60 17 L70 6 L76 27Z"></path>'},
+  {initial:"G",name:"Galileo Galilei",role:"Astrónomo y físico",era:"Pisa, Italia · 1564–1642",roleBack:"El telescopio al cielo",text:"Fue de los primeros en apuntar un telescopio al firmamento, descubriendo las lunas de Júpiter, las fases de Venus y los cráteres lunares: observaciones que cambiaron para siempre la forma en que entendemos nuestro lugar en el universo.",accent:"gold",
+   headwear:'<path d="M30 22 Q50 8 70 22 L70 27 L30 27Z"></path><path d="M28 80 Q50 94 72 80 L72 86 Q50 100 28 86Z" opacity=".85"></path>'}
 ];
+var SABIO_BUST='<path d="M28 82 C28 60 34 48 42 42 C36 36 34 28 34 22 C34 10 41 2 50 2 C59 2 66 10 66 22 C66 28 64 36 58 42 C66 48 72 60 72 82 Z" opacity=".55"></path>';
 
 function anOpenView(){
   view.hidden=false;
@@ -9724,6 +9738,24 @@ if(tabs){
       if(target)target.scrollIntoView({behavior:"smooth",block:"start"});
     });
   });
+  var anSectionIds=["anHero","anCosmovisiones","anCalendarios","anPiedra","anInstrumentos","anMitos","anCronicas","anPrecesion","anSabios","anSalvador"];
+  if("IntersectionObserver"in window){
+    var anSpyObserver=new IntersectionObserver(function(entries){
+      entries.forEach(function(entry){
+        if(!entry.isIntersecting)return;
+        var id=entry.target.id;
+        tabs.querySelectorAll(".an-tab").forEach(function(btn){
+          btn.classList.toggle("is-active",btn.getAttribute("data-an-goto")===id);
+        });
+        var activeBtn=tabs.querySelector('.an-tab[data-an-goto="'+id+'"]');
+        if(activeBtn&&activeBtn.scrollIntoView)activeBtn.scrollIntoView({behavior:"smooth",block:"nearest",inline:"center"});
+      });
+    },{root:view,rootMargin:"-45% 0px -50% 0px",threshold:0});
+    anSectionIds.forEach(function(id){
+      var el=document.getElementById(id);
+      if(el)anSpyObserver.observe(el);
+    });
+  }
 }
 
 var codexState={astro:"pleyades",culture:"maya"};
@@ -9759,7 +9791,7 @@ renderCodex();
 var monGrid=document.getElementById("anMonGrid");
 if(monGrid){
   monGrid.innerHTML=MONUMENTS.map(function(m,i){
-    return '<div class="an-mon-card">'+
+    return '<div class="an-mon-card reveal">'+
       '<div class="an-mon-stage" id="anMonStage'+i+'"><div class="an-mon-beam"></div><div class="an-mon-sun" id="anMonSun'+i+'"></div><div class="an-mon-silhouette">'+m.silhouette+"</div></div>"+
       '<h3 class="an-mon-name">'+m.name+"</h3>"+
       '<span class="an-mon-place">'+m.place+"</span>"+
@@ -9793,13 +9825,17 @@ if(monGrid){
 var sabiosGrid=document.getElementById("anSabiosGrid");
 if(sabiosGrid){
   sabiosGrid.innerHTML=SABIOS.map(function(s,i){
-    return '<button type="button" class="an-sabio" data-i="'+i+'" aria-label="'+s.name+', toca para ver su legado">'+
+    return '<button type="button" class="an-sabio reveal" data-i="'+i+'" aria-label="'+s.name+', toca para ver su legado">'+
       '<div class="an-sabio-inner">'+
         '<div class="an-sabio-face an-sabio-front">'+
-          '<svg class="an-sabio-medal" viewBox="0 0 100 100" fill="none" style="stroke:var(--an-'+s.accent+')" stroke-width="1.2"><circle cx="50" cy="50" r="46"/><circle cx="50" cy="50" r="38"/><g stroke-width=".8"><line x1="50" y1="4" x2="50" y2="12"/><line x1="50" y1="88" x2="50" y2="96"/><line x1="4" y1="50" x2="12" y2="50"/><line x1="88" y1="50" x2="96" y2="50"/><line x1="17" y1="17" x2="23" y2="23"/><line x1="77" y1="77" x2="83" y2="83"/><line x1="17" y1="83" x2="23" y2="77"/><line x1="77" y1="23" x2="83" y2="17"/></g><text x="50" y="60" text-anchor="middle" font-size="30" style="fill:var(--an-'+s.accent+');stroke:none" font-family="Cinzel Decorative, serif">'+s.initial+"</text></svg>"+
-          '<h3 class="an-sabio-name">'+s.name+"</h3>"+
-          '<span class="an-sabio-role">'+s.role+"</span>"+
-          '<span class="an-sabio-hint">Toca para revelar</span>'+
+          '<div class="an-sabio-portrait">'+
+            '<svg class="an-sabio-medal" viewBox="0 0 100 100" fill="none" style="stroke:var(--an-'+s.accent+')" stroke-width="1.2"><circle cx="50" cy="50" r="46"/><circle cx="50" cy="50" r="38"/><g stroke-width=".8"><line x1="50" y1="4" x2="50" y2="12"/><line x1="50" y1="88" x2="50" y2="96"/><line x1="4" y1="50" x2="12" y2="50"/><line x1="88" y1="50" x2="96" y2="50"/><line x1="17" y1="17" x2="23" y2="23"/><line x1="77" y1="77" x2="83" y2="83"/><line x1="17" y1="83" x2="23" y2="77"/><line x1="77" y1="23" x2="83" y2="17"/></g><g style="fill:var(--an-'+s.accent+')" stroke="none">'+SABIO_BUST+s.headwear+"</g></svg>"+
+          "</div>"+
+          '<div class="an-sabio-text">'+
+            '<h3 class="an-sabio-name">'+s.name+"</h3>"+
+            '<span class="an-sabio-role">'+s.role+"</span>"+
+            '<span class="an-sabio-hint">Toca para revelar</span>'+
+          "</div>"+
         "</div>"+
         '<div class="an-sabio-face an-sabio-back">'+
           '<span class="an-sabio-back-era">'+s.era+"</span>"+
@@ -9819,12 +9855,18 @@ if(sabiosGrid){
 }
 
 var WHEEL_CULTURES=[
-  {angle:180,short:"Babilonia",name:"Calendario Babilónico",type:"Lunisolar · 12 meses + intercalación",text:"Cada mes comenzaba con el avistamiento de la luna nueva y el año arrancaba en primavera, con el mes de Nisannu. Cuando el calendario se desalineaba del ciclo solar, los sacerdotes-astrónomos añadían un mes extra —Addaru II— para corregirlo. De aquí heredamos también la semana de siete días, uno por cada astro errante conocido.",tags:["Nisannu · Año nuevo","Semana de 7 astros","Mes intercalar"]},
-  {angle:144,short:"Egipto",name:"Calendario Civil Egipcio",type:"Solar · 365 días exactos",text:"Doce meses de 30 días, organizados en tres estaciones de cuatro meses cada una —inundación, siembra y cosecha—, más cinco días «fuera del tiempo» dedicados a los dioses al final del año. El nuevo año se anunciaba con la crecida anual del Nilo y el orto helíaco de la estrella Sopdet (Sirio).",tags:["Crecida del Nilo","5 días epagómenos","Orto de Sirio"]},
-  {angle:108,short:"Grecia",name:"Calendario Ático (Helénico)",type:"Lunisolar · variable por polis",text:"Cada ciudad-estado griega llevaba su propio calendario, con distintos nombres de mes y fechas de inicio de año. En Atenas, el año comenzaba con la primera luna nueva tras el solsticio de verano, y se insertaban meses intercalares para mantenerlo alineado con las estaciones y las grandes fiestas religiosas.",tags:["Calendario Ático","Panateneas","Un calendario por polis"]},
-  {angle:72,short:"Celta",name:"La Rueda del Año",type:"Estacional · 8 puntos del ciclo solar",text:"Ocho festividades equidistantes marcan los solsticios, los equinoccios y los cuatro puntos intermedios entre ellos: Samhain, Yule, Imbolc, Ostara, Beltane, Litha, Lughnasad y Mabon. Combina festividades gaélicas y anglosajonas mucho más antiguas; esta «Rueda del Año» unificada se popularizó en el siglo XX como símbolo del ciclo agrícola y espiritual celta.",tags:["8 sabbats","Samhain · año nuevo","Ciclo agrícola"]},
-  {angle:36,short:"Roma",name:"Calendario Juliano",type:"Solar · 365.25 días",text:"El calendario romano original, de apenas diez meses, fue reformado por Numa Pompilio y, siglos después, por Julio César en el 46 a.C.: 365 días repartidos en doce meses, con un día extra cada cuatro años. Fue el calendario más usado en Occidente durante más de 1600 años y es el ancestro directo del calendario que usamos hoy.",tags:["Reforma de Julio César","Año bisiesto","Ancestro del calendario actual"]},
-  {angle:0,short:"China",name:"Calendario Chino Tradicional",type:"Lunisolar · ciclo de 12 animales",text:"Los meses siguen las fases de la luna y el año nuevo llega con la segunda luna nueva tras el solsticio de invierno. Cada año recibe el nombre de uno de los doce animales del zodiaco en un ciclo que se repite, y un mes intercalar se añade cada dos o tres años para no perder el paso con las estaciones. Sigue en uso hoy junto al calendario gregoriano.",tags:["Zodiaco de 12 animales","Año Nuevo Lunar","Aún vigente hoy"]}
+  {angle:180,short:"Babilonia",name:"Calendario Babilónico",type:"Lunisolar · 12 meses + intercalación",text:"Cada mes comenzaba con el avistamiento de la luna nueva y el año arrancaba en primavera, con el mes de Nisannu. Cuando el calendario se desalineaba del ciclo solar, los sacerdotes-astrónomos añadían un mes extra —Addaru II— para corregirlo. De aquí heredamos también la semana de siete días, uno por cada astro errante conocido.",tags:["Nisannu · Año nuevo","Semana de 7 astros","Mes intercalar"],
+   banner:'<svg viewBox="0 0 300 120"><path d="M0 108H300V100H0Z" fill="currentColor"></path><rect x="95" y="80" width="110" height="20" fill="currentColor"></rect><rect x="112" y="60" width="76" height="20" fill="currentColor"></rect><rect x="129" y="40" width="42" height="20" fill="currentColor"></rect><rect x="142" y="24" width="16" height="16" fill="currentColor"></rect><circle cx="240" cy="30" r="10" style="fill:var(--an-parchment)"></circle><circle cx="246" cy="26" r="9" fill="currentColor"></circle><circle cx="60" cy="20" r="1.6" style="fill:var(--an-parchment)"></circle><circle cx="75" cy="35" r="1.2" style="fill:var(--an-parchment)"></circle><circle cx="45" cy="42" r="1.4" style="fill:var(--an-parchment)"></circle></svg>'},
+  {angle:144,short:"Egipto",name:"Calendario Civil Egipcio",type:"Solar · 365 días exactos",text:"Doce meses de 30 días, organizados en tres estaciones de cuatro meses cada una —inundación, siembra y cosecha—, más cinco días «fuera del tiempo» dedicados a los dioses al final del año. El nuevo año se anunciaba con la crecida anual del Nilo y el orto helíaco de la estrella Sopdet (Sirio).",tags:["Crecida del Nilo","5 días epagómenos","Orto de Sirio"],
+   banner:'<svg viewBox="0 0 300 120"><path d="M0 108H300V100H0Z" fill="currentColor"></path><path d="M60 100L110 40L160 100Z" fill="currentColor"></path><path d="M140 100L185 55L230 100Z" fill="currentColor" opacity=".85"></path><circle cx="110" cy="22" r="12" style="fill:var(--an-gold)"></circle><g style="stroke:var(--an-gold)" stroke-width="2" stroke-linecap="round"><line x1="110" y1="2" x2="110" y2="8"></line><line x1="88" y1="10" x2="93" y2="15"></line><line x1="132" y1="10" x2="127" y2="15"></line></g></svg>'},
+  {angle:108,short:"Grecia",name:"Calendario Ático (Helénico)",type:"Lunisolar · variable por polis",text:"Cada ciudad-estado griega llevaba su propio calendario, con distintos nombres de mes y fechas de inicio de año. En Atenas, el año comenzaba con la primera luna nueva tras el solsticio de verano, y se insertaban meses intercalares para mantenerlo alineado con las estaciones y las grandes fiestas religiosas.",tags:["Calendario Ático","Panateneas","Un calendario por polis"],
+   banner:'<svg viewBox="0 0 300 120"><path d="M0 108H300V100H0Z" fill="currentColor"></path><path d="M80 44L150 15L220 44Z" fill="currentColor"></path><rect x="80" y="44" width="140" height="8" fill="currentColor"></rect><rect x="85" y="52" width="6" height="48" fill="currentColor"></rect><rect x="110" y="52" width="6" height="48" fill="currentColor"></rect><rect x="135" y="52" width="6" height="48" fill="currentColor"></rect><rect x="160" y="52" width="6" height="48" fill="currentColor"></rect><rect x="185" y="52" width="6" height="48" fill="currentColor"></rect><rect x="210" y="52" width="6" height="48" fill="currentColor"></rect></svg>'},
+  {angle:72,short:"Celta",name:"La Rueda del Año",type:"Estacional · 8 puntos del ciclo solar",text:"Ocho festividades equidistantes marcan los solsticios, los equinoccios y los cuatro puntos intermedios entre ellos: Samhain, Yule, Imbolc, Ostara, Beltane, Litha, Lughnasad y Mabon. Combina festividades gaélicas y anglosajonas mucho más antiguas; esta «Rueda del Año» unificada se popularizó en el siglo XX como símbolo del ciclo agrícola y espiritual celta.",tags:["8 sabbats","Samhain · año nuevo","Ciclo agrícola"],
+   banner:'<svg viewBox="0 0 300 120"><path d="M0 108H300V100H0Z" fill="currentColor"></path><rect x="70" y="60" width="14" height="40" rx="4" fill="currentColor"></rect><rect x="100" y="45" width="16" height="55" rx="4" fill="currentColor"></rect><rect x="135" y="55" width="14" height="45" rx="4" fill="currentColor"></rect><circle cx="222" cy="37" r="18" fill="none" style="stroke:var(--an-gold)" stroke-width="2"></circle><g style="stroke:var(--an-gold)" stroke-width="2"><line x1="222" y1="15" x2="222" y2="59"></line><line x1="200" y1="37" x2="244" y2="37"></line><line x1="206" y1="21" x2="238" y2="53"></line><line x1="238" y1="21" x2="206" y2="53"></line></g></svg>'},
+  {angle:36,short:"Roma",name:"Calendario Juliano",type:"Solar · 365.25 días",text:"El calendario romano original, de apenas diez meses, fue reformado por Numa Pompilio y, siglos después, por Julio César en el 46 a.C.: 365 días repartidos en doce meses, con un día extra cada cuatro años. Fue el calendario más usado en Occidente durante más de 1600 años y es el ancestro directo del calendario que usamos hoy.",tags:["Reforma de Julio César","Año bisiesto","Ancestro del calendario actual"],
+   banner:'<svg viewBox="0 0 300 120"><path d="M0 108H300V100H0Z" fill="currentColor"></path><rect x="45" y="100" width="180" height="6" fill="currentColor"></rect><path d="M50 100V70a12 12 0 0124 0V100Z" fill="currentColor"></path><path d="M84 100V70a12 12 0 0124 0V100Z" fill="currentColor"></path><path d="M118 100V70a12 12 0 0124 0V100Z" fill="currentColor"></path><path d="M152 100V70a12 12 0 0124 0V100Z" fill="currentColor"></path><path d="M186 100V70a12 12 0 0124 0V100Z" fill="currentColor"></path><path d="M220 100V70a12 12 0 0124 0V100Z" fill="currentColor"></path><path d="M245 30c6 4 6 14 0 18M255 25c10 7 10 21 0 28" fill="none" style="stroke:var(--an-gold)" stroke-width="2" stroke-linecap="round"></path></svg>'},
+  {angle:0,short:"China",name:"Calendario Chino Tradicional",type:"Lunisolar · ciclo de 12 animales",text:"Los meses siguen las fases de la luna y el año nuevo llega con la segunda luna nueva tras el solsticio de invierno. Cada año recibe el nombre de uno de los doce animales del zodiaco en un ciclo que se repite, y un mes intercalar se añade cada dos o tres años para no perder el paso con las estaciones. Sigue en uso hoy junto al calendario gregoriano.",tags:["Zodiaco de 12 animales","Año Nuevo Lunar","Aún vigente hoy"],
+   banner:'<svg viewBox="0 0 300 120"><path d="M0 108H300V100H0Z" fill="currentColor"></path><path d="M130 100V85H170V100Z" fill="currentColor"></path><path d="M120 85L180 85L170 72L130 72Z" fill="currentColor"></path><path d="M135 72V60H165V72Z" fill="currentColor"></path><path d="M128 60L172 60L163 48L137 48Z" fill="currentColor"></path><path d="M142 48V38H158V48Z" fill="currentColor"></path><path d="M136 38L164 38L158 28L142 28Z" fill="currentColor"></path><circle cx="232" cy="30" r="11" style="fill:var(--an-parchment)"></circle><circle cx="237" cy="26" r="10" fill="currentColor"></circle></svg>'}
 ];
 
 var wheelDial=document.getElementById("anWheelDial");
@@ -9851,7 +9893,7 @@ if(wheelDial&&wheelNeedle&&wheelCard){
       if(node)node.classList.toggle("is-active",i===wheelActive);
       if(label)label.classList.toggle("is-active",i===wheelActive);
     });
-    wheelCard.innerHTML='<span class="an-wheel-card-type">'+c.type+'</span><h3>'+c.name+'</h3><p>'+c.text+'</p><div class="an-wheel-card-tags">'+c.tags.map(function(t){return '<span class="an-codex-tag">'+t+"</span>"}).join("")+"</div>";
+    wheelCard.innerHTML='<div class="an-wheel-banner">'+c.banner+'</div><div class="an-wheel-card-body"><span class="an-wheel-card-type">'+c.type+'</span><h3>'+c.name+'</h3><p>'+c.text+'</p><div class="an-wheel-card-tags">'+c.tags.map(function(t){return '<span class="an-codex-tag">'+t+"</span>"}).join("")+"</div></div>";
     wheelDial.setAttribute("aria-valuenow",String(wheelActive));
     wheelDial.setAttribute("aria-valuetext",c.short);
   }
@@ -10020,24 +10062,28 @@ if(mirrorSky&&mirrorFog){
 }
 
 var MYTHS=[
-  {culture:"Mesoamérica",badge:"Mito",title:"El jaguar celeste devora al Sol",glyph:'<svg viewBox="0 0 120 120"><circle cx="60" cy="60" r="34" style="fill:var(--an-gold)"></circle><circle cx="82" cy="46" r="30" style="fill:var(--an-void)"></circle><path d="M40 88l7-9M50 95l5-10M63 97l3-11" style="stroke:var(--an-terracotta-soft)" stroke-width="3" stroke-linecap="round" fill="none"></path></svg>',
+  {culture:"Mesoamérica",badge:"Mito",title:"El jaguar celeste devora al Sol",glyph:'<svg viewBox="0 0 200 140"><circle cx="100" cy="52" r="38" style="fill:var(--an-gold)"></circle><circle cx="124" cy="38" r="34" style="fill:var(--an-void)"></circle><path d="M75 92l8-10M87 100l6-11M101 103l3-12" style="stroke:var(--an-terracotta-soft)" stroke-width="3" stroke-linecap="round" fill="none"></path><path d="M40 140V115H70V105H130V115H160V140Z" style="fill:var(--an-void-3)"></path><path d="M85 140V125H115V140Z" style="fill:var(--an-void-2)"></path></svg>',
    backBadge:"Ciencia",backTitle:"Eclipse solar",text:"La Luna se interpone entre la Tierra y el Sol. Los astrónomos mayas registraron ciclos de eclipses con enorme precisión en el Códice Dresde, usando tablas de 405 lunaciones para anticipar cuándo el jaguar celeste podía «atacar» de nuevo."},
-  {culture:"China antigua",badge:"Mito",title:"Un dragón celeste devora al Sol",glyph:'<svg viewBox="0 0 120 120"><circle cx="60" cy="60" r="34" style="fill:var(--an-parchment)"></circle><circle cx="40" cy="72" r="30" style="fill:var(--an-void)"></circle><path d="M20 40 Q40 20 60 30 Q80 40 100 25" fill="none" style="stroke:var(--an-terracotta)" stroke-width="4" stroke-linecap="round"></path><path d="M96 20l7 4-5 7z" style="fill:var(--an-terracotta)"></path></svg>',
+  {culture:"China antigua",badge:"Mito",title:"Un dragón celeste devora al Sol",glyph:'<svg viewBox="0 0 200 140"><circle cx="100" cy="52" r="38" style="fill:var(--an-parchment)"></circle><circle cx="72" cy="67" r="34" style="fill:var(--an-void)"></circle><path d="M20 27 Q50 2 85 15 Q120 27 155 7" fill="none" style="stroke:var(--an-terracotta)" stroke-width="4" stroke-linecap="round"></path><path d="M148 1l9 5-6 8z" style="fill:var(--an-terracotta)"></path><path d="M50 140V120L100 105L150 120V140Z" style="fill:var(--an-void-3)"></path></svg>',
    backBadge:"Ciencia",backTitle:"Eclipse registrado por la corte",text:"Predecir eclipses era una obligación imperial: la leyenda cuenta que los astrónomos Hsi y Ho fueron castigados hacia el 2100 a.C. por no anticipar uno. Con el tiempo, China desarrolló uno de los registros de eclipses más largos y precisos de la historia."},
-  {culture:"Mitología nórdica",badge:"Mito",title:"Los lobos Sköll y Hati devoran el Sol y la Luna",glyph:'<svg viewBox="0 0 120 120"><circle cx="42" cy="55" r="22" style="fill:var(--an-gold)"></circle><circle cx="84" cy="55" r="18" style="fill:var(--an-parchment)"></circle><circle cx="55" cy="48" r="19" style="fill:var(--an-void)"></circle><circle cx="92" cy="50" r="15" style="fill:var(--an-void)"></circle><path d="M8 92l16-16 9 7-11 13z M112 94l-14-15-9 6 10 14z" style="fill:var(--an-stone)"></path></svg>',
+  {culture:"Mitología nórdica",badge:"Mito",title:"Los lobos Sköll y Hati devoran el Sol y la Luna",glyph:'<svg viewBox="0 0 200 140"><circle cx="70" cy="52" r="26" style="fill:var(--an-gold)"></circle><circle cx="130" cy="52" r="22" style="fill:var(--an-parchment)"></circle><circle cx="85" cy="44" r="23" style="fill:var(--an-void)"></circle><circle cx="142" cy="46" r="18" style="fill:var(--an-void)"></circle><path d="M10 97l20-20 11 8-14 17z M190 99l-18-21-11 7 12 19z" style="fill:var(--an-stone)"></path><path d="M0 140L45 95L90 140Z M70 140L120 85L170 140Z M140 140L175 105L200 140Z" style="fill:var(--an-void-3)"></path></svg>',
    backBadge:"Ciencia",backTitle:"Anuncio del Ragnarök",text:"En la cosmovisión nórdica, la persecución eterna de los lobos explicaba por qué el Sol y la Luna se mueven por el cielo. Un eclipse era el lobo alcanzando por fin a su presa: una señal de que el fin del mundo se acercaba."}
 ];
 var mythGrid=document.getElementById("anMythGrid");
 if(mythGrid){
   mythGrid.innerHTML=MYTHS.map(function(m,i){
-    return '<button type="button" class="an-myth" data-i="'+i+'" aria-label="'+m.title+', toca para revelar la explicación científica">'+
+    return '<button type="button" class="an-myth reveal" data-i="'+i+'" aria-label="'+m.title+', toca para revelar la explicación científica">'+
       '<div class="an-myth-inner">'+
         '<div class="an-myth-face an-myth-front">'+
-          '<span class="an-myth-badge">'+m.badge+"</span>"+
-          '<div class="an-myth-glyph">'+m.glyph+"</div>"+
-          '<h3 class="an-myth-title">'+m.title+"</h3>"+
-          '<span class="an-myth-culture">'+m.culture+"</span>"+
-          '<span class="an-myth-hint">Toca para revelar</span>'+
+          '<div class="an-myth-image">'+
+            '<span class="an-myth-badge">'+m.badge+"</span>"+
+            m.glyph+
+          "</div>"+
+          '<div class="an-myth-body">'+
+            '<h3 class="an-myth-title">'+m.title+"</h3>"+
+            '<span class="an-myth-culture">'+m.culture+"</span>"+
+            '<span class="an-myth-hint">Toca para revelar</span>'+
+          "</div>"+
         "</div>"+
         '<div class="an-myth-face an-myth-back">'+
           '<span class="an-myth-badge">'+m.backBadge+"</span>"+
