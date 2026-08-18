@@ -283,12 +283,9 @@ html[data-nivel="principiante"] .section-head{border-left:2px solid var(--nebula
 /* Fondo espacial global — estrellas en movimiento + planetas a la deriva */
 #spaceBackdrop{position:fixed;inset:0;z-index:-1;overflow:hidden;pointer-events:none}
 #spaceStars{position:absolute;inset:0;width:100%;height:100%;mix-blend-mode:screen}
-.sb-planet{position:absolute;border-radius:50%;opacity:0;transition:opacity 1.6s var(--ease-out);will-change:transform;box-shadow:0 0 50px -6px currentColor}
-.sb-planet.is-active{opacity:1}
-.sb-planet-photo{position:absolute;inset:0;width:100%;height:100%;border-radius:50%;object-fit:cover;opacity:0;transition:opacity 1.4s var(--ease-out)}
-.sb-planet-photo.is-loaded{opacity:.92}
-.sb-planet-ring{position:absolute;inset:-30%;border-radius:50%;border:1px solid currentColor;opacity:.35;transform:rotate(-18deg) scaleY(.32);z-index:1}
-@media(max-width:640px){.sb-planet{filter:blur(.3px)}}
+.sb-planet{position:absolute;border-radius:50%;opacity:0;transition:opacity 2s var(--ease-out);will-change:transform;background:radial-gradient(circle,currentColor 0%,currentColor 15%,transparent 70%);filter:blur(18px)}
+.sb-planet.is-active{opacity:.5}
+@media(max-width:640px){.sb-planet{filter:blur(10px)}}
 
 /* Swiper Cube — carrusel 3D de hitos espaciales */
 .gw-swiper{width:100%;height:min(58vh,480px);margin-top:var(--space-2)}
@@ -9412,22 +9409,11 @@ document.addEventListener("keydown",function(e){
 (function planetsBackdrop(){
   var root=document.getElementById("spaceBackdrop");
   if(!root)return;
-  function WM(file){return "https://commons.wikimedia.org/wiki/Special:FilePath/"+encodeURIComponent(file)+"?width=800"}
-  function loadImageInto(imgEl,url){
-    if(!imgEl||!url)return;
-    imgEl.referrerPolicy="no-referrer";
-    imgEl.addEventListener("load",function(){imgEl.classList.add("is-loaded")},{once:true});
-    imgEl.src=url;
-  }
   var PLANETS=[
-    {size:150,top:"12%",left:"78%",from:"#2f6a8c",to:"#081c22",ring:false,dx:26,dy:16,rot:6,duration:19000,
-      img:WM("The Blue Marble.jpg"),name:"Tierra"},
-    {size:100,top:"62%",left:"6%",from:"#9c6a3f",to:"#241708",ring:false,dx:-18,dy:-22,rot:-8,duration:23000,
-      img:WM("Jupiter_and_its_shrunken_Great_Red_Spot.jpg"),name:"Júpiter"},
-    {size:64,top:"22%",left:"14%",from:"#2f4a7c",to:"#080f1c",ring:false,dx:14,dy:24,rot:10,duration:16000,
-      img:WM("Neptune_Full.jpg"),name:"Neptuno"},
-    {size:110,top:"78%",left:"84%",from:"#a4502f",to:"#200f08",ring:false,dx:-22,dy:14,rot:-6,duration:21000,
-      img:WM("Mars_Hubble.jpg"),name:"Marte"}
+    {size:150,top:"12%",left:"78%",from:"#2f6a8c",dx:26,dy:16,rot:6,duration:19000},
+    {size:100,top:"62%",left:"6%",from:"#9c6a3f",dx:-18,dy:-22,rot:-8,duration:23000},
+    {size:64,top:"22%",left:"14%",from:"#2f4a7c",dx:14,dy:24,rot:10,duration:16000},
+    {size:110,top:"78%",left:"84%",from:"#a4502f",dx:-22,dy:14,rot:-6,duration:21000}
   ];
   var reduced=window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   var els=PLANETS.map(function(p){
@@ -9438,18 +9424,6 @@ document.addEventListener("keydown",function(e){
     el.style.top=p.top;
     el.style.left=p.left;
     el.style.color=p.from;
-    el.style.background="radial-gradient(circle at 32% 28%,"+p.from+","+p.to+" 72%)";
-    var photo=document.createElement("img");
-    photo.className="sb-planet-photo";
-    photo.alt="";
-    photo.loading="lazy";
-    el.appendChild(photo);
-    loadImageInto(photo,p.img);
-    if(p.ring){
-      var ring=document.createElement("span");
-      ring.className="sb-planet-ring";
-      el.appendChild(ring);
-    }
     root.appendChild(el);
     return el;
   });
