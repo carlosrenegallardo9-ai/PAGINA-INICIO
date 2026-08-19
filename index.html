@@ -543,7 +543,7 @@ html[data-nivel="principiante"] .section-head{border-left:2px solid var(--nebula
   --an-accent:var(--an-gold);
   --an-glass:rgba(244,232,193,.045);--an-glass-border:rgba(244,232,193,.14);
   position:fixed;inset:0;z-index:9290;background:var(--an-void);opacity:0;pointer-events:none;
-  transition:opacity var(--dur-med) var(--ease-out);overflow-y:auto;
+  transition:opacity var(--dur-med) var(--ease-out);overflow-y:auto;overflow-x:hidden;
   color:var(--an-parchment);font-family:var(--font-body);-webkit-font-smoothing:antialiased;
 }
 #ancestralView.is-open{opacity:1;pointer-events:auto}
@@ -762,7 +762,7 @@ html[data-nivel="principiante"] .section-head{border-left:2px solid var(--nebula
 .an-prec-year{text-align:center;font-family:'Cinzel Decorative',var(--font-display);font-size:1.6rem;color:var(--an-parchment);margin-bottom:6px}
 .an-prec-ticks{display:flex;justify-content:space-between;font-family:var(--font-mono);font-size:10.5px;color:var(--an-stone);opacity:.75;margin-top:4px}
 .an-prec-flag{position:relative;height:0}
-.an-prec-flag-note{position:absolute;top:-34px;transform:translateX(-50%);font-family:var(--font-mono);font-size:11px;color:var(--an-stone);opacity:0;transition:opacity .3s ease;white-space:nowrap;background:var(--an-glass);border:1px solid var(--an-glass-border);border-radius:100px;padding:4px 10px}
+.an-prec-flag-note{position:absolute;top:-34px;transform:translateX(-50%);font-family:var(--font-mono);font-size:11px;color:var(--an-stone);opacity:0;transition:opacity .3s ease;white-space:normal;text-align:center;line-height:1.4;background:var(--an-glass);border:1px solid var(--an-glass-border);border-radius:14px;padding:5px 10px;width:max-content;max-width:min(220px,calc(100vw - 56px))}
 .an-prec-flag-note.is-near{opacity:1;color:var(--an-terracotta-soft);border-color:var(--an-terracotta-dim)}
 .an-prec-flag-dot{position:absolute;top:-4px;width:6px;height:6px;border-radius:50%;background:var(--an-glass-border);transform:translateX(-50%)}
 @media(max-width:820px){.an-prec-layout{grid-template-columns:1fr;gap:26px}}
