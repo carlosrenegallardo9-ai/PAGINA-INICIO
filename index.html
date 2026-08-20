@@ -761,6 +761,231 @@ html[data-nivel="principiante"] .section-head{border-left:2px solid var(--nebula
 @media(max-width:820px){.an-prec-layout{grid-template-columns:1fr;gap:26px}}
 </style>
 
+<style id="orgs-styles">
+/* Guardianes del Cosmos — organizaciones que investigan el espacio. Aislado, prefijo "og-", escapado bajo #orgsView. */
+.og-cta{position:relative;display:flex;align-items:center;gap:var(--space-5);width:100%;max-width:640px;margin-top:var(--space-4);padding:var(--space-6) var(--space-7);background:linear-gradient(135deg,#131417,#26282e);border:1px solid rgba(215,218,224,.22);border-radius:var(--radius-lg);overflow:hidden;text-align:left;cursor:pointer;transition:transform var(--dur-fast) var(--ease-out),border-color var(--dur-fast),box-shadow var(--dur-fast)}
+.og-cta:hover{transform:translateY(-4px);border-color:rgba(247,248,250,.6);box-shadow:0 30px 70px -34px rgba(215,218,224,.35)}
+.og-cta-glow{position:absolute;inset:-40% -10%;z-index:0;background:radial-gradient(circle,rgba(215,218,224,.16),transparent 62%);opacity:.5;transition:opacity var(--dur-med);pointer-events:none}
+.og-cta:hover .og-cta-glow{opacity:1}
+.og-cta-icon{position:relative;z-index:1;flex-shrink:0;width:56px;height:56px;border-radius:var(--radius-md);display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#f7f8fa,#8b9099);color:#0A0A0B}
+.og-cta-icon svg{width:26px;height:26px}
+.og-cta-text{position:relative;z-index:1;display:flex;flex-direction:column;gap:2px}
+.og-cta-text strong{font-family:var(--font-display);color:#F7F8FA}
+.og-cta-text small{color:#A8ADB7}
+.og-cta-arrow{position:relative;z-index:1;margin-left:auto;color:#D7DAE0;flex-shrink:0;transition:transform var(--dur-fast) var(--ease-out)}
+.og-cta:hover .og-cta-arrow{transform:translateX(6px)}
+@media(max-width:560px){.og-cta{flex-wrap:wrap;padding:var(--space-5)}.og-cta-arrow{display:none}}
+
+#orgsView{
+  --og-void:#0A0A0B;--og-void-2:#101114;--og-void-3:#17181C;
+  --og-steel:#22242A;--og-steel-2:#31343B;
+  --og-ash:#6E727B;--og-silver:#A8ADB7;--og-mist:#D7DAE0;--og-white:#F7F8FA;
+  --og-glass:rgba(247,248,250,.04);--og-glass-border:rgba(247,248,250,.12);
+  --og-glass-strong:rgba(247,248,250,.08);
+  position:fixed;inset:0;z-index:9290;background:var(--og-void);opacity:0;pointer-events:none;
+  transition:opacity var(--dur-med) var(--ease-out);overflow-y:auto;overflow-x:hidden;
+  color:var(--og-mist);font-family:var(--font-body);-webkit-font-smoothing:antialiased;
+}
+#orgsView.is-open{opacity:1;pointer-events:auto}
+#orgsView,#orgsView *{box-sizing:border-box}
+#orgsView .og-scroll{min-height:100%;position:relative;background:radial-gradient(ellipse 900px 520px at 14% -6%,rgba(247,248,250,.08),transparent 62%),radial-gradient(ellipse 760px 560px at 88% 6%,rgba(168,173,183,.07),transparent 58%),linear-gradient(180deg,var(--og-void) 0%,var(--og-void-2) 48%,var(--og-void-3) 100%)}
+#orgsView .og-scroll::before{content:'';position:absolute;inset:0;z-index:0;pointer-events:none;background-image:var(--ms-grain);background-size:220px 220px;opacity:.05;mix-blend-mode:overlay}
+#orgsView h1,#orgsView h2,#orgsView h3{font-family:var(--font-display);color:var(--og-white)}
+#orgsView .og-mono{font-family:var(--font-mono)}
+#orgsView ::selection{background:var(--og-white);color:#0A0A0B}
+#orgsView ::-webkit-scrollbar{width:10px}
+#orgsView ::-webkit-scrollbar-track{background:transparent}
+#orgsView ::-webkit-scrollbar-thumb{background:var(--og-glass-border);border-radius:10px}
+#orgsView a{color:inherit}
+#orgsView .og-wrap{max-width:1180px;margin:0 auto;padding:0 24px;position:relative;z-index:1}
+.og-view-close{position:fixed;top:var(--space-5);right:var(--space-5);z-index:110;width:42px;height:42px;border-radius:50%;background:rgba(10,10,11,.75);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);border:1px solid var(--og-glass-border);display:flex;align-items:center;justify-content:center;color:var(--og-mist);font-size:1.1rem}
+.og-view-close:hover{border-color:var(--og-white);color:var(--og-white)}
+.og-toolbar{position:sticky;top:0;z-index:20;-webkit-backdrop-filter:blur(18px) saturate(140%);backdrop-filter:blur(18px) saturate(140%);background:rgba(10,10,11,.84);border-bottom:1px solid var(--og-glass-border);padding:14px 0}
+.og-toolbar-inner{display:flex;gap:8px;flex-wrap:nowrap;overflow-x:auto;padding-right:52px;-webkit-mask-image:linear-gradient(90deg,transparent,#000 20px,#000 calc(100% - 44px),transparent);mask-image:linear-gradient(90deg,transparent,#000 20px,#000 calc(100% - 44px),transparent);scrollbar-width:none}
+#orgsView #ogTabs{margin-right:72px}
+.og-toolbar-inner::-webkit-scrollbar{display:none}
+.og-tab{font-family:var(--font-mono);font-size:11.5px;letter-spacing:.02em;padding:8px 13px;border-radius:100px;border:1px solid var(--og-glass-border);background:var(--og-glass);color:var(--og-ash);cursor:pointer;white-space:nowrap;transition:all .18s ease;flex-shrink:0}
+.og-tab:hover{border-color:rgba(247,248,250,.4);color:var(--og-white)}
+.og-tab.is-active{background:var(--og-white);color:#0A0A0B;border-color:var(--og-white);font-weight:700}
+
+.og-hero{position:relative;z-index:1;padding:60px 0 46px;overflow:hidden}
+.og-eyebrow{display:inline-flex;align-items:center;gap:8px;font-family:var(--font-mono);font-size:12px;letter-spacing:.14em;color:var(--og-mist);text-transform:uppercase;margin-bottom:20px;border:1px solid var(--og-glass-border);padding:6px 14px;border-radius:100px;background:var(--og-glass)}
+.og-eyebrow .og-dot{width:6px;height:6px;border-radius:50%;background:var(--og-white);box-shadow:0 0 8px rgba(247,248,250,.8);animation:ogPulse 2.4s infinite ease-in-out}
+@keyframes ogPulse{0%,100%{opacity:1}50%{opacity:.3}}
+.og-hero h1{font-size:clamp(2rem,5.4vw,3.7rem);line-height:1.08;font-weight:700;margin:0 0 20px;max-width:900px;letter-spacing:-.01em}
+.og-hero h1 em{font-style:normal;background:linear-gradient(100deg,#ffffff,#7c8189 96%);-webkit-background-clip:text;background-clip:text;color:transparent}
+.og-hero p.og-lead{font-size:1.08rem;color:var(--og-silver);max-width:600px;line-height:1.7;margin-bottom:34px}
+.og-hero-stats{display:flex;gap:36px;flex-wrap:wrap}
+.og-hstat b{display:block;font-family:var(--font-display);font-size:1.55rem;color:var(--og-white)}
+.og-hstat span{font-size:12px;color:var(--og-ash);text-transform:uppercase;letter-spacing:.08em}
+.og-hero-bars{margin-top:40px;display:flex;gap:5px;align-items:flex-end;height:52px;opacity:.5}
+.og-hero-bars i{display:block;width:4px;border-radius:2px;background:linear-gradient(180deg,var(--og-white),transparent)}
+
+.og-main{position:relative;z-index:1}
+.og-section{padding:60px 0}
+.og-section.og-divider{border-top:1px solid var(--og-glass-border)}
+.og-section-head{max-width:700px;margin-bottom:36px}
+.og-section-head h2{font-size:1.85rem;margin:0 0 10px;letter-spacing:-.01em}
+.og-section-head p{color:var(--og-silver);font-size:15px;line-height:1.65;margin:0}
+.og-note{font-family:var(--font-mono);font-size:11.5px;color:var(--og-ash);line-height:1.6;margin-top:18px}
+
+/* ---------- Atlas de organizaciones ---------- */
+.og-chip-label{font-family:var(--font-mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--og-ash);margin-bottom:9px;display:block}
+.og-chip-row{display:flex;gap:9px;flex-wrap:wrap;margin-bottom:28px}
+.og-chip{font-family:var(--font-body);font-size:13.5px;font-weight:600;padding:9px 16px;border-radius:100px;border:1px solid var(--og-glass-border);background:var(--og-glass);color:var(--og-silver);cursor:pointer;transition:all .2s ease}
+.og-chip:hover{color:var(--og-white);border-color:rgba(247,248,250,.42)}
+.og-chip.is-active{background:var(--og-white);color:#0A0A0B;border-color:var(--og-white);font-weight:700}
+.og-org-panel{display:grid;grid-template-columns:minmax(210px,300px) 1fr;gap:36px;background:var(--og-glass);border:1px solid var(--og-glass-border);border-radius:24px;padding:36px;position:relative;overflow:hidden}
+.og-org-panel::after{content:'';position:absolute;inset:0;pointer-events:none;background:linear-gradient(135deg,rgba(247,248,250,.05),transparent 42%)}
+.og-org-seal{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;background:radial-gradient(circle,rgba(247,248,250,.07),transparent 70%);border-radius:18px;padding:18px}
+.og-org-seal svg{width:100%;height:auto;max-width:186px}
+.og-org-seal svg .og-seal-ring{fill:none;stroke:var(--og-mist);stroke-width:1.6}
+.og-org-seal svg .og-seal-line{fill:none;stroke:var(--og-white);stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.og-org-seal svg .og-seal-fill{fill:var(--og-white)}
+.og-org-seal svg .og-seal-soft{fill:var(--og-ash)}
+.og-org-seal-code{font-family:var(--font-mono);font-size:11px;letter-spacing:.18em;color:var(--og-ash);text-transform:uppercase}
+.og-org-body{min-width:0;display:flex;flex-direction:column;justify-content:center}
+.og-org-country{font-family:var(--font-mono);font-size:11.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--og-mist);margin-bottom:10px;display:block}
+.og-org-name{font-size:1.65rem;margin:0 0 4px}
+.og-org-full{color:var(--og-silver);font-size:14px;margin-bottom:20px;line-height:1.5}
+.og-org-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(122px,1fr));gap:1px;background:var(--og-glass-border);border:1px solid var(--og-glass-border);border-radius:14px;overflow:hidden;margin-bottom:22px}
+.og-org-cell{background:var(--og-void-2);padding:12px 14px}
+.og-org-cell span{display:block;font-family:var(--font-mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--og-ash);margin-bottom:5px}
+.og-org-cell b{font-size:14.5px;color:var(--og-white);font-weight:600}
+.og-org-block{margin-bottom:18px}
+.og-org-block h4{font-family:var(--font-mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--og-ash);margin:0 0 7px;font-weight:400}
+.og-org-block p{color:var(--og-mist);opacity:.94;line-height:1.72;font-size:15px;margin:0}
+.og-org-secret{border-left:2px solid var(--og-white);padding-left:16px}
+.og-org-tags{display:flex;gap:8px;flex-wrap:wrap;margin-top:20px;align-items:center}
+.og-org-tag{font-family:var(--font-mono);font-size:11px;padding:5px 12px;border-radius:100px;border:1px solid var(--og-glass-border);color:var(--og-silver)}
+.og-org-link{font-family:var(--font-mono);font-size:11.5px;color:var(--og-white);border-bottom:1px solid rgba(247,248,250,.35);padding-bottom:2px;transition:border-color .2s}
+.og-org-link:hover{border-color:var(--og-white)}
+@media(max-width:760px){.og-org-panel{grid-template-columns:1fr;padding:26px;gap:26px}.og-org-seal svg{max-width:140px}}
+
+/* ---------- Globo de puertos espaciales ---------- */
+.og-globe-layout{display:grid;grid-template-columns:1.05fr 1fr;gap:40px;align-items:center}
+.og-globe-stage{position:relative;aspect-ratio:1/1;max-width:460px;width:100%;margin-inline:auto}
+.og-globe-stage svg{width:100%;height:auto;display:block;overflow:visible}
+.og-globe-limb{fill:rgba(247,248,250,.035);stroke:var(--og-glass-border);stroke-width:1.4}
+.og-globe-grid{fill:none;stroke:rgba(247,248,250,.13);stroke-width:.8}
+.og-globe-equator{fill:none;stroke:rgba(247,248,250,.34);stroke-width:1.4;stroke-dasharray:5 5}
+.og-globe-site{cursor:pointer;transition:opacity .25s ease}
+.og-globe-site circle{transition:r .25s ease,fill .25s ease,stroke .25s ease}
+.og-globe-site .og-site-dot{fill:var(--og-void);stroke:var(--og-mist);stroke-width:2}
+.og-globe-site.is-back{opacity:.24;pointer-events:none}
+.og-globe-site.is-active .og-site-dot{fill:var(--og-white);stroke:var(--og-white)}
+.og-globe-site.is-active .og-site-halo{fill:rgba(247,248,250,.18)}
+.og-site-halo{fill:transparent}
+.og-globe-controls{display:flex;align-items:center;gap:14px;margin-top:20px;max-width:460px;margin-inline:auto}
+.og-globe-controls label{font-family:var(--font-mono);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--og-ash);white-space:nowrap}
+.og-range{-webkit-appearance:none;appearance:none;flex:1;height:2px;border-radius:2px;background:var(--og-glass-border);outline:none}
+.og-range::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;width:16px;height:16px;border-radius:50%;background:var(--og-white);cursor:pointer;border:none}
+.og-range::-moz-range-thumb{width:16px;height:16px;border-radius:50%;background:var(--og-white);cursor:pointer;border:none}
+.og-spin{font-family:var(--font-mono);font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;padding:7px 13px;border-radius:100px;border:1px solid var(--og-glass-border);background:var(--og-glass);color:var(--og-silver);cursor:pointer;white-space:nowrap;transition:all .2s ease}
+.og-spin:hover{color:var(--og-white);border-color:rgba(247,248,250,.42)}
+.og-spin.is-active{background:var(--og-white);color:#0A0A0B;border-color:var(--og-white)}
+.og-site-card{background:var(--og-glass);border:1px solid var(--og-glass-border);border-radius:20px;padding:28px;min-height:280px;display:flex;flex-direction:column}
+.og-site-kind{font-family:var(--font-mono);font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--og-ash);margin-bottom:10px}
+.og-site-card h3{font-size:1.45rem;margin:0 0 4px}
+.og-site-owner{color:var(--og-silver);font-size:14px;margin-bottom:20px}
+.og-site-card p{color:var(--og-mist);opacity:.92;line-height:1.7;font-size:14.5px;margin:0 0 20px}
+.og-boost{margin-top:auto;border-top:1px solid var(--og-glass-border);padding-top:18px}
+.og-boost-row{display:flex;justify-content:space-between;align-items:baseline;font-family:var(--font-mono);font-size:11px;color:var(--og-ash);letter-spacing:.06em;text-transform:uppercase;margin-bottom:9px}
+.og-boost-row b{font-family:var(--font-display);font-size:1.25rem;color:var(--og-white);letter-spacing:0}
+.og-boost-bar{height:6px;border-radius:3px;background:rgba(247,248,250,.09);overflow:hidden}
+.og-boost-fill{height:100%;border-radius:3px;background:linear-gradient(90deg,var(--og-ash),var(--og-white));transition:width .45s var(--ease-out)}
+.og-boost-note{font-family:var(--font-mono);font-size:10.5px;color:var(--og-ash);margin-top:9px;line-height:1.5}
+.og-site-chips{display:flex;gap:7px;flex-wrap:wrap;margin-top:20px;justify-content:center}
+.og-chip-sm{font-size:11.5px;padding:6px 12px;font-weight:500}
+@media(max-width:860px){.og-globe-layout{grid-template-columns:1fr;gap:28px}}
+
+/* ---------- Cronología ---------- */
+.og-timeline{position:relative;margin-bottom:30px}
+.og-timeline-track{display:flex;gap:0;overflow-x:auto;padding:34px 4px 8px;scrollbar-width:none;position:relative;-webkit-mask-image:linear-gradient(90deg,#000 calc(100% - 46px),transparent);mask-image:linear-gradient(90deg,#000 calc(100% - 46px),transparent)}
+.og-timeline-track::-webkit-scrollbar{display:none}
+.og-timeline-track::before{content:'';position:absolute;left:0;right:0;top:52px;height:1px;background:var(--og-glass-border)}
+.og-tl-node{position:relative;flex:1 0 118px;background:none;border:none;padding:0 6px;cursor:pointer;text-align:center;color:var(--og-ash);font-family:var(--font-mono);font-size:11.5px;transition:color .2s ease}
+.og-tl-node::before{content:'';display:block;width:11px;height:11px;border-radius:50%;margin:0 auto 14px;background:var(--og-void-2);border:2px solid var(--og-glass-border);position:relative;z-index:1;transition:all .25s ease}
+.og-tl-node:hover{color:var(--og-mist)}
+.og-tl-node:hover::before{border-color:var(--og-silver)}
+.og-tl-node.is-active{color:var(--og-white);font-weight:700}
+.og-tl-node.is-active::before{background:var(--og-white);border-color:var(--og-white);transform:scale(1.25);box-shadow:0 0 0 5px rgba(247,248,250,.1)}
+.og-tl-panel{display:grid;grid-template-columns:88px 1fr;gap:24px;background:var(--og-glass);border:1px solid var(--og-glass-border);border-radius:20px;padding:30px}
+.og-tl-year{font-family:var(--font-display);font-size:1.5rem;color:var(--og-white);line-height:1.1;border-right:1px solid var(--og-glass-border);padding-right:20px}
+.og-tl-body h3{font-size:1.3rem;margin:0 0 6px}
+.og-tl-actor{font-family:var(--font-mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--og-ash);margin-bottom:14px}
+.og-tl-body p{color:var(--og-mist);opacity:.92;line-height:1.72;font-size:15px;margin:0}
+@media(max-width:640px){.og-tl-panel{grid-template-columns:1fr;gap:16px}.og-tl-year{border-right:none;border-bottom:1px solid var(--og-glass-border);padding:0 0 12px}}
+
+/* ---------- Presupuestos ---------- */
+.og-budget-filters{display:flex;gap:9px;flex-wrap:wrap;margin-bottom:30px}
+.og-chart{border:1px solid var(--og-glass-border);border-radius:20px;padding:30px;background:var(--og-glass)}
+.og-chart-title{font-family:var(--font-mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--og-ash);margin-bottom:26px}
+.og-bar-row{display:grid;grid-template-columns:132px 1fr auto;gap:16px;align-items:center;margin-bottom:14px;position:relative}
+.og-bar-name{font-size:13.5px;color:var(--og-mist);text-align:right;line-height:1.3}
+.og-bar-name small{display:block;font-family:var(--font-mono);font-size:10px;color:var(--og-ash);letter-spacing:.06em}
+.og-bar-track{height:22px;border-radius:4px;background:rgba(247,248,250,.05);overflow:hidden}
+.og-bar-fill{height:100%;border-radius:0 4px 4px 0;background:linear-gradient(90deg,#4a4e56,#f7f8fa);width:0;transition:width .6s var(--ease-out)}
+.og-bar-row.is-nodata .og-bar-fill{background:repeating-linear-gradient(135deg,rgba(247,248,250,.16) 0 6px,transparent 6px 12px);border:1px dashed var(--og-glass-border);border-left:none}
+.og-bar-value{font-family:var(--font-mono);font-size:12.5px;color:var(--og-white);min-width:72px;text-align:right;white-space:nowrap}
+.og-bar-row:hover .og-bar-name{color:var(--og-white)}
+.og-bar-tip{display:none;position:absolute;left:148px;bottom:100%;margin-bottom:6px;z-index:5;background:#0A0A0B;border:1px solid var(--og-glass-border);border-radius:10px;padding:9px 13px;font-size:12.5px;line-height:1.5;color:var(--og-mist);max-width:330px;box-shadow:0 18px 40px -18px #000}
+.og-bar-row:hover .og-bar-tip,.og-bar-row:focus-within .og-bar-tip{display:block}
+.og-scale-legend{display:flex;justify-content:space-between;font-family:var(--font-mono);font-size:10.5px;color:var(--og-ash);border-top:1px solid var(--og-glass-border);padding-top:12px;margin-top:22px}
+@media(max-width:620px){.og-bar-row{grid-template-columns:1fr;gap:5px}.og-bar-name{text-align:left}.og-bar-value{text-align:left}.og-bar-tip{left:0}}
+.og-callouts{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:16px;margin-top:26px}
+.og-callout{border:1px solid var(--og-glass-border);border-radius:16px;padding:22px;background:var(--og-void-2)}
+.og-callout b{display:block;font-family:var(--font-display);font-size:2rem;color:var(--og-white);line-height:1;margin-bottom:10px}
+.og-callout p{font-size:13.5px;color:var(--og-silver);line-height:1.6;margin:0}
+
+/* ---------- Reglas del cielo ---------- */
+.og-rules{display:grid;gap:12px}
+.og-rule{border:1px solid var(--og-glass-border);border-radius:16px;background:var(--og-glass);overflow:hidden}
+.og-rule-toggle{width:100%;display:flex;align-items:center;gap:16px;padding:20px 24px;background:none;border:none;cursor:pointer;text-align:left;color:var(--og-white)}
+.og-rule-year{font-family:var(--font-mono);font-size:11.5px;color:var(--og-ash);letter-spacing:.08em;flex-shrink:0;width:74px}
+.og-rule-title{font-family:var(--font-display);font-size:1.02rem;flex:1;line-height:1.35}
+.og-rule-chev{color:var(--og-silver);transition:transform .3s var(--ease-out);flex-shrink:0}
+.og-rule.is-open .og-rule-chev{transform:rotate(180deg)}
+.og-rule.is-open{border-color:rgba(247,248,250,.36);background:var(--og-glass-strong)}
+.og-rule-panel{max-height:0;overflow:hidden;transition:max-height .4s var(--ease-out)}
+.og-rule-panel-inner{padding:0 24px 22px 114px;color:var(--og-mist);opacity:.92;font-size:14.5px;line-height:1.75}
+@media(max-width:640px){.og-rule-toggle{gap:12px;padding:18px}.og-rule-year{width:58px;font-size:10.5px}.og-rule-panel-inner{padding:0 18px 20px}}
+
+/* ---------- Mitos ---------- */
+.og-myths{display:grid;grid-template-columns:repeat(auto-fit,minmax(268px,1fr));gap:16px}
+.og-myth{display:block;position:relative;width:100%;height:300px;border:none;background:none;padding:0;cursor:pointer;perspective:1100px;font-family:inherit;font-size:inherit;color:inherit;text-align:left}
+.og-myth-inner{display:block;position:relative;width:100%;height:100%;transition:transform .6s var(--ease-out);transform-style:preserve-3d}
+.og-myth.is-flipped .og-myth-inner{transform:rotateY(180deg)}
+.og-myth-face{position:absolute;inset:0;-webkit-backface-visibility:hidden;backface-visibility:hidden;border:1px solid var(--og-glass-border);border-radius:18px;padding:24px;display:flex;flex-direction:column;justify-content:space-between}
+.og-myth-front{background:var(--og-glass)}
+.og-myth-back{background:linear-gradient(160deg,#1c1e23,#0d0e11);transform:rotateY(180deg);border-color:rgba(247,248,250,.34);justify-content:flex-start;overflow-y:auto}
+.og-myth-label{font-family:var(--font-mono);font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--og-ash)}
+.og-myth-front p{font-family:var(--font-display);font-size:1.02rem;color:var(--og-white);line-height:1.45;margin:14px 0 0}
+.og-myth-back p{font-size:13.5px;color:var(--og-mist);line-height:1.62;margin:14px 0 0}
+.og-myth-verdict{display:inline-flex;align-items:center;gap:7px;font-family:var(--font-mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:#0A0A0B;background:var(--og-white);padding:5px 11px;border-radius:100px;align-self:flex-start}
+.og-myth-hint{font-family:var(--font-mono);font-size:10.5px;color:var(--og-ash);letter-spacing:.06em}
+
+/* ---------- Región ---------- */
+.og-region{display:grid;grid-template-columns:repeat(auto-fit,minmax(252px,1fr));gap:16px}
+.og-region-card{border:1px solid var(--og-glass-border);border-radius:18px;padding:26px;background:var(--og-glass);transition:border-color .25s ease,transform .25s var(--ease-out)}
+.og-region-card:hover{border-color:rgba(247,248,250,.34);transform:translateY(-3px)}
+.og-region-flagline{display:flex;align-items:center;gap:10px;margin-bottom:16px}
+.og-region-mark{width:34px;height:34px;border-radius:9px;border:1px solid var(--og-glass-border);display:flex;align-items:center;justify-content:center;font-family:var(--font-mono);font-size:12px;color:var(--og-white);background:var(--og-void-2);flex-shrink:0}
+.og-region-place{font-family:var(--font-mono);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--og-ash)}
+.og-region-card h3{font-size:1.08rem;margin:0 0 10px}
+.og-region-card p{font-size:14px;color:var(--og-mist);opacity:.9;line-height:1.68;margin:0}
+.og-region-year{font-family:var(--font-mono);font-size:11px;color:var(--og-silver);margin-top:14px;display:block}
+
+.og-closing{border:1px solid var(--og-glass-border);border-radius:22px;padding:38px;background:linear-gradient(140deg,rgba(247,248,250,.07),transparent 62%);margin-top:34px}
+.og-closing h3{font-size:1.35rem;margin:0 0 12px;max-width:640px;line-height:1.35}
+.og-closing p{color:var(--og-silver);font-size:15px;line-height:1.72;max-width:680px;margin:0}
+.og-footer{border-top:1px solid var(--og-glass-border);padding:34px 0 60px;position:relative;z-index:1}
+.og-footer p{font-size:12.5px;color:var(--og-ash);line-height:1.6;margin:0 0 6px}
+@media(prefers-reduced-motion:reduce){
+  #orgsView *{animation-duration:.01ms!important;transition-duration:.01ms!important}
+}
+</style>
+
 <style id="hs-styles">
 /* Carrusel horizontal deslizable reutilizable (flechas + barra de progreso). Aislado, prefijo "hs-". */
 .hs-row-wrap{position:relative}
@@ -1023,7 +1248,7 @@ window.initHScroll=function(rowEl){
 <a href="#rocket-tbox">Rocket TBox</a>
 <a href="#" data-open-ai>Guía interactiva</a>
 </div>
-</nav> <button id="observatoryToggle" class="btn-observatory" title="Modo para daltonismo" aria-label="Activar modo para daltonismo"> <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"> <path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7z"></path><circle cx="12" cy="12" r="3.2"></circle> </svg> <span>Daltónico</span> </button> <div class="a11y-widget" id="a11yWidget"> <button type="button" class="a11y-toggle-btn" id="a11yToggleBtn" aria-expanded="false" aria-controls="a11yPanel" aria-label="Abrir opciones de accesibilidad"> <span aria-hidden="true">♿</span> </button> <div class="a11y-panel" id="a11yPanel" role="dialog" aria-label="Accesibilidad"> <span class="a11y-panel-title">Accesibilidad</span> <label class="a11y-panel-option"> <input type="checkbox" id="a11yVoiceToggle"> <span>Asistencia por voz guiada</span> </label> <p class="a11y-panel-hint">Lee en voz alta los mensajes del Capitán Cósmico, las lecciones de la Ruta Estelar y los avisos del Buscador Celeste.</p> </div> </div> <button class="nav-toggle" id="navToggle" aria-label="Abrir menú" aria-expanded="false" aria-controls="navLinks"> <span></span><span></span><span></span> </button> </div> </div> </header> <main id="main"> <section class="hero" id="inicio"> <img class="hero-bg-photo" id="heroBgPhoto" alt="" aria-hidden="true" loading="eager"> <canvas id="starfield" aria-hidden="true"></canvas> <div class="container"> <div class="hero-inner"> <span class="eyebrow">Observatorio digital interactivo</span> <h1>Explora el <em>cosmos</em> a tu propio ritmo</h1> <p>Un observatorio interactivo para descubrir planetas, escalas cósmicas y fenómenos extremos del universo, con una guía interactiva que orienta tu recorrido según lo que eliges.</p> <div class="hero-actions"> <a class="btn btn-primary" href="#explorador">Iniciar exploración</a> <a class="hero-link-secondary" href="#aprender">Ver módulos de aprendizaje <span aria-hidden="true">→</span></a> <button type="button" class="btn btn-ghost rs-launch-btn" id="rsLaunchBtn" data-open-ruta aria-haspopup="dialog" aria-controls="rsView"><span aria-hidden="true">🪐</span> Ruta Estelar</button> </div> <div class="df-card" id="dfCard">
+</nav> <button id="observatoryToggle" class="btn-observatory" title="Modo para daltonismo" aria-label="Activar modo para daltonismo"> <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"> <path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7z"></path><circle cx="12" cy="12" r="3.2"></circle> </svg> <span>Daltónico</span> </button> <button type="button" class="og-cta reveal" id="openOrgsBtn" aria-haspopup="dialog" aria-controls="orgsView" data-open-orgs> <span class="og-cta-glow" aria-hidden="true"></span> <span class="og-cta-icon" aria-hidden="true"> <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8.6"/><path d="M3.4 12h17.2"/><path d="M12 3.4c2.3 2.6 3.4 5.5 3.4 8.6S14.3 18 12 20.6C9.7 18 8.6 15.1 8.6 12S9.7 6 12 3.4z"/><path d="M5.6 6.6c1.8 1.2 4 1.9 6.4 1.9s4.6-.7 6.4-1.9"/></svg> </span> <span class="og-cta-text"> <strong>Guardianes del Cosmos · Organizaciones del espacio</strong> <small>Diez agencias y organismos, el mapa de los puertos de lanzamiento y las reglas que rigen el cielo</small> </span> <span class="og-cta-arrow" aria-hidden="true">→</span> </button> <div class="a11y-widget" id="a11yWidget"> <button type="button" class="a11y-toggle-btn" id="a11yToggleBtn" aria-expanded="false" aria-controls="a11yPanel" aria-label="Abrir opciones de accesibilidad"> <span aria-hidden="true">♿</span> </button> <div class="a11y-panel" id="a11yPanel" role="dialog" aria-label="Accesibilidad"> <span class="a11y-panel-title">Accesibilidad</span> <label class="a11y-panel-option"> <input type="checkbox" id="a11yVoiceToggle"> <span>Asistencia por voz guiada</span> </label> <p class="a11y-panel-hint">Lee en voz alta los mensajes del Capitán Cósmico, las lecciones de la Ruta Estelar y los avisos del Buscador Celeste.</p> </div> </div> <button class="nav-toggle" id="navToggle" aria-label="Abrir menú" aria-expanded="false" aria-controls="navLinks"> <span></span><span></span><span></span> </button> </div> </div> </header> <main id="main"> <section class="hero" id="inicio"> <img class="hero-bg-photo" id="heroBgPhoto" alt="" aria-hidden="true" loading="eager"> <canvas id="starfield" aria-hidden="true"></canvas> <div class="container"> <div class="hero-inner"> <span class="eyebrow">Observatorio digital interactivo</span> <h1>Explora el <em>cosmos</em> a tu propio ritmo</h1> <p>Un observatorio interactivo para descubrir planetas, escalas cósmicas y fenómenos extremos del universo, con una guía interactiva que orienta tu recorrido según lo que eliges.</p> <div class="hero-actions"> <a class="btn btn-primary" href="#explorador">Iniciar exploración</a> <a class="hero-link-secondary" href="#aprender">Ver módulos de aprendizaje <span aria-hidden="true">→</span></a> <button type="button" class="btn btn-ghost rs-launch-btn" id="rsLaunchBtn" data-open-ruta aria-haspopup="dialog" aria-controls="rsView"><span aria-hidden="true">🪐</span> Ruta Estelar</button> </div> <div class="df-card" id="dfCard">
 <span class="df-card-icon" aria-hidden="true">🌌</span>
 <span>
 <span class="df-card-label">Dato curioso del día</span>
@@ -1477,6 +1702,208 @@ window.initHScroll=function(rowEl){
 <div class="an-wrap">
 <p>Fuentes de imágenes y referencias culturales: Met Museum Open Access · Wikimedia Commons · dominio público.</p>
 <p class="an-mono">Códice Cósmico · Star Web</p>
+</div>
+</footer>
+</div>
+</div>
+
+<div class="og-view" id="orgsView" hidden aria-hidden="true" role="dialog" aria-modal="true" aria-label="Guardianes del Cosmos — las organizaciones que investigan el espacio">
+<button type="button" class="og-view-close" id="ogViewClose" aria-label="Cerrar Guardianes del Cosmos">✕</button>
+<div class="og-scroll">
+
+<div class="og-toolbar">
+<div class="og-wrap og-toolbar-inner" id="ogTabs">
+<button type="button" class="og-tab" data-og-goto="ogHero">Portada</button>
+<button type="button" class="og-tab" data-og-goto="ogAtlas">Atlas</button>
+<button type="button" class="og-tab" data-og-goto="ogPuertos">Puertos</button>
+<button type="button" class="og-tab" data-og-goto="ogCronologia">Cronología</button>
+<button type="button" class="og-tab" data-og-goto="ogDinero">El dinero</button>
+<button type="button" class="og-tab" data-og-goto="ogReglas">Reglas del cielo</button>
+<button type="button" class="og-tab" data-og-goto="ogMitos">Mitos</button>
+<button type="button" class="og-tab" data-og-goto="ogRegion">Nuestra región</button>
+</div>
+</div>
+
+<header class="og-hero" id="ogHero">
+<div class="og-wrap">
+<span class="og-eyebrow"><span class="og-dot" aria-hidden="true"></span>Guardianes del Cosmos · Organizaciones del espacio</span>
+<h1>Nadie mira el universo <em>en solitario</em></h1>
+<p class="og-lead">Detrás de cada foto de Marte, de cada alerta de asteroide y de cada dato abierto hay oficinas, tratados, antenas y miles de personas repartidas por el planeta. Este es el mapa de quién sostiene la mirada.</p>
+<div class="og-hero-stats">
+<div class="og-hstat"><b>10</b><span>Organizaciones</span></div>
+<div class="og-hstat"><b>12</b><span>Puertos y antenas</span></div>
+<div class="og-hstat"><b>1957</b><span>Año cero de la era espacial</span></div>
+<div class="og-hstat"><b>1967</b><span>Tratado que rige el cielo</span></div>
+<div class="og-hstat"><b>5</b><span>Agencias operan la ISS</span></div>
+</div>
+<div class="og-hero-bars" id="ogHeroBars" aria-hidden="true"></div>
+</div>
+</header>
+
+<main class="og-main">
+
+<section class="og-section" id="ogAtlas">
+<div class="og-wrap">
+<div class="og-section-head reveal">
+<span class="og-eyebrow">Sector 1 · Atlas de organizaciones</span>
+<h2>Quién investiga el espacio</h2>
+<p>Agencias nacionales, consorcios de países y organismos que no lanzan nada pero sin los cuales nada se lanzaría. Elige una y mira su ficha.</p>
+</div>
+<span class="og-chip-label">Organización</span>
+<div class="og-chip-row" id="ogOrgChips"></div>
+<div class="og-org-panel reveal" id="ogOrgPanel">
+<div class="og-org-seal">
+<div id="ogOrgSeal"></div>
+<div class="og-org-seal-code" id="ogOrgCode"></div>
+</div>
+<div class="og-org-body">
+<span class="og-org-country" id="ogOrgCountry"></span>
+<h3 class="og-org-name" id="ogOrgName"></h3>
+<p class="og-org-full" id="ogOrgFull"></p>
+<div class="og-org-grid" id="ogOrgGrid"></div>
+<div class="og-org-block">
+<h4>Misión insignia</h4>
+<p id="ogOrgFlagship"></p>
+</div>
+<div class="og-org-block og-org-secret">
+<h4>Lo que pocos saben</h4>
+<p id="ogOrgSecret"></p>
+</div>
+<div class="og-org-tags" id="ogOrgTags"></div>
+</div>
+</div>
+<p class="og-note">Las cifras de personal y presupuesto son aproximadas y cambian cada año; sirven para comparar órdenes de magnitud.</p>
+</div>
+</section>
+
+<section class="og-section og-divider" id="ogPuertos">
+<div class="og-wrap">
+<div class="og-section-head reveal">
+<span class="og-eyebrow">Sector 2 · Geografía del despegue</span>
+<h2>Puertos de salida del planeta</h2>
+<p>Girar la Tierra no es un adorno: cada puerto espacial está donde está por física, por política o por seguridad. Arrastra el control para rotar el globo y toca un punto.</p>
+</div>
+<div class="og-globe-layout">
+<div>
+<div class="og-globe-stage">
+<svg id="ogGlobe" viewBox="0 0 340 340" role="img" aria-label="Globo terráqueo esquemático con puertos espaciales y antenas de espacio profundo">
+<circle class="og-globe-limb" cx="170" cy="170" r="150"></circle>
+<g id="ogGlobeGrid"></g>
+<g id="ogGlobeSites"></g>
+</svg>
+</div>
+<div class="og-globe-controls">
+<label for="ogGlobeSlider">Girar</label>
+<input type="range" class="og-range" id="ogGlobeSlider" min="-180" max="180" step="1" value="-60" aria-label="Rotar el globo terráqueo">
+<button type="button" class="og-spin is-active" id="ogGlobeSpin" aria-pressed="true">Auto</button>
+</div>
+<div class="og-site-chips" id="ogSiteChips" role="group" aria-label="Selector de puertos espaciales y antenas"></div>
+</div>
+<div class="og-site-card reveal" id="ogSiteCard">
+<div class="og-site-kind" id="ogSiteKind"></div>
+<h3 id="ogSiteName"></h3>
+<div class="og-site-owner" id="ogSiteOwner"></div>
+<p id="ogSiteText"></p>
+<div class="og-boost">
+<div class="og-boost-row"><span>Impulso regalado por la rotación terrestre</span><b id="ogSiteBoost"></b></div>
+<div class="og-boost-bar"><div class="og-boost-fill" id="ogSiteBoostFill"></div></div>
+<div class="og-boost-note" id="ogSiteBoostNote"></div>
+</div>
+</div>
+</div>
+<p class="og-note">La Tierra gira a unos 465 m/s en el ecuador. Un cohete que despega hacia el este se lleva ese empujón gratis, y por eso los puertos ecuatoriales —Kourou, Alcântara, Wenchang— valen tanto.</p>
+</div>
+</section>
+
+<section class="og-section og-divider" id="ogCronologia">
+<div class="og-wrap">
+<div class="og-section-head reveal">
+<span class="og-eyebrow">Sector 3 · Setenta años en órbita</span>
+<h2>De la carrera a la cooperación</h2>
+<p>La era espacial empezó como una competencia entre dos bloques y terminó convertida en la obra colectiva más cara y más coordinada de la historia. Recorre los hitos.</p>
+</div>
+<div class="og-timeline reveal">
+<div class="og-timeline-track" id="ogTimelineTrack"></div>
+</div>
+<div class="og-tl-panel reveal">
+<div class="og-tl-year" id="ogTlYear"></div>
+<div class="og-tl-body">
+<h3 id="ogTlTitle"></h3>
+<div class="og-tl-actor" id="ogTlActor"></div>
+<p id="ogTlText"></p>
+</div>
+</div>
+</div>
+</section>
+
+<section class="og-section og-divider" id="ogDinero">
+<div class="og-wrap">
+<div class="og-section-head reveal">
+<span class="og-eyebrow">Sector 4 · Cuánto cuesta mirar</span>
+<h2>El dinero del espacio</h2>
+<p>Explorar el sistema solar cuesta menos de lo que la mayoría imagina. Cambia la vista para ver el gasto total de un año o lo que aporta cada habitante del país que lo financia.</p>
+</div>
+<div class="og-budget-filters" id="ogBudgetFilters">
+<button type="button" class="og-chip is-active" data-og-budget="total">Presupuesto anual</button>
+<button type="button" class="og-chip" data-og-budget="percap">Por habitante y año</button>
+</div>
+<div class="og-chart reveal">
+<div class="og-chart-title" id="ogChartTitle"></div>
+<div id="ogChartRows"></div>
+<div class="og-scale-legend"><span>0</span><span id="ogChartMax"></span></div>
+</div>
+<div class="og-callouts reveal">
+<div class="og-callout"><b>0,4 %</b><p>Parte del presupuesto federal de Estados Unidos que recibe la NASA hoy. En 1966, en pleno programa Apolo, rozó el 4,4 %.</p></div>
+<div class="og-callout"><b>≈ 74 M</b><p>Dólares que costó Mangalyaan, la sonda india que llegó a Marte al primer intento: menos que el presupuesto de muchas películas de ciencia ficción.</p></div>
+<div class="og-callout"><b>≈ 17 €</b><p>Lo que aporta al año cada habitante de los estados miembros de la ESA: una entrada de cine a cambio de doce meses de exploración.</p></div>
+</div>
+<p class="og-note">Cifras aproximadas de presupuesto anual (referencia 2024) convertidas a dólares. Sirven para comparar órdenes de magnitud, no como dato contable. China no publica un presupuesto espacial oficial desglosado.</p>
+</div>
+</section>
+
+<section class="og-section og-divider" id="ogReglas">
+<div class="og-wrap">
+<div class="og-section-head reveal">
+<span class="og-eyebrow">Sector 5 · Derecho del espacio</span>
+<h2>Las reglas del cielo</h2>
+<p>El espacio no es tierra de nadie: es tierra de todos, y eso se escribió en documentos que casi nadie ha leído. Estos son los que mandan.</p>
+</div>
+<div class="og-rules reveal" id="ogRules"></div>
+</div>
+</section>
+
+<section class="og-section og-divider" id="ogMitos">
+<div class="og-wrap">
+<div class="og-section-head reveal">
+<span class="og-eyebrow">Sector 6 · Falso o verdadero</span>
+<h2>Lo que se dice de las agencias</h2>
+<p>Seis creencias muy repetidas sobre quienes investigan el espacio. Toca cada tarjeta para darle la vuelta.</p>
+</div>
+<div class="og-myths reveal" id="ogMyths"></div>
+</div>
+</section>
+
+<section class="og-section og-divider" id="ogRegion">
+<div class="og-wrap">
+<div class="og-section-head reveal">
+<span class="og-eyebrow">Sector 7 · América Latina</span>
+<h2>La región también mira hacia arriba</h2>
+<p>No hace falta un cohete gigante para hacer ciencia espacial: hacen falta antenas, universidades, cielos limpios y gente terca.</p>
+</div>
+<div class="og-region reveal" id="ogRegionGrid"></div>
+<div class="og-closing reveal">
+<h3>El camino de entrada no empieza en un cohete: empieza en un aula</h3>
+<p>Casi todas las organizaciones de esta sección publican sus datos en archivos abiertos y gratuitos: imágenes de Marte, catálogos de estrellas, mediciones de satélites de observación terrestre. Cualquier estudiante con conexión a internet puede trabajar hoy con el mismo material que usan los equipos científicos. Los satélites universitarios de la región nacieron exactamente así.</p>
+</div>
+</div>
+</section>
+
+</main>
+
+<footer class="og-footer">
+<div class="og-wrap">
+<p>Datos recopilados de la información pública de cada organización. Las cifras de presupuesto, personal y fechas son aproximadas y cambian con el tiempo.</p>
+<p class="og-mono">Guardianes del Cosmos · Star Web</p>
 </div>
 </footer>
 </div>
@@ -8619,6 +9046,594 @@ if(precSlider&&precMarker){
 })();
 </script>
 
+<script id="orgs-script">
+(function(){
+"use strict";
+var view=document.getElementById("orgsView");
+var closeBtn=document.getElementById("ogViewClose");
+if(!view||!closeBtn)return;
+
+function esc(s){return String(s).replace(/[&<>"']/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]})}
+var reduceMotion=window.matchMedia&&window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+/* ============================================================
+   1 · ATLAS DE ORGANIZACIONES
+   ============================================================ */
+var SEALS={
+  nasa:'<svg viewBox="0 0 160 160"><circle class="og-seal-ring" cx="80" cy="80" r="62"/><ellipse class="og-seal-line" cx="80" cy="80" rx="60" ry="22" transform="rotate(-24 80 80)"/><path class="og-seal-line" d="M28 96C50 70 92 56 130 60"/><circle class="og-seal-fill" cx="80" cy="80" r="9"/><path class="og-seal-fill" d="M118 40l3.4 8.6 8.6 3.4-8.6 3.4-3.4 8.6-3.4-8.6-8.6-3.4 8.6-3.4z"/></svg>',
+  esa:'<svg viewBox="0 0 160 160"><circle class="og-seal-ring" cx="80" cy="80" r="62"/><g class="og-seal-fill"><circle cx="80" cy="30" r="3.6"/><circle cx="105" cy="37" r="3.6"/><circle cx="123" cy="55" r="3.6"/><circle cx="130" cy="80" r="3.6"/><circle cx="123" cy="105" r="3.6"/><circle cx="105" cy="123" r="3.6"/><circle cx="80" cy="130" r="3.6"/><circle cx="55" cy="123" r="3.6"/><circle cx="37" cy="105" r="3.6"/><circle cx="30" cy="80" r="3.6"/><circle cx="37" cy="55" r="3.6"/><circle cx="55" cy="37" r="3.6"/></g><path class="og-seal-line" d="M46 108C58 74 92 56 118 58"/><circle class="og-seal-fill" cx="118" cy="58" r="6"/></svg>',
+  roscosmos:'<svg viewBox="0 0 160 160"><circle class="og-seal-ring" cx="80" cy="80" r="62"/><path class="og-seal-line" d="M40 120c8-40 34-70 78-84"/><path class="og-seal-fill" d="M104 44c14 6 18 18 14 32l-26 8-12-12 8-24z"/><circle class="og-seal-soft" cx="106" cy="60" r="6"/><path class="og-seal-line" d="M48 116l-10 10M62 122l-6 12M40 102l-12 6"/></svg>',
+  cnsa:'<svg viewBox="0 0 160 160"><circle class="og-seal-ring" cx="80" cy="80" r="62"/><circle class="og-seal-line" cx="80" cy="80" r="34"/><path class="og-seal-fill" d="M80 46a34 34 0 000 68z"/><path class="og-seal-line" d="M18 80h20M122 80h20"/><circle class="og-seal-fill" cx="128" cy="46" r="4.5"/><circle class="og-seal-fill" cx="34" cy="118" r="3.5"/></svg>',
+  isro:'<svg viewBox="0 0 160 160"><circle class="og-seal-ring" cx="80" cy="80" r="62"/><path class="og-seal-fill" d="M56 112a34 34 0 0148-48l-12 14a16 16 0 00-22 22z"/><path class="og-seal-line" d="M96 64l24-24M84 118c22 0 40-18 40-40"/><path class="og-seal-line" d="M74 128c30 0 54-24 54-54"/><circle class="og-seal-fill" cx="120" cy="40" r="5"/></svg>',
+  jaxa:'<svg viewBox="0 0 160 160"><circle class="og-seal-ring" cx="80" cy="80" r="62"/><path class="og-seal-fill" d="M74 52l20 6 12 18-8 22-22 6-18-14-2-22z"/><path class="og-seal-line" d="M26 128C46 108 60 94 68 84"/><path class="og-seal-line" d="M112 34a58 58 0 01-4 84"/><circle class="og-seal-fill" cx="26" cy="128" r="5"/></svg>',
+  csa:'<svg viewBox="0 0 160 160"><circle class="og-seal-ring" cx="80" cy="80" r="62"/><path class="og-seal-line" d="M34 118l26-26 22 22 30-46"/><circle class="og-seal-fill" cx="34" cy="118" r="7"/><circle class="og-seal-fill" cx="60" cy="92" r="5"/><circle class="og-seal-fill" cx="82" cy="114" r="5"/><path class="og-seal-fill" d="M112 60l6 10-12 4z"/><path class="og-seal-line" d="M104 44h24"/></svg>',
+  eso:'<svg viewBox="0 0 160 160"><circle class="og-seal-ring" cx="80" cy="80" r="62"/><path class="og-seal-line" d="M22 118l30-34 20 22 24-34 42 46"/><path class="og-seal-fill" d="M62 100a22 22 0 0144 0z"/><path class="og-seal-line" d="M84 92l26-26"/><circle class="og-seal-fill" cx="116" cy="58" r="5"/><circle class="og-seal-fill" cx="46" cy="46" r="3.4"/><circle class="og-seal-fill" cx="66" cy="34" r="2.6"/></svg>',
+  unoosa:'<svg viewBox="0 0 160 160"><circle class="og-seal-ring" cx="80" cy="80" r="62"/><circle class="og-seal-line" cx="80" cy="80" r="38"/><path class="og-seal-line" d="M80 42c14 16 14 60 0 76M80 42c-14 16-14 60 0 76M44 66h72M44 94h72"/><path class="og-seal-line" d="M40 128c-10-16-10-40 0-56M120 128c10-16 10-40 0-56"/></svg>',
+  iau:'<svg viewBox="0 0 160 160"><circle class="og-seal-ring" cx="80" cy="80" r="62"/><path class="og-seal-line" d="M44 52l22 30 30-12 20 34"/><circle class="og-seal-fill" cx="44" cy="52" r="5"/><circle class="og-seal-fill" cx="66" cy="82" r="6.5"/><circle class="og-seal-fill" cx="96" cy="70" r="4.5"/><circle class="og-seal-fill" cx="116" cy="104" r="5.5"/><circle class="og-seal-soft" cx="58" cy="118" r="3"/><circle class="og-seal-soft" cx="104" cy="40" r="3"/></svg>'
+};
+
+var ORGS=[
+  {key:"nasa",name:"NASA",code:"EE. UU. · 1958",country:"Estados Unidos",
+   full:"National Aeronautics and Space Administration — la agencia civil de aeronáutica y espacio de Estados Unidos.",
+   founded:"1958",hq:"Washington D. C.",people:"≈18.000",budget:"≈25.000 M US$",
+   flagship:"Apolo 11 (1969): por primera vez un ser humano caminó sobre otro mundo. Hoy su continuación es Artemis, el programa que busca establecer una presencia sostenida en la Luna y ensayar el viaje a Marte.",
+   secret:"Nació como respuesta política al Sputnik, y su acta fundacional le exige que los resultados de sus investigaciones sean públicos. Por eso casi todas sus imágenes y datos son de dominio público y cualquiera puede usarlos.",
+   tags:["Artemis","James Webb","Perseverance","Voyager"],link:"https://www.nasa.gov"},
+  {key:"esa",name:"ESA",code:"Europa · 1975",country:"Consorcio europeo",
+   full:"Agencia Espacial Europea — una organización intergubernamental sostenida por más de veinte estados miembros.",
+   founded:"1975",hq:"París, Francia",people:"≈2.200",budget:"≈7.800 M €",
+   flagship:"Rosetta (2014): tras diez años de viaje persiguió a un cometa, se puso en órbita a su alrededor y soltó al módulo Philae sobre su superficie. Nunca antes se había aterrizado sobre un cometa.",
+   secret:"No es la agencia de la Unión Europea: es independiente y entre sus miembros hay países que no pertenecen a la UE, como Reino Unido, Noruega y Suiza. Su puerto espacial no está en Europa continental, sino en Kourou, en la Guayana Francesa, a apenas 5 grados del ecuador.",
+   tags:["Ariane 6","Gaia","ExoMars","Kourou"],link:"https://www.esa.int"},
+  {key:"roscosmos",name:"Roscosmos",code:"Rusia · 1992",country:"Federación Rusa",
+   full:"Corporación Estatal de Actividades Espaciales — heredera directa del programa espacial soviético.",
+   founded:"1992 (herencia soviética desde 1957)",hq:"Moscú, Rusia",people:"≈170.000 (grupo industrial)",budget:"≈3.000 M US$ (estimado)",
+   flagship:"Sputnik 1 (1957) y Vostok 1 (1961): el primer satélite artificial y el primer ser humano en órbita, Yuri Gagarin, que dio una sola vuelta a la Tierra en 108 minutos.",
+   secret:"Baikonur, el cosmódromo más antiguo y todavía uno de los más activos del mundo, no está en Rusia: quedó en territorio de Kazajistán al disolverse la URSS, y Rusia lo alquila desde entonces.",
+   tags:["Soyuz","Baikonur","Estación Mir","ISS"],link:"https://www.roscosmos.ru"},
+  {key:"cnsa",name:"CNSA",code:"China · 1993",country:"República Popular China",
+   full:"Administración Espacial Nacional China — coordina el programa espacial civil chino.",
+   founded:"1993",hq:"Pekín, China",people:"No publicado",budget:"Sin cifra oficial",
+   flagship:"Chang'e 4 (2019): el primer alunizaje de la historia en la cara oculta de la Luna, una zona desde la que no hay línea directa de radio con la Tierra. Chang'e 6 volvió de allí en 2024 con muestras.",
+   secret:"Para hablar con una sonda en la cara oculta hace falta un satélite repetidor colocado más allá de la Luna. China tuvo que lanzar uno, Queqiao, antes de poder intentar el alunizaje.",
+   tags:["Tiangong","Chang'e","Tianwen-1","Wenchang"],link:"https://www.cnsa.gov.cn"},
+  {key:"isro",name:"ISRO",code:"India · 1969",country:"India",
+   full:"Organización India de Investigación Espacial — el programa espacial civil de la India.",
+   founded:"1969",hq:"Bengaluru, India",people:"≈17.000",budget:"≈1.600 M US$",
+   flagship:"Chandrayaan-3 (2023): primer descenso controlado cerca del polo sur lunar, la región donde se cree que hay hielo de agua atrapado en cráteres en sombra permanente.",
+   secret:"Su fundador, Vikram Sarabhai, defendía que un país en desarrollo debía ir al espacio no por prestigio, sino para resolver problemas concretos: predicción de monzones, mapas de cultivos y televisión educativa rural.",
+   tags:["Chandrayaan","Mangalyaan","Aditya-L1","Sriharikota"],link:"https://www.isro.gov.in"},
+  {key:"jaxa",name:"JAXA",code:"Japón · 2003",country:"Japón",
+   full:"Agencia Japonesa de Exploración Aeroespacial — fusión de los tres organismos espaciales japoneses.",
+   founded:"2003 (fusión de ISAS, NAL y NASDA)",hq:"Chōfu, Tokio",people:"≈1.500",budget:"≈2.100 M US$",
+   flagship:"Hayabusa 2 (2020): viajó al asteroide Ryugu, le disparó un proyectil para exponer material que nunca había visto el Sol, recogió muestras y las devolvió a la Tierra en una cápsula que cayó en el desierto australiano.",
+   secret:"Se ha especializado en misiones pequeñas y quirúrgicas. Su módulo SLIM alunizó en 2024 con una precisión de unos cien metros —lo llamaron el francotirador lunar—, aunque acabó apoyado boca abajo y aun así cumplió su misión.",
+   tags:["Hayabusa","SLIM","Kibō","Tanegashima"],link:"https://global.jaxa.jp"},
+  {key:"csa",name:"CSA · ASC",code:"Canadá · 1989",country:"Canadá",
+   full:"Agencia Espacial Canadiense — especializada en robótica orbital y observación de la Tierra.",
+   founded:"1989",hq:"Longueuil, Quebec",people:"≈700",budget:"≈400 M US$",
+   flagship:"El Canadarm y su sucesor Canadarm2: los brazos robóticos que ensamblaron la Estación Espacial Internacional pieza por pieza y que atrapan a las naves de carga antes de acoplarlas.",
+   secret:"Canadá decidió no competir en cohetes y volcarse en un nicho: la robótica espacial. Le funcionó tan bien que el brazo robótico aparece impreso en su billete de cinco dólares.",
+   tags:["Canadarm2","Dextre","RADARSAT","NIRISS"],link:"https://www.asc-csa.gc.ca"},
+  {key:"eso",name:"ESO",code:"Europa · Chile · 1962",country:"Observatorio Europeo Austral",
+   full:"European Southern Observatory — construye y opera los telescopios terrestres más grandes del hemisferio sur.",
+   founded:"1962",hq:"Garching, Alemania · observatorios en Chile",people:"≈700",budget:"≈250 M €",
+   flagship:"El Very Large Telescope de Cerro Paranal: cuatro telescopios de 8,2 metros que pueden trabajar combinados como uno solo. En Cerro Armazones construye el ELT, con un espejo de casi 39 metros.",
+   secret:"No lanza nada al espacio y aun así es una de las organizaciones que más ha cambiado nuestra visión del cosmos. Su gran activo es geográfico: el desierto de Atacama tiene las noches más secas, oscuras y estables del planeta.",
+   tags:["VLT","ALMA","ELT","Atacama"],link:"https://www.eso.org"},
+  {key:"unoosa",name:"UNOOSA",code:"ONU · 1958",country:"Naciones Unidas",
+   full:"Oficina de Asuntos del Espacio Ultraterrestre de la ONU — la ventanilla donde el espacio se vuelve derecho internacional.",
+   founded:"1958 (oficina desde 1962)",hq:"Viena, Austria",people:"≈40",budget:"Presupuesto de la ONU",
+   flagship:"El Tratado del Espacio Ultraterrestre de 1967, negociado bajo el paraguas de la ONU: el documento que declara el espacio patrimonio de toda la humanidad y prohíbe que ningún país reclame la Luna como suya.",
+   secret:"Mantiene el registro público de casi todos los objetos lanzados al espacio desde 1957. Si un satélite cae y provoca daños, ese registro es el que determina qué Estado responde por él.",
+   tags:["Tratado 1967","Registro","Derecho espacial","Viena"],link:"https://www.unoosa.org"},
+  {key:"iau",name:"UAI",code:"Mundial · 1919",country:"Unión Astronómica Internacional",
+   full:"International Astronomical Union — la autoridad científica que ordena y nombra el cielo.",
+   founded:"1919",hq:"París, Francia",people:"≈12.000 miembros",budget:"Cuotas de países miembros",
+   flagship:"Es el organismo que asigna oficialmente los nombres de planetas, cráteres, asteroides y estrellas. Sin ella, cada país nombraría los mismos accidentes lunares de forma distinta.",
+   secret:"En 2006 votó una definición formal de planeta que dejó a Plutón fuera de la lista y creó la categoría de planeta enano. Fue probablemente la votación científica más discutida del siglo.",
+   tags:["Nomenclatura","Planeta enano","88 constelaciones"],link:"https://www.iau.org"}
+];
+
+var orgChips=document.getElementById("ogOrgChips");
+var orgActive=0;
+function renderOrg(){
+  var o=ORGS[orgActive];
+  document.getElementById("ogOrgSeal").innerHTML=SEALS[o.key]||"";
+  document.getElementById("ogOrgCode").textContent=o.code;
+  document.getElementById("ogOrgCountry").textContent=o.country;
+  document.getElementById("ogOrgName").textContent=o.name;
+  document.getElementById("ogOrgFull").textContent=o.full;
+  document.getElementById("ogOrgGrid").innerHTML=
+    '<div class="og-org-cell"><span>Fundación</span><b>'+esc(o.founded)+"</b></div>"+
+    '<div class="og-org-cell"><span>Sede</span><b>'+esc(o.hq)+"</b></div>"+
+    '<div class="og-org-cell"><span>Personal</span><b>'+esc(o.people)+"</b></div>"+
+    '<div class="og-org-cell"><span>Presupuesto anual</span><b>'+esc(o.budget)+"</b></div>";
+  document.getElementById("ogOrgFlagship").textContent=o.flagship;
+  document.getElementById("ogOrgSecret").textContent=o.secret;
+  document.getElementById("ogOrgTags").innerHTML=
+    o.tags.map(function(t){return '<span class="og-org-tag">'+esc(t)+"</span>"}).join("")+
+    ' <a class="og-org-link" href="'+esc(o.link)+'" target="_blank" rel="noopener">Sitio oficial ↗</a>';
+  if(orgChips)orgChips.querySelectorAll(".og-chip").forEach(function(c,i){c.classList.toggle("is-active",i===orgActive)});
+}
+if(orgChips){
+  orgChips.innerHTML=ORGS.map(function(o){return '<button type="button" class="og-chip">'+esc(o.name)+"</button>"}).join("");
+  orgChips.querySelectorAll(".og-chip").forEach(function(btn,i){
+    btn.addEventListener("click",function(){orgActive=i;renderOrg()});
+  });
+  renderOrg();
+}
+
+/* ============================================================
+   2 · PUERTOS DE SALIDA (globo orthográfico)
+   ============================================================ */
+var SITES=[
+  {name:"Centro Espacial Kennedy",short:"Kennedy",owner:"NASA · Florida, Estados Unidos",kind:"Puerto de lanzamiento",lat:28.5,lon:-80.6,
+   text:"El puerto de Apolo y de los transbordadores. Está en la costa este para que los cohetes sobrevuelen el Atlántico y no zonas pobladas si algo falla."},
+  {name:"Base Vandenberg",short:"Vandenberg",owner:"Estados Unidos · California",kind:"Puerto de lanzamiento",lat:34.7,lon:-120.6,
+   text:"Especializada en órbitas polares: desde aquí se dispara hacia el sur, sobre el Pacífico, para que los satélites pasen por encima de los polos y barran toda la Tierra."},
+  {name:"Centro Espacial de Guayana",short:"Kourou",owner:"ESA · Kourou, Guayana Francesa",kind:"Puerto de lanzamiento",lat:5.2,lon:-52.8,
+   text:"El puerto espacial europeo está en Sudamérica. A cinco grados del ecuador, un cohete gana aquí más impulso gratis que en cualquier otra base occidental."},
+  {name:"Cosmódromo de Baikonur",short:"Baikonur",owner:"Roscosmos · Kazajistán",kind:"Puerto de lanzamiento",lat:45.9,lon:63.3,
+   text:"De aquí salieron el Sputnik y Gagarin. Es el cosmódromo más antiguo en activo del mundo y Rusia lo mantiene alquilado a Kazajistán."},
+  {name:"Centro Espacial Satish Dhawan",short:"Sriharikota",owner:"ISRO · Sriharikota, India",kind:"Puerto de lanzamiento",lat:13.7,lon:80.2,
+   text:"Una isla barrera en la costa este de la India. Desde aquí despegaron las misiones a la Luna y a Marte con presupuestos que asombran por lo bajos."},
+  {name:"Centro Espacial de Tanegashima",short:"Tanegashima",owner:"JAXA · Japón",kind:"Puerto de lanzamiento",lat:30.4,lon:131.0,
+   text:"Considerado uno de los puertos espaciales más bonitos del mundo, encajado entre acantilados y mar. Sus ventanas de lanzamiento se negociaron durante años con los pescadores locales."},
+  {name:"Centro de Lanzamiento de Wenchang",short:"Wenchang",owner:"CNSA · Isla de Hainan, China",kind:"Puerto de lanzamiento",lat:19.6,lon:110.9,
+   text:"El puerto chino más moderno y el más cercano al ecuador. Al estar en la costa, permite transportar por barco cohetes demasiado grandes para el ferrocarril."},
+  {name:"Centro de Lanzamiento de Alcântara",short:"Alcântara",owner:"AEB · Maranhão, Brasil",kind:"Puerto de lanzamiento",lat:-2.3,lon:-44.4,
+   text:"A poco más de dos grados del ecuador: en teoría, la mejor posición geográfica del mundo para lanzar hacia órbita ecuatorial."},
+  {name:"Península de Mahia",short:"Mahia",owner:"Rocket Lab · Nueva Zelanda",kind:"Puerto de lanzamiento",lat:-39.3,lon:177.9,
+   text:"Un puerto espacial privado en una península ganadera. Su aislamiento permite un ritmo de lanzamientos que sería imposible cerca de una ciudad."},
+  {name:"Complejo Goldstone",short:"Goldstone",owner:"Red de Espacio Profundo · desierto de Mojave",kind:"Antena de espacio profundo",lat:35.4,lon:-116.9,
+   text:"Una de las tres orejas gigantes con las que se habla con las sondas interplanetarias. Están separadas 120 grados para que siempre haya una mirando al espacio profundo."},
+  {name:"Complejo de Madrid",short:"Madrid",owner:"Red de Espacio Profundo · Robledo de Chavela",kind:"Antena de espacio profundo",lat:40.4,lon:-4.2,
+   text:"La estación europea de la red. Desde antenas como esta se recibieron las señales de las Voyager, hoy a más de veinte mil millones de kilómetros."},
+  {name:"Observatorio Paranal",short:"Paranal",owner:"ESO · Atacama, Chile",kind:"Observatorio terrestre",lat:-24.6,lon:-70.4,
+   text:"En una montaña donde prácticamente nunca llueve. La sequedad extrema y la altitud dan noches tan limpias que aquí se concentran los telescopios más grandes del hemisferio sur."}
+];
+
+var globeSvg=document.getElementById("ogGlobe");
+var globeGrid=document.getElementById("ogGlobeGrid");
+var globeSites=document.getElementById("ogGlobeSites");
+var globeSlider=document.getElementById("ogGlobeSlider");
+var globeSpin=document.getElementById("ogGlobeSpin");
+var siteChips=document.getElementById("ogSiteChips");
+if(globeSvg&&globeGrid&&globeSites&&globeSlider){
+  var GCX=170,GCY=170,GR=150,GTILT=22*Math.PI/180;
+  var rot=-60,spinning=!reduceMotion,siteActive=0,rafId=null,glide=null;
+  var SVGNS="http://www.w3.org/2000/svg";
+
+  function project(lat,lon){
+    var phi=lat*Math.PI/180,lam=(lon-rot)*Math.PI/180;
+    var cosc=Math.sin(GTILT)*Math.sin(phi)+Math.cos(GTILT)*Math.cos(phi)*Math.cos(lam);
+    return{
+      x:GCX+GR*Math.cos(phi)*Math.sin(lam),
+      y:GCY-GR*(Math.cos(GTILT)*Math.sin(phi)-Math.sin(GTILT)*Math.cos(phi)*Math.cos(lam)),
+      visible:cosc>=0
+    };
+  }
+  function polyline(points,cls){
+    var el=document.createElementNS(SVGNS,"polyline");
+    el.setAttribute("class",cls);
+    el.setAttribute("points",points.map(function(p){return p.x.toFixed(1)+","+p.y.toFixed(1)}).join(" "));
+    return el;
+  }
+  function drawArc(coords,cls){
+    var run=[];
+    coords.forEach(function(c){
+      var p=project(c[0],c[1]);
+      if(p.visible){run.push(p)}
+      else if(run.length>1){globeGrid.appendChild(polyline(run,cls));run=[]}
+      else{run=[]}
+    });
+    if(run.length>1)globeGrid.appendChild(polyline(run,cls));
+  }
+  function drawGrid(){
+    globeGrid.innerHTML="";
+    var lon,lat,coords;
+    for(lon=-180;lon<180;lon+=30){
+      coords=[];
+      for(lat=-85;lat<=85;lat+=5)coords.push([lat,lon]);
+      drawArc(coords,"og-globe-grid");
+    }
+    [-60,-30,30,60].forEach(function(la){
+      coords=[];
+      for(lon=-180;lon<=180;lon+=5)coords.push([la,lon]);
+      drawArc(coords,"og-globe-grid");
+    });
+    coords=[];
+    for(lon=-180;lon<=180;lon+=5)coords.push([0,lon]);
+    drawArc(coords,"og-globe-equator");
+  }
+  function drawSites(){
+    globeSites.innerHTML="";
+    SITES.forEach(function(s,i){
+      var p=project(s.lat,s.lon);
+      var g=document.createElementNS(SVGNS,"g");
+      g.setAttribute("class","og-globe-site"+(p.visible?"":" is-back")+(i===siteActive?" is-active":""));
+      var halo=document.createElementNS(SVGNS,"circle");
+      halo.setAttribute("class","og-site-halo");
+      halo.setAttribute("cx",p.x.toFixed(1));halo.setAttribute("cy",p.y.toFixed(1));halo.setAttribute("r","13");
+      var dot=document.createElementNS(SVGNS,"circle");
+      dot.setAttribute("class","og-site-dot");
+      dot.setAttribute("cx",p.x.toFixed(1));dot.setAttribute("cy",p.y.toFixed(1));
+      dot.setAttribute("r",s.kind==="Puerto de lanzamiento"?"5":"4");
+      g.appendChild(halo);g.appendChild(dot);
+      g.addEventListener("click",function(){selectSite(i)});
+      globeSites.appendChild(g);
+    });
+  }
+  function renderGlobe(){drawGrid();drawSites()}
+
+  function boostFor(lat){return 465*Math.cos(lat*Math.PI/180)}
+  function selectSite(i,noGlide){
+    siteActive=i;
+    var s=SITES[i];
+    document.getElementById("ogSiteKind").textContent=s.kind;
+    document.getElementById("ogSiteName").textContent=s.name;
+    document.getElementById("ogSiteOwner").textContent=s.owner;
+    document.getElementById("ogSiteText").textContent=s.text;
+    var boost=boostFor(s.lat);
+    document.getElementById("ogSiteBoost").textContent=Math.round(boost)+" m/s";
+    document.getElementById("ogSiteBoostFill").style.width=(boost/465*100).toFixed(1)+"%";
+    document.getElementById("ogSiteBoostNote").textContent=
+      "Latitud "+Math.abs(s.lat).toFixed(1)+"° "+(s.lat>=0?"norte":"sur")+
+      " · conserva el "+(boost/465*100).toFixed(1).replace(".",",")+" % del impulso máximo posible (465 m/s en el ecuador).";
+    if(siteChips)siteChips.querySelectorAll(".og-chip").forEach(function(c,ci){c.classList.toggle("is-active",ci===i)});
+    if(!noGlide)glideTo(s.lon);
+    drawSites();
+  }
+  function glideTo(lon){
+    if(reduceMotion){rot=lon;globeSlider.value=Math.round(lon);renderGlobe();return}
+    glide={target:lon};
+  }
+  function tick(){
+    var moved=false;
+    if(glide){
+      var d=glide.target-rot;
+      while(d>180)d-=360;while(d<-180)d+=360;
+      if(Math.abs(d)<0.6){rot=glide.target;glide=null}
+      else{rot+=d*0.09}
+      moved=true;
+    }else if(spinning){rot+=0.13;moved=true}
+    if(moved){
+      while(rot>180)rot-=360;while(rot<-180)rot+=360;
+      globeSlider.value=Math.round(rot);
+      renderGlobe();
+    }
+    rafId=requestAnimationFrame(tick);
+  }
+  function startLoop(){if(rafId===null)rafId=requestAnimationFrame(tick)}
+  function stopLoop(){if(rafId!==null){cancelAnimationFrame(rafId);rafId=null}}
+
+  globeSlider.addEventListener("input",function(){
+    spinning=false;glide=null;
+    if(globeSpin){globeSpin.classList.remove("is-active");globeSpin.setAttribute("aria-pressed","false")}
+    rot=parseFloat(globeSlider.value);renderGlobe();
+  });
+  if(globeSpin){
+    globeSpin.addEventListener("click",function(){
+      spinning=!spinning;glide=null;
+      globeSpin.classList.toggle("is-active",spinning);
+      globeSpin.setAttribute("aria-pressed",String(spinning));
+    });
+    if(reduceMotion){globeSpin.classList.remove("is-active");globeSpin.setAttribute("aria-pressed","false")}
+  }
+  if(siteChips){
+    siteChips.innerHTML=SITES.map(function(s){
+      return '<button type="button" class="og-chip og-chip-sm">'+esc(s.short)+"</button>";
+    }).join("");
+    siteChips.querySelectorAll(".og-chip").forEach(function(btn,i){
+      btn.addEventListener("click",function(){
+        spinning=false;
+        if(globeSpin){globeSpin.classList.remove("is-active");globeSpin.setAttribute("aria-pressed","false")}
+        selectSite(i);
+      });
+    });
+  }
+  renderGlobe();
+  selectSite(2,true);
+  view.addEventListener("ogview:open",startLoop);
+  view.addEventListener("ogview:close",stopLoop);
+}
+
+/* ============================================================
+   3 · CRONOLOGÍA
+   ============================================================ */
+var TIMELINE=[
+  {year:"1957",title:"Sputnik 1",actor:"Unión Soviética",
+   text:"Una esfera de 58 centímetros con cuatro antenas emite un pitido de radio audible desde cualquier receptor doméstico. El mundo entero descubre en una noche que el espacio ya no es teoría."},
+  {year:"1958",title:"Nace la NASA",actor:"Estados Unidos",
+   text:"La respuesta estadounidense al Sputnik no fue un cohete, sino una institución civil. La ley que la creó separó explícitamente la exploración espacial pacífica de los programas militares."},
+  {year:"1961",title:"Yuri Gagarin en órbita",actor:"Unión Soviética",
+   text:"Una vuelta completa a la Tierra en 108 minutos. Gagarin ni siquiera pilotaba: los controles iban bloqueados porque nadie sabía cómo reaccionaría una persona en ingravidez."},
+  {year:"1969",title:"Apolo 11 alcanza la Luna",actor:"NASA",
+   text:"El punto culminante de la carrera espacial. La computadora de a bordo del módulo lunar tenía menos memoria que un teléfono actual y aun así sostuvo el descenso con avisos de sobrecarga en pantalla."},
+  {year:"1975",title:"Apolo-Soyuz y el nacimiento de la ESA",actor:"NASA · URSS · Europa",
+   text:"Dos naves rivales se acoplan en órbita y sus tripulaciones se dan la mano. El mismo año, diez países europeos fusionan sus organismos espaciales en una sola agencia: la competencia empieza a convertirse en cooperación."},
+  {year:"1990",title:"El telescopio Hubble",actor:"NASA · ESA",
+   text:"Nació con un defecto en el espejo que emborronaba todas sus imágenes. Una misión tripulada subió a instalarle unas lentes correctoras: la primera vez que se reparó en órbita un observatorio."},
+  {year:"1998",title:"Primer módulo de la ISS",actor:"Cinco agencias",
+   text:"NASA, Roscosmos, ESA, JAXA y CSA ensamblan en órbita la estructura más cara jamás construida. Desde el año 2000 ha estado habitada de forma ininterrumpida por seres humanos."},
+  {year:"2003",title:"China llega por sus propios medios",actor:"CNSA",
+   text:"Yang Liwei se convierte en el primer taikonauta a bordo de la Shenzhou 5. China pasa a ser el tercer país capaz de poner a una persona en órbita con tecnología propia."},
+  {year:"2014",title:"Mangalyaan orbita Marte",actor:"ISRO",
+   text:"India llega a Marte al primer intento —algo que nadie había conseguido— y con un presupuesto que apenas supera el de una gran producción de cine."},
+  {year:"2021",title:"El telescopio James Webb",actor:"NASA · ESA · CSA",
+   text:"Un espejo de 6,5 metros plegado como origami dentro de un cohete europeo. Tuvo que desplegarse solo, a un millón y medio de kilómetros, sin posibilidad de reparación."},
+  {year:"2024",title:"Muestras de la cara oculta",actor:"CNSA",
+   text:"Chang'e 6 despega, recoge material de la cara de la Luna que jamás vemos desde la Tierra y lo trae de vuelta: la primera vez que la humanidad tiene en un laboratorio rocas de ese hemisferio."}
+];
+var tlTrack=document.getElementById("ogTimelineTrack");
+var tlActive=3;
+function renderTl(){
+  var t=TIMELINE[tlActive];
+  document.getElementById("ogTlYear").textContent=t.year;
+  document.getElementById("ogTlTitle").textContent=t.title;
+  document.getElementById("ogTlActor").textContent=t.actor;
+  document.getElementById("ogTlText").textContent=t.text;
+  if(tlTrack)tlTrack.querySelectorAll(".og-tl-node").forEach(function(n,i){n.classList.toggle("is-active",i===tlActive)});
+}
+if(tlTrack){
+  tlTrack.innerHTML=TIMELINE.map(function(t){
+    return '<button type="button" class="og-tl-node" aria-label="'+esc(t.year+" · "+t.title)+'">'+esc(t.year)+"</button>";
+  }).join("");
+  tlTrack.querySelectorAll(".og-tl-node").forEach(function(node,i){
+    node.addEventListener("click",function(){tlActive=i;renderTl()});
+  });
+  renderTl();
+}
+
+/* ============================================================
+   4 · PRESUPUESTOS
+   ============================================================ */
+var BUDGET=[
+  {name:"NASA",sub:"Estados Unidos",total:25.4,percap:76,note:"Unos 25.400 millones de dólares al año, repartidos entre ciencia, exploración tripulada, aeronáutica y operaciones."},
+  {name:"CNSA",sub:"China",nodata:true,note:"China no publica un presupuesto espacial oficial desglosado. Las estimaciones externas la sitúan entre los dos mayores gastos del mundo."},
+  {name:"ESA",sub:"Consorcio europeo",total:8.4,percap:19,note:"Unos 7.800 millones de euros aportados por los estados miembros, que reciben contratos industriales en proporción a lo que ponen."},
+  {name:"Roscosmos",sub:"Rusia",total:3,percap:21,note:"Cifra estimada: el presupuesto ruso mezcla partidas civiles e industriales y no siempre se publica desglosado."},
+  {name:"JAXA",sub:"Japón",total:2.1,percap:17,note:"Un presupuesto modesto muy concentrado en misiones robóticas pequeñas y altamente especializadas."},
+  {name:"ISRO",sub:"India",total:1.6,percap:1.1,note:"El programa espacial más eficiente del mundo en relación coste-resultado: llegó a la Luna y a Marte con esta escala de gasto."},
+  {name:"CSA · ASC",sub:"Canadá",total:0.4,percap:10,note:"Presupuesto pequeño, apuesta concentrada: robótica orbital y observación de la Tierra en lugar de cohetes propios."},
+  {name:"AEB",sub:"Brasil",total:0.06,percap:0.3,note:"El mayor programa espacial de América Latina, con el puerto de Alcântara como principal activo estratégico."}
+];
+var chartRows=document.getElementById("ogChartRows");
+var budgetMode="total";
+function fmt(n){
+  if(n>=10)return n.toFixed(0);
+  if(n>=1)return n.toFixed(1).replace(".",",");
+  return n.toFixed(2).replace(".",",");
+}
+function renderBudget(){
+  if(!chartRows)return;
+  var isTotal=budgetMode==="total";
+  var rows=BUDGET.slice().sort(function(a,b){
+    if(a.nodata)return 1;if(b.nodata)return -1;
+    return (isTotal?b.total-a.total:b.percap-a.percap);
+  });
+  var max=0;
+  rows.forEach(function(r){if(!r.nodata)max=Math.max(max,isTotal?r.total:r.percap)});
+  document.getElementById("ogChartTitle").textContent=isTotal
+    ?"Presupuesto anual aproximado · miles de millones de dólares"
+    :"Aporte aproximado por habitante y año · dólares";
+  document.getElementById("ogChartMax").textContent=isTotal
+    ?fmt(max)+" mil M US$":fmt(max)+" US$";
+  chartRows.innerHTML=rows.map(function(r){
+    var val=isTotal?r.total:r.percap;
+    var pct=r.nodata?100:Math.max(1.2,val/max*100);
+    var label=r.nodata?"sin dato oficial":(isTotal?fmt(val)+" mil M":fmt(val)+" US$");
+    return '<div class="og-bar-row'+(r.nodata?" is-nodata":"")+'" tabindex="0">'+
+      '<div class="og-bar-name">'+esc(r.name)+"<small>"+esc(r.sub)+"</small></div>"+
+      '<div class="og-bar-track"><div class="og-bar-fill" style="width:'+pct.toFixed(1)+'%"></div></div>'+
+      '<div class="og-bar-value">'+esc(label)+"</div>"+
+      '<div class="og-bar-tip">'+esc(r.note)+"</div>"+
+      "</div>";
+  }).join("");
+}
+var budgetFilters=document.getElementById("ogBudgetFilters");
+if(budgetFilters){
+  budgetFilters.querySelectorAll("[data-og-budget]").forEach(function(btn){
+    btn.addEventListener("click",function(){
+      budgetMode=btn.getAttribute("data-og-budget");
+      budgetFilters.querySelectorAll("[data-og-budget]").forEach(function(b){b.classList.toggle("is-active",b===btn)});
+      renderBudget();
+    });
+  });
+}
+renderBudget();
+
+/* ============================================================
+   5 · REGLAS DEL CIELO
+   ============================================================ */
+var RULES=[
+  {year:"1967",title:"Tratado del Espacio Ultraterrestre",
+   text:"El texto fundacional del derecho espacial. Declara que el espacio y los cuerpos celestes no pueden ser apropiados por ningún país, prohíbe colocar armas nucleares en órbita y hace responsable a cada Estado de todo lo que lancen sus organizaciones, sean públicas o privadas. Lo han firmado la práctica totalidad de las naciones con actividad espacial."},
+  {year:"1968 · 1972",title:"Rescate y responsabilidad",
+   text:"Dos acuerdos complementarios: cualquier país debe auxiliar y devolver a un astronauta que caiga en su territorio, sea de la nacionalidad que sea; y el Estado que lanza un objeto responde por los daños que cause al caer. Es la razón por la que existe un registro internacional de lanzamientos."},
+  {year:"1976",title:"Registro de objetos espaciales",
+   text:"Cada objeto puesto en órbita se anota en un registro público que custodia la ONU: quién lo lanzó, cuándo, desde dónde y con qué función. Ese archivo es hoy la única forma de saber, en caso de colisión o reentrada, a quién pertenece un fragmento."},
+  {year:"Permanente",title:"Protección planetaria",
+   text:"Antes de viajar a Marte o a una luna helada, una sonda se esteriliza en salas limpias para no llevar microbios terrestres. La regla protege dos cosas a la vez: los posibles ecosistemas de otros mundos y la validez de cualquier futura detección de vida, que no serviría de nada si la hubiéramos llevado nosotros."},
+  {year:"Hoy",title:"Basura orbital",
+   text:"Alrededor de la Tierra giran millones de fragmentos, y cada colisión genera miles más. El riesgo extremo tiene nombre: síndrome de Kessler, una reacción en cadena que podría dejar ciertas órbitas inutilizables. Por eso hoy se exige que los satélites se desorbiten al terminar su vida útil, en plazos cada vez más cortos."},
+  {year:"2020",title:"Acuerdos Artemis",
+   text:"Un conjunto de principios impulsado por Estados Unidos para la nueva etapa lunar: transparencia en los planes, interoperabilidad de equipos, ayuda mutua en emergencias y zonas de seguridad alrededor de las operaciones. No sustituyen al tratado de 1967, pero abren el debate sobre cómo se explotan los recursos lunares."}
+];
+var rulesBox=document.getElementById("ogRules");
+if(rulesBox){
+  rulesBox.innerHTML=RULES.map(function(r,i){
+    return '<div class="og-rule">'+
+      '<button type="button" class="og-rule-toggle" aria-expanded="false" aria-controls="ogRulePanel'+i+'">'+
+        '<span class="og-rule-year">'+esc(r.year)+"</span>"+
+        '<span class="og-rule-title">'+esc(r.title)+"</span>"+
+        '<span class="og-rule-chev" aria-hidden="true">⌄</span>'+
+      "</button>"+
+      '<div class="og-rule-panel" id="ogRulePanel'+i+'"><div class="og-rule-panel-inner">'+esc(r.text)+"</div></div>"+
+      "</div>";
+  }).join("");
+  rulesBox.querySelectorAll(".og-rule").forEach(function(rule){
+    var btn=rule.querySelector(".og-rule-toggle");
+    var panel=rule.querySelector(".og-rule-panel");
+    btn.addEventListener("click",function(){
+      var open=rule.classList.contains("is-open");
+      rulesBox.querySelectorAll(".og-rule").forEach(function(other){
+        other.classList.remove("is-open");
+        other.querySelector(".og-rule-panel").style.maxHeight="0px";
+        other.querySelector(".og-rule-toggle").setAttribute("aria-expanded","false");
+      });
+      if(!open){
+        rule.classList.add("is-open");
+        panel.style.maxHeight=panel.scrollHeight+"px";
+        btn.setAttribute("aria-expanded","true");
+      }
+    });
+  });
+}
+
+/* ============================================================
+   6 · MITOS
+   ============================================================ */
+var MYTHS=[
+  {claim:"La NASA se lleva una tajada enorme del presupuesto de Estados Unidos.",verdict:"Falso",
+   text:"Recibe alrededor del 0,4 % del gasto federal. Incluso en el punto más alto del programa Apolo, en 1966, no llegó al 4,5 %. Encuestas repetidas muestran que mucha gente cree que es diez o veinte veces más."},
+  {claim:"La ESA es la agencia espacial de la Unión Europea.",verdict:"Falso",
+   text:"Es una organización intergubernamental independiente, anterior a la UE actual, y entre sus miembros hay países que no pertenecen a la Unión, como Reino Unido, Noruega y Suiza."},
+  {claim:"Un país podría reclamar como propio un trozo de la Luna.",verdict:"Falso",
+   text:"El Tratado del Espacio Ultraterrestre de 1967 lo prohíbe expresamente: ningún Estado puede apropiarse de un cuerpo celeste, ni plantando banderas ni ocupándolo. Los certificados de propiedad lunar que se venden por internet no tienen ningún valor legal."},
+  {claim:"La NASA gastó millones en un bolígrafo mientras los soviéticos usaban lápiz.",verdict:"Mito",
+   text:"El bolígrafo presurizado lo desarrolló una empresa privada con su propio dinero, y después ambos programas lo compraron a precio de catálogo. Los lápices se descartaron por un motivo serio: sueltan virutas de grafito conductoras e inflamables."},
+  {claim:"Las agencias trabajan cada una por su lado y en secreto.",verdict:"Falso",
+   text:"La Estación Espacial la operan cinco agencias a la vez y el telescopio James Webb es fruto de tres. Las sondas de un país usan rutinariamente antenas de otro, y casi todos los datos científicos acaban en archivos públicos y gratuitos."},
+  {claim:"El velcro, el teflón y las bebidas en polvo los inventó la NASA.",verdict:"Falso",
+   text:"Los tres son anteriores a la carrera espacial. Sí salieron de ella otras cosas que usamos a diario: la espuma viscoelástica de los colchones, los filtros de agua portátiles y el sensor de imagen de casi todas las cámaras de teléfono."}
+];
+var mythsBox=document.getElementById("ogMyths");
+if(mythsBox){
+  mythsBox.innerHTML=MYTHS.map(function(m,i){
+    return '<button type="button" class="og-myth" data-i="'+i+'" aria-label="'+esc(m.claim)+', toca para ver el veredicto">'+
+      '<span class="og-myth-inner">'+
+        '<span class="og-myth-face og-myth-front">'+
+          '<span class="og-myth-label">Se dice que…</span>'+
+          "<p>"+esc(m.claim)+"</p>"+
+          '<span class="og-myth-hint">Toca para descubrirlo →</span>'+
+        "</span>"+
+        '<span class="og-myth-face og-myth-back">'+
+          '<span class="og-myth-verdict">'+esc(m.verdict)+"</span>"+
+          "<p>"+esc(m.text)+"</p>"+
+        "</span>"+
+      "</span>"+
+    "</button>";
+  }).join("");
+  mythsBox.querySelectorAll(".og-myth").forEach(function(card){
+    card.addEventListener("click",function(){card.classList.toggle("is-flipped")});
+  });
+}
+
+/* ============================================================
+   7 · AMÉRICA LATINA
+   ============================================================ */
+var REGION=[
+  {mark:"BR",place:"Brasil",title:"AEB · Agencia Espacial Brasileña",year:"Desde 1994",
+   text:"El programa más grande de la región. Su base de Alcântara, a poco más de dos grados del ecuador, es una de las posiciones geográficas más codiciadas del planeta para lanzar cohetes."},
+  {mark:"AR",place:"Argentina",title:"CONAE · Comisión Nacional de Actividades Espaciales",year:"Desde 1991",
+   text:"Diseña y construye sus propios satélites de observación terrestre. Sus radares SAOCOM miden la humedad del suelo a través de las nubes y ayudan a anticipar inundaciones y decidir siembras."},
+  {mark:"MX",place:"México",title:"AEM · Agencia Espacial Mexicana",year:"Desde 2010",
+   text:"Apuesta por formar ingeniería espacial dentro del país y por coordinar a universidades y empresas en proyectos de satélites pequeños."},
+  {mark:"CL",place:"Chile",title:"El país anfitrión de los telescopios",year:"Desde 1962",
+   text:"El norte chileno concentra una fracción enorme de la capacidad de observación óptica del mundo. La sequedad del desierto de Atacama y su altitud dan noches que ningún otro lugar iguala."},
+  {mark:"CR",place:"Costa Rica",title:"Irazú, el primer satélite centroamericano",year:"2018",
+   text:"Un cubesat construido por estudiantes e ingenieros costarricenses para vigilar bosques desde la órbita. Demostró que un país pequeño puede llegar al espacio con trabajo universitario."},
+  {mark:"GT",place:"Guatemala",title:"Quetzal-1, hecho en una universidad",year:"2020",
+   text:"Diseñado y ensamblado por un equipo universitario guatemalteco, midió la calidad del agua y de la vegetación desde la órbita baja durante meses. El camino que dejó abierto sigue disponible para toda la región."}
+];
+var regionGrid=document.getElementById("ogRegionGrid");
+if(regionGrid){
+  regionGrid.innerHTML=REGION.map(function(r){
+    return '<article class="og-region-card">'+
+      '<div class="og-region-flagline"><span class="og-region-mark">'+esc(r.mark)+"</span>"+
+      '<span class="og-region-place">'+esc(r.place)+"</span></div>"+
+      "<h3>"+esc(r.title)+"</h3><p>"+esc(r.text)+"</p>"+
+      '<span class="og-region-year">'+esc(r.year)+"</span></article>";
+  }).join("");
+}
+
+/* ============================================================
+   Portada decorativa
+   ============================================================ */
+var heroBars=document.getElementById("ogHeroBars");
+if(heroBars){
+  var seq=[18,34,52,26,44,62,30,48,22,58,36,66,28,40,54,24,46,60,32,50,20,42,56,38,64,26,48,34,58,30];
+  heroBars.innerHTML=seq.map(function(h,i){
+    return '<i style="height:'+h+"%;opacity:"+(0.35+(i%5)*0.13).toFixed(2)+'"></i>';
+  }).join("");
+}
+
+/* ============================================================
+   Apertura, cierre y navegación
+   ============================================================ */
+function ogOpenView(){
+  view.hidden=false;
+  view.setAttribute("aria-hidden","false");
+  document.documentElement.classList.add("nal-lock-scroll");
+  requestAnimationFrame(function(){view.classList.add("is-open")});
+  view.querySelectorAll(".reveal").forEach(function(el){el.classList.add("is-visible")});
+  view.dispatchEvent(new CustomEvent("ogview:open"));
+}
+function ogCloseView(){
+  view.classList.remove("is-open");
+  view.setAttribute("aria-hidden","true");
+  document.documentElement.classList.remove("nal-lock-scroll");
+  view.dispatchEvent(new CustomEvent("ogview:close"));
+  setTimeout(function(){view.hidden=true},350);
+}
+closeBtn.addEventListener("click",ogCloseView);
+document.addEventListener("keydown",function(e){
+  if(e.key==="Escape"&&view.classList.contains("is-open"))ogCloseView();
+});
+document.addEventListener("click",function(e){
+  var trigger=e.target.closest&&e.target.closest("[data-open-orgs]");
+  if(trigger){e.preventDefault();ogOpenView()}
+});
+
+var ogTabs=document.getElementById("ogTabs");
+if(ogTabs){
+  ogTabs.querySelectorAll(".og-tab").forEach(function(btn){
+    btn.addEventListener("click",function(){
+      var target=document.getElementById(btn.getAttribute("data-og-goto"));
+      if(!target)return;
+      var toolbarEl=view.querySelector(".og-toolbar");
+      var offset=(toolbarEl?toolbarEl.offsetHeight:64)+16;
+      var delta=target.getBoundingClientRect().top-view.getBoundingClientRect().top-offset;
+      view.scrollTo({top:view.scrollTop+delta,behavior:"smooth"});
+    });
+  });
+  if("IntersectionObserver"in window){
+    var ogSpy=new IntersectionObserver(function(entries){
+      entries.forEach(function(entry){
+        if(!entry.isIntersecting)return;
+        var id=entry.target.id;
+        ogTabs.querySelectorAll(".og-tab").forEach(function(btn){
+          btn.classList.toggle("is-active",btn.getAttribute("data-og-goto")===id);
+        });
+        var activeBtn=ogTabs.querySelector('.og-tab[data-og-goto="'+id+'"]');
+        if(activeBtn){
+          var tabsRect=ogTabs.getBoundingClientRect();
+          var btnRect=activeBtn.getBoundingClientRect();
+          ogTabs.scrollTo({left:ogTabs.scrollLeft+(btnRect.left+btnRect.width/2)-(tabsRect.left+tabsRect.width/2),behavior:"smooth"});
+        }
+      });
+    },{root:view,rootMargin:"-45% 0px -50% 0px",threshold:0});
+    ["ogHero","ogAtlas","ogPuertos","ogCronologia","ogDinero","ogReglas","ogMitos","ogRegion"].forEach(function(id){
+      var el=document.getElementById(id);
+      if(el)ogSpy.observe(el);
+    });
+  }
+}
+})();
+</script>
+
 <script id="showcase-script">
 (function(){
 "use strict";
@@ -8672,7 +9687,8 @@ var QUICK_ITEMS=[
   {label:"Galería espacial",href:"#hitosEspaciales",icon:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="6.5" width="15" height="11" rx="2"/><path d="M18 10l3.4-2v8L18 14"/><circle cx="8" cy="12" r="2.3"/></svg>'},
   {label:"Escala cósmica",href:"#escala",icon:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="M4 15v5h5"/><path d="M20 9V4h-5"/><path d="M20 4L13 11"/><path d="M4 20l7-7"/></svg>'},
   {label:"Aprender",href:"#aprender",icon:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4l9 4.5-9 4.5-9-4.5z"/><path d="M6.5 11v5c0 1.4 2.5 3 5.5 3s5.5-1.6 5.5-3v-5"/></svg>'},
-  {label:"Cielos Ancestrales",href:"#",attr:"data-open-ancestral",icon:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8.4"/><circle cx="12" cy="12" r="2.2" fill="currentColor" stroke="none"/><path d="M12 3.2v2.6M12 18.2v2.6M3.2 12h2.6M18.2 12h2.6M6.1 6.1l1.8 1.8M16.1 16.1l1.8 1.8M17.9 6.1l-1.8 1.8M7.9 16.1l-1.8 1.8"/></svg>'}
+  {label:"Cielos Ancestrales",href:"#",attr:"data-open-ancestral",icon:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8.4"/><circle cx="12" cy="12" r="2.2" fill="currentColor" stroke="none"/><path d="M12 3.2v2.6M12 18.2v2.6M3.2 12h2.6M18.2 12h2.6M6.1 6.1l1.8 1.8M16.1 16.1l1.8 1.8M17.9 6.1l-1.8 1.8M7.9 16.1l-1.8 1.8"/></svg>'},
+  {label:"Guardianes del Cosmos",href:"#",attr:"data-open-orgs",icon:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8.6"/><path d="M3.4 12h17.2"/><path d="M12 3.4c2.3 2.6 3.4 5.5 3.4 8.6S14.3 18 12 20.6C9.7 18 8.6 15.1 8.6 12S9.7 6 12 3.4z"/></svg>'}
 ];
 var quickRow=document.getElementById("quickAccessRow");
 if(quickRow){
@@ -8682,7 +9698,7 @@ if(quickRow){
 }
 
 var MILESTONES=[
-  {year:"1957",title:"Sputnik 1",text:"El primer objeto humano en alcanzar la órbita terrestre. Un pitido de radio que anunció la era espacial.",img:WM("Sputnik_asm.jpg"),link:"https://es.wikipedia.org/wiki/Sputnik_1"},
+  {year:"1957",title:"Sputnik 1",text:"El primer objeto humano en alcanzar la órbita terrestre. Un pitido de radio que anunció la era espacial.",img:WM("Sputnik_asm.jpg"),link:"https://es.wikipedia.org/wiki/Sputnik_1"},,
   {year:"1961",title:"Vostok 1",text:"Yuri Gagarin se convierte en el primer humano en ver la Tierra desde el espacio, en una sola órbita de 108 minutos.",img:WP("Yuri Gagarin",WM("Bundesarchiv_Bild_183-72131-0001,_Juri_Gagarin.jpg")),link:"https://es.wikipedia.org/wiki/Vostok_1"},
   {year:"1969",title:"Apollo 11",text:"Neil Armstrong y Buzz Aldrin pisan la Luna. La primera vez que un ser humano camina sobre otro mundo.",img:WM("Apollo_11_Crew.jpg"),link:"https://es.wikipedia.org/wiki/Apolo_11"},
   {year:"1977",title:"Voyager 1 y 2",text:"Lanzadas para sobrevolar los gigantes gaseosos, hoy son los objetos hechos por el hombre más lejanos del cosmos.",img:WM("Voyager_Golden_Record.jpg"),link:"https://es.wikipedia.org/wiki/Voyager_1"},
