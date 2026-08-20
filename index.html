@@ -1406,10 +1406,10 @@ html.nal-lock-scroll,html.nal-lock-scroll body{overflow:hidden}
 .nal-bar{position:fixed;top:88px;right:var(--space-4);z-index:var(--nal-z-bar);display:flex;align-items:center;gap:var(--space-3);background:rgba(var(--void-rgb),.6);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);border:1px solid var(--cosmic-indigo-border);border-radius:var(--radius-pill);padding:.45rem .55rem .45rem 1rem;box-shadow:var(--shadow-card);opacity:0;transform:translateY(-10px);pointer-events:none;transition:opacity var(--dur-med) var(--ease-out),transform var(--dur-med) var(--ease-out)}
 .nal-bar.is-visible{opacity:1;transform:none;pointer-events:auto}
 .nal-bar-greeting{font-family:var(--font-mono);font-size:.68rem;color:var(--estelar-mist-dim);white-space:nowrap;max-width:180px;overflow:hidden;text-overflow:ellipsis}
-.nal-level-switch{display:flex;gap:2px;background:var(--cosmic-indigo-light);border-radius:var(--radius-pill);padding:2px}
-.nal-lvl-btn{font-family:var(--font-mono);font-size:.62rem;letter-spacing:.03em;text-transform:uppercase;color:var(--proton-silver);padding:.35rem .6rem;border-radius:var(--radius-pill);transition:background var(--dur-fast),color var(--dur-fast)}
-.nal-lvl-btn:hover{color:var(--estelar-mist)}
-.nal-lvl-btn.is-active{background:var(--nebula-violet-dim);color:var(--estelar-mist)}
+
+
+
+
 .nal-logout{width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:var(--proton-silver);border:1px solid var(--cosmic-indigo-border);flex-shrink:0;transition:color var(--dur-fast),border-color var(--dur-fast)}
 .nal-logout:hover{color:var(--solar-ember);border-color:var(--solar-ember-dim)}
 .nal-logout svg{width:15px;height:15px}
@@ -2334,17 +2334,6 @@ html[data-nivel="principiante"] .section-head{border-left:2px solid var(--nebula
 
 <style id="cm-styles">
 /* Comunidad — muro estilo foro en vista de pantalla completa. Aislado, prefijo "cm-". */
-.cm-cta{position:relative;display:flex;align-items:center;gap:var(--space-5);width:100%;max-width:640px;margin-top:var(--space-4);padding:var(--space-6) var(--space-7);background:linear-gradient(135deg,var(--cosmic-indigo),var(--cosmic-indigo-light));border:1px solid var(--cosmic-indigo-border);border-radius:var(--radius-lg);overflow:hidden;text-align:left;cursor:pointer;transition:transform var(--dur-fast) var(--ease-out),border-color var(--dur-fast) var(--ease-out),box-shadow var(--dur-fast) var(--ease-out)}
-.cm-cta:hover{transform:translateY(-2px);border-color:var(--nebula-violet-soft);box-shadow:var(--shadow-card)}
-.cm-cta-glow{position:absolute;inset:-40% -10%;z-index:0;background:radial-gradient(circle,var(--solar-ember-dim),transparent 60%);opacity:.5;transition:opacity var(--dur-med);pointer-events:none}
-.cm-cta:hover .cm-cta-glow{opacity:1}
-.cm-cta-icon{position:relative;z-index:1;flex-shrink:0;width:56px;height:56px;border-radius:var(--radius-md);display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,var(--solar-ember-dim),var(--nebula-violet-dim));color:var(--solar-ember-soft)}
-.cm-cta-text{position:relative;z-index:1;display:flex;flex-direction:column;gap:.3rem}
-.cm-cta-text strong{font-family:var(--font-display);font-size:1.05rem;color:var(--estelar-mist)}
-.cm-cta-text small{font-family:var(--font-mono);font-size:.72rem;color:var(--proton-silver);letter-spacing:.02em}
-.cm-cta-arrow{position:relative;z-index:1;margin-left:auto;font-size:1.3rem;color:var(--solar-ember);transition:transform var(--dur-fast) var(--ease-out)}
-.cm-cta:hover .cm-cta-arrow{transform:translateX(6px)}
-@media(max-width:560px){.cm-cta{flex-wrap:wrap;padding:var(--space-5)}.cm-cta-arrow{display:none}}
 .cm-view{position:fixed;inset:0;z-index:9250;background:var(--deep-void);opacity:0;pointer-events:none;transition:opacity var(--dur-med) var(--ease-out);overflow-y:auto}
 .cm-view.is-open{opacity:1;pointer-events:auto}
 .cm-view-close{position:fixed;top:var(--space-5);right:var(--space-5);z-index:2;width:42px;height:42px;border-radius:50%;background:rgba(var(--void-rgb),.6);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);border:1px solid var(--cosmic-indigo-border);display:flex;align-items:center;justify-content:center;color:var(--estelar-mist);font-size:1.1rem}
@@ -2529,11 +2518,6 @@ window.initHScroll=function(rowEl){
 </div>
 </div>
 </div>
-<div class="nal-level-switch" role="group" aria-label="Cambiar nivel de experiencia">
-<button type="button" class="nal-lvl-btn" data-level="principiante">Princ.</button>
-<button type="button" class="nal-lvl-btn" data-level="intermedio">Interm.</button>
-<button type="button" class="nal-lvl-btn" data-level="avanzado">Avanz.</button>
-</div>
 <button type="button" class="nal-logout" id="nalLogout" title="Cerrar sesión" aria-label="Cerrar sesión">
 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><path d="M16 17l5-5-5-5"/><path d="M21 12H9"/></svg>
 </button>
@@ -2586,7 +2570,7 @@ window.initHScroll=function(rowEl){
 </span>
 </div>
 
-<div class="telemetry"> <div><strong>8</strong>planetas explorables</div> <div><strong>6</strong>módulos educativos</div> <div><strong>1</strong>guía cósmica interactiva</div> <div><strong>∞</strong>posibilidades por descubrir</div> </div> </div> </div> </section> <section class="section explorer-section" id="explorador"> <div class="container"> <div class="section-head reveal"> <span class="eyebrow">Sistema solar interactivo 360°</span> <h2>Explora el sistema solar en 3D</h2> <p>El mapa visual del sistema solar: recorre cada planeta en 3D real, sigue sus órbitas y abre su ficha detallada.</p> <button type="button" class="continue-chip" id="explorerContinueChip" hidden>Continuar en <span id="explorerContinueLabel"></span> <span aria-hidden="true">→</span></button> </div> <div class="solar-map-frame"> <iframe id="solarMapFrame" src="mapa-solar.html" title="Mapa visual del sistema solar en 3D" loading="lazy" allowfullscreen></iframe> </div> <p class="solar-map-actions"><a class="solar-map-open" href="mapa-solar.html" target="_blank" rel="noopener">Abrir el mapa a pantalla completa <span aria-hidden="true">↗</span></a></p> </div> </section> <section class="section" id="escala"> <div class="container"> <div class="section-head reveal"> <span class="eyebrow">De la Tierra al universo observable</span> <h2>Explorador de escala cósmica</h2> <p>Desliza el control para viajar desde nuestro planeta hasta los límites del universo conocido.</p> </div> <div class="scale-module reveal"> <div class="scale-stage" id="scaleStage" aria-hidden="true"> <div class="scale-circle" id="scaleCircle"></div> <img class="scale-photo" id="scaleImage" alt="" loading="lazy"> </div> <div class="scale-info"> <span class="eyebrow">Nivel de escala</span> <h3 id="scaleLabel">Tierra</h3> <p id="scaleText" class="scale-text">Nuestro hogar: 12.742 km de diámetro, con un 71% de su superficie cubierta por agua líquida.</p> <button type="button" class="scale-text-toggle" id="scaleTextToggle" aria-expanded="false" aria-controls="scaleText" hidden>+ detalle</button> <div class="telemetry" style="border:none;padding-top:0;margin-top:var(--space-5)"> <div><strong id="scaleReadout">1 : 1</strong>escala relativa</div> </div> <input type="range" class="range-slider" id="scaleSlider" min="1" max="8" value="1" step="1" aria-label="Selector de escala cósmica"> <div class="scale-ticks"><span>Tierra</span><span>Universo</span></div> </div> </div> </div> </section>  <div class="rs-view" id="rsView" hidden aria-hidden="true" role="dialog" aria-modal="true" aria-label="Ruta Estelar — aprendizaje del universo por niveles">
+<div class="telemetry"> <div><strong>8</strong>planetas explorables</div> <div><strong>6</strong>módulos educativos</div> <div><strong>1</strong>guía cósmica interactiva</div> <div><strong>∞</strong>posibilidades por descubrir</div> </div> </div> </div> </section> <section class="section explorer-section" id="explorador"> <div class="container"> <div class="section-head reveal"> <span class="eyebrow">Sistema solar interactivo 360°</span> <h2>Explora el sistema solar en 3D</h2> <p>El mapa visual del sistema solar: recorre cada planeta en 3D real, sigue sus órbitas y abre su ficha detallada.</p> <button type="button" class="continue-chip" id="explorerContinueChip" hidden>Continuar en <span id="explorerContinueLabel"></span> <span aria-hidden="true">→</span></button> </div> <div class="solar-map-frame"> <iframe id="solarMapFrame" src="mapa-solar.html" title="Mapa visual del sistema solar en 3D" loading="lazy" allowfullscreen></iframe> </div> <p class="solar-map-actions"><a class="solar-map-open" href="mapa-solar.html" target="_blank" rel="noopener">Abrir el mapa a pantalla completa <span aria-hidden="true">↗</span></a></p> </div> </section> <section class="section" id="escala"> <div class="container"> <div class="section-head reveal"> <span class="eyebrow">De la Tierra al universo observable</span> <h2>Explorador de escala cósmica</h2> <p>Desliza el control para viajar desde nuestro planeta hasta los límites del universo conocido. La cifra "1 : N" indica cuántas veces más grande es esa escala comparada con el diámetro de la Tierra.</p> </div> <div class="scale-module reveal"> <div class="scale-stage" id="scaleStage" aria-hidden="true"> <div class="scale-circle" id="scaleCircle"></div> <img class="scale-photo" id="scaleImage" alt="" loading="lazy"> </div> <div class="scale-info"> <span class="eyebrow">Nivel de escala</span> <h3 id="scaleLabel">Tierra</h3> <p id="scaleText" class="scale-text">Nuestro hogar: 12.742 km de diámetro, con un 71% de su superficie cubierta por agua líquida.</p> <button type="button" class="scale-text-toggle" id="scaleTextToggle" aria-expanded="false" aria-controls="scaleText" hidden>+ detalle</button> <div class="telemetry" style="border:none;padding-top:0;margin-top:var(--space-5)"> <div><strong id="scaleReadout">1 : 1</strong>tamaño comparado con el diámetro de la Tierra</div> </div> <input type="range" class="range-slider" id="scaleSlider" min="1" max="8" value="1" step="1" aria-label="Selector de escala cósmica"> <div class="scale-ticks"><span>Tierra</span><span>Universo</span></div> </div> </div> </div> </section>  <div class="rs-view" id="rsView" hidden aria-hidden="true" role="dialog" aria-modal="true" aria-label="Ruta Estelar — aprendizaje del universo por niveles">
 <button type="button" class="rs-view-close" id="rsViewClose" aria-label="Cerrar Ruta Estelar">✕</button>
 <div class="rs-view-inner" id="rsViewInner"></div>
 </div>
