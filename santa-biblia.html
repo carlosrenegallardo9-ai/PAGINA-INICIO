@@ -256,6 +256,9 @@
     position:fixed; inset:0; z-index:520;
     display:flex; align-items:center; justify-content:center;
     padding:clamp(.75rem,2.4vw,2rem);
+    /* notch / barra de gestos: el libro nunca queda debajo del área segura */
+    padding-bottom:max(clamp(.75rem,2.4vw,2rem), env(safe-area-inset-bottom, 0px));
+    padding-top:max(clamp(.75rem,2.4vw,2rem), env(safe-area-inset-top, 0px));
     opacity:0; visibility:hidden; pointer-events:none;
     transition:opacity .5s var(--ease), visibility 0s linear .5s;
     /* NUNCA overflow:hidden aquí: recortaría la cubierta y la hoja al girar */
@@ -272,6 +275,9 @@
     --thick: clamp(9px, .95vw, 15px);       /* grosor del canto/lomo */
     --open-dur: 1180ms;                     /* apertura completa */
     --flip-dur: 660ms;                      /* paso de página (500–800 ms) */
+    --tap: 44px;                            /* área táctil mínima */
+    --nav-h: 60px;                          /* banda de navegación: altura FIJA */
+    --parchment-bg: #efe1bc;                /* tono medio del pergamino */
     --ease-book: cubic-bezier(.4,.04,.28,1);
     --ease-flip: cubic-bezier(.38,.04,.3,1);
   }
@@ -296,6 +302,8 @@
     color:var(--parchment-ink); text-shadow:0.3px 0.3px 0 rgba(60,35,10,0.28), 0 0 1px rgba(60,35,10,0.12);
   }
   .book-gloss-block p.ink{ font-family:'Literata', serif; font-style:normal; font-weight:400; line-height:1.78; }
+  /* la palabra es la unidad de salto de línea; los glifos van dentro */
+  .ink-word{ display:inline-block; white-space:nowrap; }
   .ink-glyph{
     display:inline-block;
     /* la amplitud del "temblor de pluma" calculada en JS (--r/--y) se atenúa aquí en CSS
@@ -307,16 +315,20 @@
     font-family:'Space Mono',monospace; font-weight:700; letter-spacing:0.16em; text-transform:uppercase;
     color:var(--parchment-label); font-style:normal;
   }
+  /* PERGAMINO — marfil cálido con manchas de envejecido muy tenues y los
+     cantos ligeramente tostados, como el papel de una edición antigua */
   .parchment{
     background:
-      radial-gradient(ellipse 60% 45% at 18% 12%, rgba(255,250,230,0.55), transparent 60%),
-      radial-gradient(ellipse 50% 40% at 85% 88%, rgba(120,86,45,0.16), transparent 60%),
-      radial-gradient(circle at 92% 8%, rgba(90,60,30,0.10), transparent 40%),
-      linear-gradient(165deg, #f2e6c4 0%, #e9d7a8 55%, #eddcb2 100%);
+      radial-gradient(ellipse 55% 40% at 20% 14%, rgba(255,252,238,.65), transparent 58%),
+      radial-gradient(ellipse 42% 34% at 82% 84%, rgba(139,101,52,.16), transparent 62%),
+      radial-gradient(ellipse 26% 26% at 90% 10%, rgba(150,110,58,.10), transparent 70%),
+      radial-gradient(ellipse 18% 22% at 12% 78%, rgba(150,110,58,.09), transparent 70%),
+      radial-gradient(ellipse 12% 16% at 62% 34%, rgba(160,120,66,.07), transparent 70%),
+      linear-gradient(168deg, #f6ecd2 0%, #efe1bc 46%, #e8d7ae 78%, #f1e5c4 100%);
     position:relative;
   }
   .parchment::before{
-    content:''; position:absolute; inset:0; pointer-events:none; opacity:0.5; mix-blend-mode:multiply;
+    content:''; position:absolute; inset:0; pointer-events:none; opacity:0.42; mix-blend-mode:multiply;
     background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='0 0 0 0 0.35  0 0 0 0 0.27  0 0 0 0 0.14  0 0 0 0.5 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
   }
 
@@ -489,8 +501,12 @@
       radial-gradient(circle at 96% 6%, rgba(0,0,0,0.4), transparent 42%),
       repeating-linear-gradient(128deg, rgba(0,0,0,0.1) 0 1.4px, transparent 1.4px 3.6px),
       repeating-linear-gradient(38deg, rgba(0,0,0,0.06) 0 1px, transparent 1px 3.2px),
+      radial-gradient(ellipse 90% 80% at 50% 46%, rgba(122,52,36,.28), transparent 68%),
       linear-gradient(160deg, #5a2e22 0%, #3a1c14 38%, #241209 72%, var(--bg-darker) 100%);
-    box-shadow:inset 0 0 0 1px rgba(201,162,39,.12), 0 24px 48px -20px rgba(0,0,0,.75);
+    box-shadow:
+      inset 0 0 0 1px rgba(201,162,39,.12),
+      inset 0 0 90px rgba(0,0,0,.55),
+      0 24px 48px -20px rgba(0,0,0,.75);
   }
   .book-flap-front::after{
     content:''; position:absolute; inset:0; pointer-events:none;
@@ -574,13 +590,41 @@
   .book-face-content{
     position:absolute; inset:0; z-index:2;
     display:flex; flex-direction:column; align-items:center; justify-content:center;
-    text-align:center; gap:.55rem; padding:12% 8%; pointer-events:none;
+    text-align:center; gap:.5rem; padding:14% 10%; pointer-events:none;
+  }
+  /* filete doble grabado en oro: la marca de encuadernación más reconocible
+     de una Biblia de colección — un hilo fino por fuera y otro por dentro,
+     ambos con su sombra de hueco para que parezcan estampados en el cuero */
+  .book-face-content::before{
+    content:''; position:absolute; inset:6.5% 7%; border-radius:2px; pointer-events:none;
+    border:1px solid rgba(201,162,39,.52);
+    box-shadow:
+      0 1px 0 rgba(255,232,180,.14),
+      inset 0 0 0 3px rgba(0,0,0,.26),
+      inset 0 0 0 4px rgba(201,162,39,.30),
+      inset 0 0 30px rgba(0,0,0,.34);
+  }
+  /* costura ciega junto al canto */
+  .book-face-content::after{
+    content:''; position:absolute; inset:3.4% 3.8%; border-radius:4px; pointer-events:none;
+    border:1px dashed rgba(232,192,125,.20);
+  }
+  /* ornamento de pan de oro sobre el título */
+  .book-cover-orn{
+    width:clamp(52px, 26%, 96px); height:12px; opacity:.9; flex:0 0 auto;
   }
   .book-corner{ position:absolute; width:clamp(24px,7%,38px); height:clamp(24px,7%,38px); overflow:visible; }
-  .book-corner.tl{ top:6%; left:6%; }
-  .book-corner.tr{ top:6%; right:6%; transform:rotate(90deg); }
-  .book-corner.bl{ bottom:6%; left:6%; transform:rotate(-90deg); }
-  .book-corner.br{ bottom:6%; right:6%; transform:rotate(180deg); }
+  .book-corner.tl{ top:7.4%; left:7.9%; }
+  .book-corner.tr{ top:7.4%; right:7.9%; transform:rotate(90deg); }
+  .book-corner.bl{ bottom:7.4%; left:7.9%; transform:rotate(-90deg); }
+  .book-corner.br{ bottom:7.4%; right:7.9%; transform:rotate(180deg); }
+  /* estado de carga: el texto grabado aparece cuando las tipografías están
+     listas, para que el título no destelle primero con la fuente de sistema */
+  .book-cover-orn, .book-cover-title, .book-cover-divider, .book-cover-sub{
+    opacity:0; transition:opacity .45s var(--ease);
+  }
+  html.fonts-ready .book-cover-orn, html.fonts-ready .book-cover-title,
+  html.fonts-ready .book-cover-divider, html.fonts-ready .book-cover-sub{ opacity:1; }
   .book-cross-wrap{ position:relative; display:inline-flex; align-items:center; justify-content:center; margin-bottom:.3rem; pointer-events:none; }
   .book-cross-svg{
     width:clamp(3.2rem, calc(var(--page-w) * .21), 5.4rem); height:auto; display:block; overflow:visible;
@@ -611,7 +655,12 @@
     text-shadow:-1px -1px 0 rgba(255,226,170,0.25), 1px 1.5px 1.5px rgba(0,0,0,0.7), 0 0 14px rgba(201,162,39,0.25);
   }
   .book-cover-divider{ width:clamp(44px,22%,72px); height:9px; margin:.1rem 0; opacity:.85; }
-  .book-cover-sub{ font-family:'Space Mono',monospace; font-weight:700; text-transform:uppercase; font-size:clamp(8px, calc(var(--page-w) * .026), 11.5px); letter-spacing:.16em; color:var(--gold); text-shadow:0 1px 2px rgba(0,0,0,.6); }
+  .book-cover-sub{
+    font-family:'Cormorant Garamond',serif; font-style:italic; font-weight:600;
+    font-size:clamp(.78rem, calc(var(--page-w) * .046), 1.15rem);
+    letter-spacing:.04em; color:var(--gold-light); opacity:.92;
+    text-shadow:0 1px 2px rgba(0,0,0,.65);
+  }
   /* la tinta de inkifyEl fue calibrada para pergamino claro; sobre el cuero
      oscuro de la cubierta el texto debe seguir dorado */
   .book-cover-title .ink-glyph, .book-cover-sub .ink-glyph{ color:inherit !important; }
@@ -679,13 +728,12 @@
     overflow:visible;
     box-shadow:0 40px 90px -30px rgba(0,0,0,.75);
   }
+  /* la página ya NO se desplaza: el scroll vive dentro de .book-read, de modo
+     que el titulillo y la navegación quedan siempre fijos en su banda */
   .book-page{
-    position:relative; overflow:hidden auto; overscroll-behavior:contain;
-    padding:clamp(.9rem, calc(var(--page-w) * .075), 2.6rem);
-    scrollbar-width:thin; scrollbar-color:rgba(122,53,36,.4) transparent;
+    position:relative; overflow:hidden;
+    padding:clamp(.95rem, calc(var(--page-w) * .078), 2.7rem);
   }
-  .book-page::-webkit-scrollbar{ width:6px; }
-  .book-page::-webkit-scrollbar-thumb{ background:rgba(122,53,36,.35); border-radius:99px; }
   .book-page-left{ border-radius:2px 0 0 2px; }
   .book-page-right{ border-radius:0 5px 5px 0; }
   /* curvatura del papel hacia el pliegue + variación de iluminación: las
@@ -694,13 +742,21 @@
     content:''; position:absolute; inset:0; pointer-events:none; z-index:1;
     border-radius:inherit;
   }
+  /* curvatura: luz en el canto exterior, sombra creciente hacia el pliegue,
+     más un velo muy tenue en las esquinas (papel envejecido) */
   .book-page-left::after{
-    background:linear-gradient(90deg, rgba(255,252,240,.22) 0%, rgba(255,252,240,0) 16%, rgba(74,46,16,0) 62%, rgba(74,46,16,.13) 88%, rgba(52,32,10,.30) 100%);
-    box-shadow:inset 0 0 60px rgba(70,44,16,.20);
+    background:
+      radial-gradient(ellipse 70% 55% at 12% 90%, rgba(120,86,45,.10), transparent 62%),
+      linear-gradient(90deg, rgba(255,252,240,.30) 0%, rgba(255,252,240,0) 14%,
+        rgba(74,46,16,0) 58%, rgba(74,46,16,.16) 86%, rgba(46,28,8,.34) 100%);
+    box-shadow:inset 0 0 72px rgba(70,44,16,.22);
   }
   .book-page-right::after{
-    background:linear-gradient(270deg, rgba(255,252,240,.22) 0%, rgba(255,252,240,0) 16%, rgba(74,46,16,0) 62%, rgba(74,46,16,.13) 88%, rgba(52,32,10,.30) 100%);
-    box-shadow:inset 0 0 60px rgba(70,44,16,.20);
+    background:
+      radial-gradient(ellipse 70% 55% at 88% 90%, rgba(120,86,45,.10), transparent 62%),
+      linear-gradient(270deg, rgba(255,252,240,.30) 0%, rgba(255,252,240,0) 14%,
+        rgba(74,46,16,0) 58%, rgba(74,46,16,.16) 86%, rgba(46,28,8,.34) 100%);
+    box-shadow:inset 0 0 72px rgba(70,44,16,.22);
   }
   /* EL PLIEGUE REAL: eje central con doble sombra y filo de luz */
   .book-gutter{
@@ -726,67 +782,320 @@
   .book-spread::before{ left:0; border-radius:3px 0 0 3px; }
   .book-spread::after{ right:0; border-radius:0 3px 3px 0; }
 
-  /* página izquierda — sello simbólico */
-  .book-page-left{ display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; gap:1.2rem; }
-  .book-seal{ width:min(210px,62%); aspect-ratio:1/1; filter:drop-shadow(0 0 16px rgba(201,162,39,0.22)); }
-  .book-left-tag{ font-family:'Space Mono',monospace; font-size:clamp(9px,calc(var(--page-w)*.024),11px); letter-spacing:.16em; text-transform:uppercase; color:var(--parchment-label); }
-  .book-left-title{ font-family:'Cormorant Garamond',serif; font-style:italic; font-weight:600; font-size:clamp(1rem,calc(var(--page-w)*.042),1.35rem); color:var(--parchment-ink-2); max-width:26ch; }
-  .book-left-quote{ font-family:'Cormorant Garamond',serif; font-style:italic; font-size:clamp(.9rem,calc(var(--page-w)*.034),1.08rem); line-height:1.55; color:#5a3320; max-width:28ch; }
-  .book-to-index{
-    position:absolute; top:1rem; left:1rem; z-index:4;
-    font-family:'Space Mono',monospace; font-size:10px; letter-spacing:0.12em; text-transform:uppercase;
-    color:var(--parchment-label); background:rgba(255,250,235,0.35); border:1px dashed rgba(122,53,36,0.4); border-radius:var(--radius-full);
-    padding:0.45rem 0.85rem; cursor:pointer; transition:background-color .3s var(--ease);
+  /* =====================================================================
+     PÁGINA IZQUIERDA — LÁMINA ILUMINADA
+     Sello dentro de un roundel de pan de oro, filete doble y el motivo del
+     pasaje en cursiva. Es la "lámina" del pliego: acompaña, no compite.
+     ===================================================================== */
+  .book-page-left{
+    display:flex; flex-direction:column; align-items:center; justify-content:center;
+    text-align:center; gap:clamp(.7rem, calc(var(--page-w) * .035), 1.4rem);
   }
-  .book-to-index:hover{ background:rgba(255,250,235,0.6); }
+  /* fundido corto al confirmar la lámina tras el giro: evita que el cambio
+     del lado izquierdo se perciba como un salto */
+  .book-page-left.is-settling{ animation:plateSettle 320ms ease both; }
+  @keyframes plateSettle{
+    from{ opacity:.25; transform:translateY(5px); }
+    to  { opacity:1;   transform:none; }
+  }
+  @media (prefers-reduced-motion: reduce){
+    .book-page-left.is-settling{ animation:plateSettleSoft 160ms ease both; }
+  }
+  @keyframes plateSettleSoft{ from{ opacity:.4; } to{ opacity:1; } }
+
+  .book-plate{
+    position:relative; display:grid; place-items:center;
+    width:min(230px, 64%); aspect-ratio:1/1; flex:0 0 auto;
+  }
+  /* roundel: filete doble de oro envejecido con un halo interior cálido */
+  .book-plate::before{
+    content:''; position:absolute; inset:0; border-radius:50%;
+    border:1px solid rgba(166,139,60,.55);
+    box-shadow:0 0 0 5px rgba(247,240,220,.5), 0 0 0 6px rgba(166,139,60,.28),
+               inset 0 0 34px rgba(120,86,45,.16);
+    background:radial-gradient(circle at 50% 38%, rgba(255,251,236,.75), rgba(255,251,236,0) 66%);
+  }
+  .book-plate .book-seal{
+    position:relative; width:88%; height:auto; aspect-ratio:1/1;
+    filter:drop-shadow(0 2px 3px rgba(90,60,25,.18));
+  }
+  .book-left-tag{
+    font-family:'Cinzel',serif; font-weight:600;
+    font-size:clamp(10px, calc(var(--page-w) * .028), 13px);
+    letter-spacing:.22em; text-transform:uppercase; color:var(--parchment-label);
+  }
+  .book-left-title{
+    font-family:'Cinzel',serif; font-weight:600; line-height:1.32;
+    font-size:clamp(.95rem, calc(var(--page-w) * .042), 1.28rem);
+    letter-spacing:.04em; color:var(--parchment-ink-2); max-width:22ch;
+  }
+  .book-left-quote{
+    font-family:'Cormorant Garamond',serif; font-style:italic; font-weight:500;
+    font-size:clamp(.92rem, calc(var(--page-w) * .036), 1.12rem);
+    line-height:1.62; color:#5b3521; max-width:26ch;
+  }
+  .book-left-motif{
+    font-family:'Cormorant Garamond',serif; font-style:italic;
+    font-size:clamp(.82rem, calc(var(--page-w) * .030), .98rem);
+    line-height:1.55; color:#7c563c; max-width:24ch;
+  }
+  /* filete ornamental: hairline dorado con un rombo central */
+  .book-rule{
+    flex:0 0 auto; width:min(72%, 220px); height:9px; position:relative;
+    margin:.1rem auto;
+  }
+  .book-rule::before{
+    content:''; position:absolute; top:4px; left:0; right:0; height:1px;
+    background:linear-gradient(90deg, transparent, rgba(166,139,60,.65) 22%, rgba(166,139,60,.65) 78%, transparent);
+  }
+  .book-rule::after{
+    content:''; position:absolute; top:1.5px; left:50%; width:6px; height:6px; margin-left:-3px;
+    background:linear-gradient(135deg,#d9b45a,#a68b3c); transform:rotate(45deg);
+    box-shadow:0 0 0 2.5px var(--parchment-bg, #efe1bc);
+  }
+  .book-rule.is-short{ width:min(46%, 120px); }
+  .book-read > .book-rule{ margin:0 0 clamp(1rem, calc(var(--page-w)*.05), 1.7rem); }
+
+  .book-to-index{
+    position:absolute; top:clamp(.6rem,2.2%,1.1rem); left:clamp(.6rem,2.2%,1.1rem); z-index:4;
+    display:inline-flex; align-items:center; gap:.35rem;
+    min-height:34px; padding:0 .8rem;
+    font-family:'Space Mono',monospace; font-size:10px; letter-spacing:.12em; text-transform:uppercase;
+    color:var(--parchment-label);
+    background:rgba(255,250,235,.42); border:1px solid rgba(122,53,36,.28);
+    border-radius:var(--radius-full); cursor:pointer;
+    transition:background-color .3s var(--ease), border-color .3s var(--ease), transform .2s var(--ease);
+  }
+  .book-to-index:hover{ background:rgba(255,250,235,.72); border-color:rgba(122,53,36,.5); }
+  .book-to-index:active{ transform:scale(.97); }
   .book-to-index:focus-visible{ outline:2px solid var(--parchment-label); outline-offset:2px; }
 
-  /* página derecha — texto */
-  .book-page-right{ display:flex; flex-direction:column; }
-  .book-page-tag{ margin-bottom:1.1rem; font-size:clamp(9px,calc(var(--page-w)*.024),11px); }
-  .book-verse{ font-size:clamp(1.02rem, calc(var(--page-w) * .052), 1.8rem); line-height:1.46; margin-bottom:1.3rem; }
-  /* capitular iluminada, puramente vía CSS */
-  .book-verse .ink-glyph:first-child{
-    float:left; font-size:2.5em; line-height:0.78; font-weight:700;
-    padding:0.03em 0.09em 0 0; margin-top:0.03em;
-    color:var(--border-ornate); text-shadow:0 1px 1px rgba(0,0,0,0.15);
-    transform:none;
+  /* =====================================================================
+     PÁGINA DERECHA — CAJA EDITORIAL
+     Estructura fija en tres bandas (titulillo · lectura · navegación) para
+     que los controles NO cambien de sitio entre pasajes.
+     ===================================================================== */
+  .book-page-right{
+    display:flex; flex-direction:column;
+    /* la columna nunca se comprime por debajo de su contenido: sin esto, un
+       pasaje largo empujaba la navegación fuera de su banda */
+    min-height:0;
   }
-  .book-divider{ height:1px; background:linear-gradient(90deg, transparent, rgba(122,53,36,0.35), transparent); margin-bottom:1.2rem; }
-  .book-gloss-block{ margin-bottom:1rem; }
-  .book-gloss-block h5{ font-size:clamp(8.5px,calc(var(--page-w)*.023),10.5px); margin-bottom:0.45rem; }
-  .book-gloss-block p{ font-size:clamp(.86rem, calc(var(--page-w) * .031), 1.04rem); line-height:1.7; }
-  .book-page-nav{ margin-top:auto; padding-top:1.2rem; display:flex; align-items:center; justify-content:space-between; gap:.5rem; flex-wrap:wrap; }
-  .book-pill{
-    font-family:'Space Mono',monospace; font-size:clamp(8.5px,calc(var(--page-w)*.022),10px); letter-spacing:0.1em; text-transform:uppercase;
-    color:#5a3320; background:rgba(255,250,235,0.4); border:1px dashed rgba(122,53,36,0.4); border-radius:var(--radius-full);
-    padding:0.5rem .9rem; cursor:pointer; transition:background-color .3s var(--ease), opacity .3s var(--ease);
-    white-space:nowrap;
+  /* titulillo: nombre del pasaje + folio, separados por un hairline */
+  .book-runhead{
+    flex:0 0 auto;
+    display:flex; align-items:baseline; justify-content:space-between; gap:1rem;
+    padding-bottom:.55rem; margin-bottom:clamp(.9rem, calc(var(--page-w)*.05), 1.7rem);
+    border-bottom:1px solid rgba(166,139,60,.42);
   }
-  .book-pill:hover{ background:rgba(255,250,235,0.7); }
-  .book-pill:focus-visible, .book-index-row:focus-visible, .book-continue:focus-visible{ outline:2px solid var(--parchment-label); outline-offset:2px; }
-  .book-pill[disabled]{ opacity:0.3; cursor:default; pointer-events:none; }
-  .book-pill.is-primary{ background:rgba(201,162,39,0.14); border-style:solid; border-color:var(--border-ornate); }
+  .book-page-tag{
+    font-family:'Cinzel',serif; font-weight:600;
+    font-size:clamp(10px, calc(var(--page-w) * .027), 13px);
+    letter-spacing:.2em; text-transform:uppercase; color:var(--parchment-label);
+    white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+  }
+  /* indicador de avance: un hilo de oro al pie, sin impacto en el layout */
+  .book-progress{
+    position:absolute; left:0; right:0; bottom:0; height:2px; z-index:2;
+    pointer-events:none; background:rgba(122,53,36,.12);
+  }
+  .book-progress span{
+    display:block; height:100%;
+    background:linear-gradient(90deg, rgba(201,162,39,.55), rgba(233,201,126,.95));
+    box-shadow:0 0 6px rgba(201,162,39,.45);
+    transition:width .5s var(--ease);
+  }
+  .book-folio{
+    font-family:'Space Mono',monospace; font-size:clamp(8.5px, calc(var(--page-w)*.022), 10.5px);
+    letter-spacing:.14em; color:#9a7a5e; white-space:nowrap; flex:0 0 auto;
+  }
+  /* banda de lectura: es la ÚNICA que crece y la única que se desplaza */
+  .book-read{
+    flex:1 1 auto; min-height:0; overflow:hidden auto; overscroll-behavior:contain;
+    scrollbar-width:thin; scrollbar-color:rgba(122,53,36,.35) transparent;
+    padding-right:.2rem;
+  }
+  .book-read::-webkit-scrollbar{ width:5px; }
+  .book-read::-webkit-scrollbar-thumb{ background:rgba(122,53,36,.3); border-radius:99px; }
 
-  /* ---- página índice ---- */
-  .book-index-title{ font-family:'Cinzel',serif; font-weight:600; font-size:clamp(1.05rem,calc(var(--page-w)*.045),1.5rem); letter-spacing:0.02em; color:var(--parchment-ink-2); margin-bottom:1rem; }
-  .book-continue{
-    display:inline-flex; align-items:center; gap:0.5rem; margin-bottom:1.3rem;
-    font-family:'Space Mono',monospace; font-size:clamp(9px,calc(var(--page-w)*.023),10.5px); letter-spacing:0.08em; text-transform:uppercase;
-    color:var(--parchment-label); background:rgba(122,53,36,0.08); border:1px dashed rgba(122,53,36,0.4); border-radius:var(--radius-full);
-    padding:0.55rem 1rem; cursor:pointer;
+  .book-verse{
+    font-family:'Cormorant Garamond',serif; font-style:italic; font-weight:600;
+    font-size:clamp(1.08rem, calc(var(--page-w) * .056), 1.85rem);
+    line-height:1.42; color:var(--parchment-ink-2);
+    margin-bottom:clamp(.9rem, calc(var(--page-w)*.045), 1.5rem);
+    max-width:30ch;
   }
+  /* capitular iluminada: panel de pan de oro con filete y la inicial en Cinzel */
+  .book-verse-open{
+    font-family:'Cormorant Garamond',serif; font-style:italic;
+    color:var(--parchment-label); opacity:.7; margin-right:.06em;
+  }
+  .book-dropcap{
+    display:inline-block; vertical-align:-.14em;
+    padding:.08em .14em .1em; margin:0 .04em 0 0;
+    font-size:1.5em; font-family:'Cinzel',serif; font-weight:700; font-style:normal;
+    color:#57200f; line-height:1;
+    background:
+      radial-gradient(ellipse at 30% 24%, rgba(255,250,228,.9), rgba(255,250,228,0) 62%),
+      linear-gradient(150deg,#e6c574 0%,#cfa646 46%,#b98f38 100%);
+    border:1px solid rgba(122,84,20,.55);
+    box-shadow:0 1px 2px rgba(70,44,14,.35), inset 0 1px 0 rgba(255,248,220,.6);
+    text-shadow:0 1px 0 rgba(255,245,210,.5);
+  }
+  .book-gloss-block{ margin-bottom:clamp(.9rem, calc(var(--page-w)*.042), 1.4rem); max-width:44ch; }
+  .book-gloss-block h5{
+    font-family:'Cinzel',serif; font-weight:600; font-style:normal;
+    font-size:clamp(9px, calc(var(--page-w) * .024), 11.5px);
+    letter-spacing:.2em; text-transform:uppercase; color:var(--parchment-label);
+    margin-bottom:.5rem; display:flex; align-items:center; gap:.55rem;
+  }
+  .book-gloss-block h5::after{
+    content:''; flex:1 1 auto; height:1px;
+    background:linear-gradient(90deg, rgba(166,139,60,.5), transparent);
+  }
+  /* lectura prolongada: Literata, sin jitter por glifo (era lo que bajaba el
+     contraste y multiplicaba los nodos del DOM), interlínea generosa y una
+     medida corta */
+  .book-gloss-block p, .book-note{
+    font-family:'Literata',Georgia,serif; font-weight:400; font-style:normal;
+    font-size:clamp(.9rem, calc(var(--page-w) * .0325), 1.06rem);
+    line-height:1.82; color:var(--parchment-ink);
+    /* alineado a la izquierda: con una medida corta, justificar abría ríos de
+       espacio entre palabras y perjudicaba la lectura */
+    text-align:left; overflow-wrap:break-word;
+  }
+  .book-note{ color:#6a4a30; }
+
+  /* =====================================================================
+     NAVEGACIÓN — banda de altura CONSTANTE, tres columnas fijas.
+     El bug en móvil venía de `justify-content:space-between` + `flex-wrap`
+     con etiquetas de ancho variable ("← Índice" frente a
+     "← Colosenses 1:16-17"): unos pasajes envolvían a dos filas y otros no,
+     así que la banda cambiaba de alto y los botones se movían de sitio.
+     Ahora la rejilla es 1fr/auto/1fr, nunca envuelve, el texto largo se
+     recorta con puntos suspensivos y la banda reserva siempre --nav-h.
+     ===================================================================== */
+  .book-page-nav{
+    flex:0 0 auto;              /* jamás se comprime */
+    margin-top:auto;            /* siempre al pie de la caja */
+    display:grid;
+    grid-template-columns:1fr auto 1fr;
+    align-items:stretch;
+    gap:.5rem;
+    min-height:var(--nav-h);
+    padding-top:clamp(.8rem, calc(var(--page-w)*.04), 1.3rem);
+    padding-bottom:max(0px, env(safe-area-inset-bottom, 0px));
+  }
+  .book-pill{
+    min-height:var(--tap); min-width:0;
+    display:inline-flex; align-items:center; justify-content:center; gap:.4rem;
+    padding:.4rem .85rem;
+    font-family:'Space Mono',monospace;
+    font-size:clamp(8.5px, calc(var(--page-w) * .0225), 10.5px);
+    letter-spacing:.1em; text-transform:uppercase;
+    color:#5a3320;
+    background:rgba(255,250,235,.4);
+    border:1px solid rgba(122,53,36,.3);
+    border-radius:var(--radius-full);
+    cursor:pointer; -webkit-tap-highlight-color:transparent;
+    transition:background-color .28s var(--ease), border-color .28s var(--ease),
+               color .28s var(--ease), transform .18s var(--ease), box-shadow .28s var(--ease);
+  }
+  .book-pill-label{ overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  .book-pill-arrow{ flex:0 0 auto; opacity:.7; transition:transform .28s var(--ease), opacity .28s var(--ease); }
+  .book-pill.is-prev{ justify-content:flex-start; }
+  .book-pill.is-next{ justify-content:flex-end; }
+  .book-pill:hover{ background:rgba(255,250,235,.75); border-color:rgba(122,53,36,.5); }
+  .book-pill:hover .book-pill-arrow{ opacity:1; }
+  .book-pill.is-prev:hover .book-pill-arrow{ transform:translateX(-2px); }
+  .book-pill.is-next:hover .book-pill-arrow{ transform:translateX(2px); }
+  .book-pill:active{ transform:scale(.975); }
+  .book-pill:focus-visible{ outline:2px solid var(--parchment-label); outline-offset:2px; }
+  /* jerarquía: la acción principal (avanzar) lleva el oro; el resto es sobrio */
+  .book-pill.is-primary{
+    color:#3f2308; font-weight:700;
+    background:linear-gradient(160deg, rgba(233,201,126,.92), rgba(201,162,39,.78));
+    border-color:rgba(122,84,20,.55);
+    box-shadow:inset 0 1px 0 rgba(255,248,220,.65), 0 1px 3px rgba(80,52,16,.22);
+  }
+  .book-pill.is-primary:hover{ filter:brightness(1.05); }
+  .book-pill.is-index{ background:transparent; border-style:dashed; }
+  .book-pill.is-index:hover{ background:rgba(255,250,235,.55); }
+  .book-pill[disabled], .book-pill[aria-disabled="true"]{ pointer-events:none; }
+  .book-pill[disabled]{ opacity:.34; }
+  /* hueco invisible que conserva la columna cuando no hay botón */
+  .book-pill.is-ghost{ visibility:hidden; pointer-events:none; }
+
+  /* mientras la hoja gira los controles no cambian de sitio ni de tamaño:
+     solo dejan de responder y bajan un punto */
+  .book-open.is-busy .book-page-nav,
+  .book-open.is-busy .book-to-index,
+  .book-open.is-busy .book-index-list,
+  .book-open.is-busy .book-continue{ pointer-events:none; opacity:.72; transition:opacity .2s ease; }
+
+  /* =====================================================================
+     ÍNDICE
+     ===================================================================== */
+  .book-index-title{
+    font-family:'Cinzel',serif; font-weight:600;
+    font-size:clamp(1.02rem, calc(var(--page-w)*.046), 1.5rem);
+    letter-spacing:.05em; color:var(--parchment-ink-2); line-height:1.28;
+    margin-bottom:.35rem;
+  }
+  .book-index-sub{
+    font-family:'Cormorant Garamond',serif; font-style:italic;
+    font-size:clamp(.86rem, calc(var(--page-w)*.032), 1rem);
+    color:#7c563c; margin-bottom:clamp(.8rem, calc(var(--page-w)*.04), 1.2rem);
+  }
+  .book-continue{
+    display:inline-flex; align-items:center; gap:.5rem;
+    min-height:var(--tap); padding:0 1rem;
+    margin-bottom:clamp(.8rem, calc(var(--page-w)*.04), 1.2rem);
+    font-family:'Space Mono',monospace;
+    font-size:clamp(9px, calc(var(--page-w)*.023), 10.5px);
+    letter-spacing:.1em; text-transform:uppercase;
+    color:#3f2308;
+    background:linear-gradient(160deg, rgba(233,201,126,.85), rgba(201,162,39,.7));
+    border:1px solid rgba(122,84,20,.5); border-radius:var(--radius-full);
+    box-shadow:inset 0 1px 0 rgba(255,248,220,.6);
+    cursor:pointer; transition:filter .28s var(--ease), transform .18s var(--ease);
+  }
+  .book-continue:hover{ filter:brightness(1.06); }
+  .book-continue:active{ transform:scale(.98); }
   .book-index-list{ display:flex; flex-direction:column; }
   .book-index-row{
-    display:flex; align-items:center; justify-content:space-between; gap:1rem;
-    padding:.85rem 0.2rem; border:none; border-bottom:1px dashed rgba(122,53,36,0.28);
+    display:grid; grid-template-columns:auto minmax(0,max-content) 1fr; align-items:center; gap:.7rem;
+    min-height:var(--tap); padding:.5rem .3rem;
+    border:none; border-bottom:1px solid rgba(166,139,60,.28);
     cursor:pointer; background:none; text-align:left; width:100%;
-    font-family:'Cormorant Garamond',serif; font-size:clamp(.95rem,calc(var(--page-w)*.038),1.18rem); color:var(--parchment-ink);
-    transition:padding-left .3s var(--ease), color .3s var(--ease);
+    color:var(--parchment-ink);
+    transition:background-color .28s var(--ease), color .28s var(--ease);
   }
   .book-index-row:last-child{ border-bottom:none; }
-  .book-index-row:hover{ padding-left:0.6rem; color:var(--parchment-label); }
-  .book-index-row .book-index-num{ font-family:'Space Mono',monospace; font-size:clamp(9px,calc(var(--page-w)*.023),11px); color:#a9866f; flex:0 0 auto; }
+  .book-index-row:hover{ background:rgba(201,162,39,.12); color:var(--parchment-label); }
+  .book-index-row:active{ background:rgba(201,162,39,.2); }
+  .book-index-num{
+    font-family:'Space Mono',monospace;
+    font-size:clamp(8.5px, calc(var(--page-w)*.021), 10px);
+    color:#a9866f; letter-spacing:.08em;
+  }
+  .book-index-name{
+    font-family:'Cormorant Garamond',serif; font-weight:600;
+    font-size:clamp(.98rem, calc(var(--page-w)*.04), 1.2rem);
+    line-height:1.25; min-width:0;
+  }
+  .book-index-name small{
+    display:block; font-family:'Literata',Georgia,serif; font-style:normal; font-weight:400;
+    font-size:.62em; color:#8a6a4e; letter-spacing:.01em; margin-top:.1em;
+    overflow:hidden; text-overflow:ellipsis; white-space:nowrap;
+  }
+  /* punteado de guía hasta el número, como en un índice impreso */
+  .book-index-dots{
+    height:1px; align-self:end; margin-bottom:.72em;
+    background-image:radial-gradient(circle, rgba(122,53,36,.42) 1px, transparent 1px);
+    background-size:5px 1px; background-repeat:repeat-x; background-position:0 0;
+    min-width:1.5rem;
+  }
 
   /* =====================================================================
      "PASO DE PÁGINA DEL CÓDICE" — animación independiente de la apertura.
@@ -849,21 +1158,50 @@
   .page-flip.is-active{ animation:pageFlipLift var(--flip-dur) ease-in-out both; }
   .page-flip.is-active.is-forward  .page-flip-sheet{ animation:pageFlipForward  var(--flip-dur) var(--ease-flip) both; }
   .page-flip.is-active.is-backward .page-flip-sheet{ animation:pageFlipBackward var(--flip-dur) var(--ease-flip) both; }
+  /* La elevación sigue la forma de |sen θ|: solo se aleja cuando la hoja
+     está cerca de la vertical (que es donde la perspectiva la agranda) y
+     vuelve a +5px en los extremos. Sin los nodos del 26% y el 74% el plano
+     de la hoja cruzaba el de la página al aterrizar y la página tapaba media
+     hoja (se veía una costura vertical a mitad del pliego). */
   @keyframes pageFlipLift{
-    0%  { transform:translateZ(0) scaleX(1); }
+    0%  { transform:translateZ(5px) scaleX(1); }
+    26% { transform:translateZ(0) scaleX(.994); }
     50% { transform:translateZ(calc(var(--page-w) * -.22)) scaleX(.976); }
-    100%{ transform:translateZ(0) scaleX(1); }
+    74% { transform:translateZ(0) scaleX(.994); }
+    100%{ transform:translateZ(5px) scaleX(1); }
   }
   /* una única curva continua para el giro: arranque suave, cuerpo firme y
      aterrizaje amortiguado, como una hoja de papel real */
   @keyframes pageFlipForward{
-    from{ transform:rotateY(0deg); }
+    from{ transform:rotateY(-1.5deg); }
     to  { transform:rotateY(-179deg); }
   }
   @keyframes pageFlipBackward{
     from{ transform:rotateY(-179deg); }
-    to  { transform:rotateY(0deg); }
+    to  { transform:rotateY(-1.5deg); }
   }
+  /* variantes de página única (móvil / pantallas bajas) */
+  @keyframes pageFlipForwardSingle{
+    from{ transform:rotateY(-1.5deg); }
+    to  { transform:rotateY(-78deg); }
+  }
+  @keyframes pageFlipBackwardSingle{
+    from{ transform:rotateY(-78deg); }
+    to  { transform:rotateY(-1.5deg); }
+  }
+  @keyframes pageLiftSingleFwd{
+    from{ transform:translateZ(4px) scaleX(1); }
+    to  { transform:translateZ(calc(var(--page-w) * -.26)) scaleX(.985); }
+  }
+  @keyframes pageLiftSingleBack{
+    from{ transform:translateZ(calc(var(--page-w) * -.26)) scaleX(.985); }
+    to  { transform:translateZ(4px) scaleX(1); }
+  }
+  /* el fundido va en la CARA, no en .page-flip: una opacidad < 1 en un
+     antecesor aplanaría la escena 3D y el giro dejaría de tener volumen.
+     Además oculta los ángulos más extremos, que son los que más deforman. */
+  @keyframes pageFaceOut{ 0%,56%{ opacity:1; } 100%{ opacity:0; } }
+  @keyframes pageFaceIn { 0%{ opacity:0; } 40%,100%{ opacity:1; } }
   .page-flip.is-active .page-flip-face::after{ animation:pageSheen var(--flip-dur) ease-in-out both; }
   @keyframes pageSheen{
     0%  { opacity:.05; }
@@ -908,6 +1246,25 @@
     .page-flip{ left:0; width:100%; }
     .page-flip-shade-a{ left:0; width:100%; }
     .page-flip-shade-b{ display:none; }
+    /* En página única la hoja no tiene mitad izquierda donde posarse. Si
+       completara los 180° acabaría girando sobre el fondo negro (y al
+       retroceder no se veía NADA durante la primera mitad del giro). Aquí el
+       arco se detiene en la vertical, dentro del propio pliegue: la hoja se
+       pliega hacia el lomo al avanzar y se despliega desde él al retroceder,
+       siempre contenida en la página. */
+    .page-flip-back{ display:none; }
+    /* perspectiva más lejana en página única: con el punto de fuga cerca, la
+       hoja casi vertical se agrandaba un 40% y se salía del libro por arriba
+       y por abajo */
+    .book-stage{ perspective:calc(var(--book-w) * 4.2); }
+    .page-flip.is-active.is-forward  .page-flip-sheet{ animation-name:pageFlipForwardSingle; }
+    .page-flip.is-active.is-backward .page-flip-sheet{ animation-name:pageFlipBackwardSingle; }
+    /* la elevación es asimétrica: el momento vertical está al FINAL al
+       avanzar y al PRINCIPIO al retroceder */
+    .page-flip.is-active.is-forward { animation-name:pageLiftSingleFwd; }
+    .page-flip.is-active.is-backward{ animation-name:pageLiftSingleBack; }
+    .page-flip.is-active.is-forward  .page-flip-front{ animation:pageFaceOut var(--flip-dur) ease-in both; }
+    .page-flip.is-active.is-backward .page-flip-front{ animation:pageFaceIn  var(--flip-dur) ease-out both; }
     /* en página única la tapa volcada no tiene mitad izquierda donde posarse:
        se retira al terminar la apertura en vez de quedarse como un panel de
        cuero suelto junto al texto */
@@ -930,14 +1287,18 @@
   @supports (height:1svh){
     @media (max-height:470px){ .book{ --book-h: min(88svh, 400px); } }
   }
-  /* en pantallas cortas la navegación queda siempre a mano aunque el pasaje
-     sea largo y la página tenga que desplazarse */
-  @media (max-width:760px), (max-height:560px){
+  /* Móviles estrechos: distribución a dos filas DELIBERADA y simétrica —
+     idéntica en todos los pasajes, nunca decidida por flex-wrap. */
+  @media (max-width:400px){
     .book-page-nav{
-      position:sticky; bottom:0; z-index:3;
-      padding-bottom:.5rem;
-      background:linear-gradient(180deg, rgba(238,224,186,0) 0%, rgba(238,224,186,.94) 34%, rgba(236,221,180,.99) 100%);
+      grid-template-columns:1fr 1fr;
+      grid-template-areas:"prev next" "index index";
+      row-gap:.45rem;
+      min-height:calc(var(--nav-h) * 2 - 14px);
     }
+    .book-pill.is-prev { grid-area:prev;  justify-content:center; }
+    .book-pill.is-next { grid-area:next;  justify-content:center; }
+    .book-pill.is-index{ grid-area:index; }
   }
   @media (max-height:560px){
     .book{ padding:.5rem; }
@@ -950,6 +1311,8 @@
      la apertura y el paso de página se resuelven con fundidos muy breves.
      ===================================================================== */
   @media (prefers-reduced-motion: reduce){
+    /* una sola fuente de verdad también aquí: JS lee estas variables */
+    .book{ --open-dur:260ms; --flip-dur:200ms; }
     .book-object, .book-flaps, .book-flap, .book-ground{ transition:none !important; }
     .book.is-cover .book-object{ transform:none; }
     .book.is-cover .book-flaps{ transform:none; }
@@ -966,7 +1329,8 @@
     .cross-sparkle{ opacity:.45; }
     .page-flip.is-active{ animation:none !important; }
     .page-flip.is-active.is-forward .page-flip-sheet,
-    .page-flip.is-active.is-backward .page-flip-sheet{ animation:reducedFade 180ms ease both; }
+    .page-flip.is-active.is-backward .page-flip-sheet{ animation:reducedFade var(--flip-dur) ease both; }
+    .page-flip.is-active .page-flip-front{ animation:none !important; opacity:1; }
     .page-flip.is-active .page-flip-face::after{ animation:none; opacity:.05; }
     .page-flip.is-active ~ .page-flip-shade-a,
     .page-flip.is-active ~ .page-flip-shade-b,
@@ -978,9 +1342,9 @@
 
   /* =====================================================================
      ZONA DE INTEGRACIÓN FUTURA: cuando el JSON completo de la Biblia esté
-     disponible, las reglas .book-verse / .book-index-row / .book-seal /
-     .book-page-tag de arriba son las que darán estilo a cada libro,
-     capítulo y versículo real — no se requiere ningún cambio de CSS.
+     disponible, las reglas .book-verse / .book-read / .book-index-row /
+     .book-plate / .book-runhead de arriba son las que darán estilo a cada
+     libro, capítulo y versículo real — no se requiere ningún cambio de CSS.
      ===================================================================== */
 </style>
 </head>
@@ -1124,6 +1488,11 @@
                 <span class="cross-sparkle s4"></span>
                 <span class="cross-sparkle s5"></span>
               </div>
+              <svg class="book-cover-orn" viewBox="0 0 96 12" aria-hidden="true">
+                <path d="M2 6h30M64 6h30" stroke="#c9a227" stroke-width="1" stroke-linecap="round" opacity=".85"/>
+                <path d="M36 6l6-4 6 4-6 4z" fill="#e8c07d" opacity=".95"/>
+                <path d="M48 6l6-4 6 4-6 4z" fill="#c9a227" opacity=".8"/>
+              </svg>
               <h2 class="book-cover-title">Santa Biblia</h2>
               <svg class="book-cover-divider" viewBox="0 0 64 9" aria-hidden="true">
                 <line x1="0" y1="4.5" x2="24" y2="4.5" stroke="#c9a227" stroke-width="1"/>
@@ -1306,20 +1675,37 @@
   // envuelve cada carácter en un span con leve variación aleatoria, para que el texto
   // antiguo se lea como manuscrito a pluma y no como texto tipografiado plano
   const INK_TONES = ['#2c1c10', '#1a1008']; // marrón cálamo / casi negro — variación de presión de pluma
+  /* Cada glifo es un inline-block para poder inclinarlo, y eso permitía al
+     navegador CORTAR las palabras por cualquier letra ("los c / ielos"). Por
+     eso ahora cada palabra se envuelve en .ink-word, que no se parte. */
   function inkHtml(text){
-    return [...text].map(ch=>{
-      if(ch === ' ') return ' ';
-      const r = (Math.random()*3.4 - 1.7).toFixed(2);
-      const y = (Math.random()*2.6 - 1.3).toFixed(2);
-      const o = (0.82 + Math.random()*0.18).toFixed(2);
-      const tone = INK_TONES[Math.random() < 0.78 ? 0 : 1];
-      const safe = ch.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
-      return `<span class="ink-glyph" style="--r:${r}deg;--y:${y}px;color:${tone};opacity:${o}">${safe}</span>`;
+    return String(text).split(/(\s+)/).map(function(chunk){
+      if(/^\s+$/.test(chunk)) return ' ';
+      if(!chunk) return '';
+      const glyphs = [...chunk].map(function(ch){
+        const r = (Math.random()*3.4 - 1.7).toFixed(2);
+        const y = (Math.random()*2.6 - 1.3).toFixed(2);
+        const o = (0.9 + Math.random()*0.1).toFixed(2);
+        const tone = INK_TONES[Math.random() < 0.78 ? 0 : 1];
+        const safe = ch.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+        return `<span class="ink-glyph" style="--r:${r}deg;--y:${y}px;color:${tone};opacity:${o}">${safe}</span>`;
+      }).join('');
+      return '<span class="ink-word">' + glyphs + '</span>';
     }).join('');
   }
   function inkifyEl(el){ if(el) el.innerHTML = inkHtml(el.textContent); }
   document.querySelectorAll('.book-cover-title').forEach(inkifyEl);
   document.querySelectorAll('.book-cover-sub').forEach(inkifyEl);
+
+  // ---- estado de carga de tipografías (con red de seguridad) ----
+  function fontsReady(){ document.documentElement.classList.add('fonts-ready'); }
+  if(document.fonts && document.fonts.ready && typeof document.fonts.ready.then === 'function'){
+    document.fonts.ready.then(fontsReady, fontsReady);
+  } else {
+    fontsReady();
+  }
+  // si las fuentes remotas no llegan, el texto se muestra igualmente
+  window.setTimeout(fontsReady, 2500);
 
   let bookSealUid = 0;
   // estética de grabado/xilografía renacentista: tinta monocroma, trazos finos,
@@ -1393,52 +1779,130 @@
   }
 
   /* ============ RENDER DE LAS DOS MITADES ============
-     buildPageHtml/buildIndexHtml devuelven el HTML de la mitad izquierda y
-     de la derecha por SEPARADO. Ese es el cambio que permite que la hoja
-     que gira lleve contenido real en su frente y en su reverso, y que cada
-     mitad se actualice justo en el instante en el que deja de estar a la
-     vista (sin parpadeos ni contenido que aparece antes de tiempo).
-     BOOK_PAGES y el marcado generado son idénticos a los anteriores. */
+     buildPageHtml/buildIndexHtml devuelven el HTML de la mitad izquierda y de
+     la derecha por SEPARADO. Eso es lo que permite que la hoja que gira lleve
+     contenido real en su frente y en su reverso, y que cada mitad se
+     actualice en el instante exacto en que deja de estar a la vista.
+     BOOK_PAGES no se toca: solo cambia cómo se compone.
+
+     Estructura fija de la página derecha (tres bandas):
+        .book-runhead   → titulillo + folio          (altura fija)
+        .book-read      → la ÚNICA banda que crece y se desplaza
+        .book-page-nav  → navegación                 (altura fija, --nav-h)
+     Gracias a esto un pasaje largo ya no puede empujar los botones. */
+
+  const ROMAN = ['I','II','III','IV','V','VI','VII','VIII','IX','X','XI','XII'];
+  function roman(n){ return ROMAN[n] || String(n+1); }
+  function esc(t){
+    return String(t).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  }
+
+  /* Inicial iluminada: panel de pan de oro con la primera LETRA del pasaje.
+     Se separa del signo de apertura («) para que la capitular sea la letra y
+     no el guillemot, y se deja como "versal alzada" (no flotante) para que no
+     descoloque el texto justificado ni provoque saltos de línea raros. */
+  function verseHtml(text){
+    const m = String(text).match(/^(\s*[«"'¿¡(\[]*\s*)(\S)([\s\S]*)$/);
+    if(!m) return inkHtml(text);
+    return '<span class="book-verse-open">' + esc(m[1].trim()) + '</span>'
+         + '<span class="book-dropcap">' + esc(m[2]) + '</span>'
+         + inkHtml(m[3]);
+  }
+
+  /* Botón de navegación con estructura SIEMPRE idéntica (flecha + etiqueta),
+     para que ninguna página pueda alterar su tamaño ni su posición. */
+  function navPill(opts){
+    const cls = 'book-pill ' + opts.cls + (opts.primary ? ' is-primary' : '');
+    const arrow = '<span class="book-pill-arrow" aria-hidden="true">' + opts.arrow + '</span>';
+    const label = '<span class="book-pill-label">' + esc(opts.label) + '</span>';
+    return '<button class="' + cls + '" type="button"'
+      + ' data-action="' + opts.action + '"'
+      + (opts.index != null ? ' data-index="' + opts.index + '"' : '')
+      + ' data-direction="' + opts.direction + '"'
+      + ' aria-label="' + esc(opts.aria) + '">'
+      + (opts.cls === 'is-prev' ? arrow + label : label + arrow)
+      + '</button>';
+  }
+
   function buildPageHtml(i){
     const p = BOOK_PAGES[i];
-    const prevLabel = i>0 ? `← ${BOOK_PAGES[i-1].tag}` : '← Índice';
-    const prevAttrs = i>0 ? `data-action="open-page" data-index="${i-1}" data-direction="backward"` : `data-action="open-index" data-direction="backward"`;
-    const nextLabel = i<BOOK_PAGES.length-1 ? `${BOOK_PAGES[i+1].tag} →` : 'Índice →';
-    const nextAttrs = i<BOOK_PAGES.length-1 ? `data-action="open-page" data-index="${i+1}" data-direction="forward"` : `data-action="open-index" data-direction="forward"`;
+    const total = BOOK_PAGES.length;
+
+    const prev = i > 0
+      ? navPill({ cls:'is-prev', arrow:'←', label:BOOK_PAGES[i-1].tag, action:'open-page',
+                  index:i-1, direction:'backward', aria:'Pasaje anterior: ' + BOOK_PAGES[i-1].tag })
+      : navPill({ cls:'is-prev', arrow:'←', label:'Índice', action:'open-index',
+                  direction:'backward', aria:'Volver al índice' });
+    const next = i < total - 1
+      ? navPill({ cls:'is-next', arrow:'→', label:BOOK_PAGES[i+1].tag, action:'open-page',
+                  index:i+1, direction:'forward', primary:true, aria:'Pasaje siguiente: ' + BOOK_PAGES[i+1].tag })
+      : navPill({ cls:'is-next', arrow:'→', label:'Índice', action:'open-index',
+                  direction:'forward', primary:true, aria:'Volver al índice' });
+
     return {
-      left: `
-      <button class="book-to-index" data-action="open-index" data-direction="backward" type="button">← Índice</button>
-      ${bookSeal(p.icon)}
-      <p class="book-left-tag ink-label">${p.tag}</p>`,
-      right: `
-      <p class="book-page-tag ink-label">${p.tag}</p>
-      <p class="book-verse ink">${inkHtml(p.verse)}</p>
-      <div class="book-divider"></div>
-      <div class="book-gloss-block"><h5 class="ink-label">Interpretación espiritual</h5><p class="ink">${inkHtml(p.spirit)}</p></div>
-      <div class="book-gloss-block"><h5 class="ink-label">Contexto científico</h5><p class="ink">${inkHtml(p.science)}</p></div>
-      <div class="book-page-nav">
-        <button class="book-pill" ${prevAttrs} type="button">${prevLabel}</button>
-        <button class="book-pill is-primary" data-action="open-index" data-direction="backward" type="button">Índice</button>
-        <button class="book-pill" ${nextAttrs} type="button">${nextLabel}</button>
-      </div>`
+      left:
+        '<button class="book-to-index" data-action="open-index" data-direction="backward" type="button">← Índice</button>' +
+        '<div class="book-plate" aria-hidden="true">' + bookSeal(p.icon) + '</div>' +
+        '<p class="book-left-tag">' + esc(p.tag) + '</p>' +
+        '<div class="book-rule is-short" aria-hidden="true"></div>' +
+        '<p class="book-left-title">' + esc(p.section) + '</p>' +
+        '<p class="book-left-motif">' + esc(p.motif) + '</p>',
+      right:
+        '<header class="book-runhead">' +
+          '<p class="book-page-tag">' + esc(p.tag) + '</p>' +
+          '<p class="book-folio">' + roman(i) + ' · ' + roman(total - 1) + '</p>' +
+        '</header>' +
+        '<div class="book-read">' +
+          '<p class="book-verse ink">' + verseHtml(p.verse) + '</p>' +
+          '<div class="book-rule" aria-hidden="true"></div>' +
+          '<section class="book-gloss-block"><h5>Interpretación espiritual</h5><p>' + esc(p.spirit) + '</p></section>' +
+          '<section class="book-gloss-block"><h5>Contexto científico</h5><p>' + esc(p.science) + '</p></section>' +
+        '</div>' +
+        '<div class="book-progress" aria-hidden="true"><span style="width:' +
+          Math.round(((i + 1) / total) * 100) + '%"></span></div>' +
+        '<nav class="book-page-nav" aria-label="Navegación entre pasajes">' +
+          prev +
+          navPill({ cls:'is-index', arrow:'', label:'Índice', action:'open-index',
+                    direction:'backward', aria:'Volver al índice' }) +
+          next +
+        '</nav>'
     };
   }
 
   function buildIndexHtml(){
     const intro = BOOK_PAGES[0];
     const hasProgress = lastPageIndex >= 0;
-    const continueTarget = hasProgress ? (lastPageIndex+1) % BOOK_PAGES.length : 0;
+    const continueTarget = hasProgress ? (lastPageIndex + 1) % BOOK_PAGES.length : 0;
     return {
-      left: `
-      ${bookSeal(intro.icon)}
-      <p class="book-left-title ink">${inkHtml(intro.section)}</p>
-      <p class="book-left-quote ink">${inkHtml('«' + intro.verse.replace(/[«»]/g,'') + '»')}</p>`,
-      right: `
-      <h3 class="book-index-title ink">${inkHtml(intro.section)}</h3>
-      ${hasProgress ? `<button class="book-continue" data-action="open-page" data-index="${continueTarget}" data-direction="forward" type="button">↺ Continuar en ${BOOK_PAGES[continueTarget].tag}</button>` : ''}
-      <div class="book-index-list">
-        ${BOOK_PAGES.map((pg,idx)=> `<button class="book-index-row" data-action="open-page" data-index="${idx}" data-direction="forward" type="button"><span>${pg.tag}</span><span class="book-index-num">${String(idx+1).padStart(2,'0')}</span></button>`).join('')}
-      </div>`
+      left:
+        '<div class="book-plate" aria-hidden="true">' + bookSeal(intro.icon) + '</div>' +
+        '<p class="book-left-tag">Aprendiendo con Jesús</p>' +
+        '<div class="book-rule is-short" aria-hidden="true"></div>' +
+        '<p class="book-left-quote ink">' + inkHtml('«' + intro.verse.replace(/[«»]/g,'') + '»') + '</p>',
+      right:
+        '<header class="book-runhead">' +
+          '<p class="book-page-tag">Índice de pasajes</p>' +
+          '<p class="book-folio">' + BOOK_PAGES.length + ' pasajes</p>' +
+        '</header>' +
+        '<div class="book-read">' +
+          '<h3 class="book-index-title">Siete pasajes</h3>' +
+          '<p class="book-index-sub">La Escritura leída junto a la ciencia con la que hoy contemplamos el cosmos.</p>' +
+          (hasProgress
+            ? '<button class="book-continue" data-action="open-page" data-index="' + continueTarget +
+              '" data-direction="forward" type="button" aria-label="Continuar la lectura en ' +
+              esc(BOOK_PAGES[continueTarget].tag) + '">↺ Continuar en ' + esc(BOOK_PAGES[continueTarget].tag) + '</button>'
+            : '') +
+          '<div class="book-index-list">' +
+            BOOK_PAGES.map(function(pg, idx){
+              return '<button class="book-index-row" data-action="open-page" data-index="' + idx +
+                '" data-direction="forward" type="button" aria-label="Abrir ' + esc(pg.tag) + ' — ' + esc(pg.section) + '">' +
+                '<span class="book-index-num">' + String(idx+1).padStart(2,'0') + '</span>' +
+                '<span class="book-index-name">' + esc(pg.tag) + '<small>' + esc(pg.section) + '</small></span>' +
+                '<span class="book-index-dots" aria-hidden="true"></span>' +
+              '</button>';
+            }).join('') +
+          '</div>' +
+        '</div>'
     };
   }
 
@@ -1623,6 +2087,7 @@
 
   function showBookCover(){
     clearOpeningTimers();
+    queuedTurn = null;          // nada pendiente al (re)abrir el modal
     endFlip(true);
     lastFocused = document.activeElement;
     book.classList.remove('is-opening','is-index','is-page');
@@ -1662,7 +2127,7 @@
     book.classList.remove('is-cover');
     book.classList.add('is-opening');
 
-    const openDelay = reduceMotion ? 250 : 1180;  // == var(--open-dur)
+    const openDelay = cssDurationMs('--open-dur', 1180);   // el valor vive en CSS
     openingTimers.push(window.setTimeout(function(){
       applyView({ type:'index' });                // sin re-render: el HTML ya está
       bookOpen.focus({ preventScroll:true });
@@ -1670,66 +2135,157 @@
   }
 
   /* ============ "PASO DE PÁGINA DEL CÓDICE" ============
-     Animación totalmente independiente de la apertura: nunca reaparecen la
-     cubierta, el destello ni el resplandor. Geometría única para las dos
-     direcciones — la hoja ocupa siempre la mitad derecha y su bisagra es el
-     pliegue central:
-        avanzar     → gira de 0° a -180° (sale hacia la IZQUIERDA)
-        retroceder  → gira de -180° a 0° (entra desde la IZQUIERDA)
-     La cara frontal lleva la mitad derecha y la trasera la izquierda, con
-     contenido REAL, de modo que el reverso del papel es el que le
-     corresponde en un libro físico. */
-  const FLIP_MS = reduceMotion ? 190 : 660;      // == var(--flip-dur)
-  let flip = null;
+     Animación independiente de la apertura: nunca reaparecen la cubierta, el
+     destello ni el resplandor.
+
+     GEOMETRÍA — la hoja ocupa siempre la mitad derecha y su bisagra es el
+     pliegue central (transform-origin: left center):
+        avanzar     → gira de   0° a -180°  (sale hacia la IZQUIERDA)
+        retroceder  → gira de -180° a   0°  (entra desde la IZQUIERDA)
+
+     ORDEN DE ACTUALIZACIÓN — regla única: la mitad DERECHA (el texto) es la
+     que manda, y ninguna mitad puede mostrar el pasaje de destino antes de
+     que la hoja lo haya llevado hasta allí.
+
+       · Avanzar: el frente de la hoja lleva la derecha que se abandona, así
+         que la derecha de debajo puede cambiar ya (está tapada) y el texto
+         nuevo se descubre en SU lado. La izquierda espera al aterrizaje,
+         donde queda cubierta por el dorso de la hoja.
+       · Retroceder: NO se toca ninguna mitad durante el giro. El dorso de la
+         hoja lleva exactamente la izquierda que ya está debajo, de modo que
+         al levantarse no revela nada nuevo; el pasaje de destino solo
+         aparece en la cara frontal, que aterriza en la derecha. Ambas
+         mitades se confirman al final.
+
+     Este era el bug: al retroceder se escribía la izquierda nueva en el
+     instante 0, y en cuanto la hoja se separaba de ese lado el lector veía
+     el pasaje de destino a la IZQUIERDA mientras el de origen seguía a la
+     derecha. */
+
+  let flip = null;            // giro en curso
+  let isPageTurning = false;  // bloqueo de navegación mientras gira la hoja
+  let queuedTurn = null;      // última navegación pedida durante el bloqueo
   let lastSoundAt = 0;
 
-  // cierra el giro en curso aplicando su estado final; es idempotente, así
-  // que pulsar muy rápido nunca deja el libro en un estado a medias
+  /* ÚNICA fuente de verdad para las duraciones: viven en CSS (--open-dur /
+     --flip-dur) y JavaScript las lee de ahí. Se consultan en el momento de
+     usarlas, así que un cambio de media query o de prefers-reduced-motion
+     no puede desincronizar CSS y JS. */
+  function cssDurationMs(name, fallback){
+    const raw = getComputedStyle(book).getPropertyValue(name).trim();
+    const n = parseFloat(raw);
+    if(!isFinite(n)) return fallback;
+    return /ms\s*$/.test(raw) ? n : n * 1000;
+  }
+  function flipDurationMs(){ return cssDurationMs('--flip-dur', 660); }
+
+  // Cierra el giro en curso aplicando su estado final. Idempotente: llamarlo
+  // dos veces no duplica nada ni deja el libro a medias.
   function endFlip(commit){
-    if(!flip) return;
     const pending = flip;
     flip = null;
-    clearTimeout(pending.timer);
-    pageFlip.removeEventListener('animationend', pending.onEnd);
+    if(pending){
+      clearTimeout(pending.timer);
+      pending.sheet.removeEventListener('animationend', pending.onEnd);
+      if(commit !== false && typeof pending.land === 'function') pending.land();
+      // 1) contenido  2) fuera las clases de animación  3) estado inicial
+      pageFlip.classList.remove('is-active','is-forward','is-backward');
+      pageFlipFront.innerHTML = '';
+      pageFlipBack.innerHTML = '';
+    }
+    isPageTurning = false;
+    setNavBusy(false);
+
+    // si el lector pulsó durante el giro, se atiende ahora esa última petición
+    const q = queuedTurn;
+    queuedTurn = null;
+    if(q) turnTo(q.view, q.direction);
+  }
+
+  // feedback sobrio mientras la hoja gira: los controles no cambian de sitio
+  // ni de tamaño, solo dejan de responder y bajan un punto de opacidad
+  function setNavBusy(busy){
+    bookOpen.classList.toggle('is-busy', !!busy);
+    const controls = bookOpen.querySelectorAll('[data-action]');
+    for(let i=0;i<controls.length;i++) controls[i].setAttribute('aria-disabled', busy ? 'true' : 'false');
+  }
+
+  /* Si por lo que sea una vista no se puede componer (datos incompletos en
+     BOOK_PAGES, por ejemplo), el lector recibe un aviso legible en la propia
+     página en vez de una pantalla en blanco o un error mudo en consola. */
+  function showRenderError(err){
+    isPageTurning = false;
+    queuedTurn = null;
+    setNavBusy(false);
     pageFlip.classList.remove('is-active','is-forward','is-backward');
-    if(commit !== false && typeof pending.land === 'function') pending.land();
+    if(window.console && console.warn) console.warn('Santa Biblia — no se pudo componer la página:', err);
+    bookPageRight.innerHTML =
+      '<p class="book-page-tag ink-label">Aviso</p>' +
+      '<p class="book-verse ink">No se ha podido mostrar este pasaje.</p>' +
+      '<div class="book-rule" aria-hidden="true"></div>' +
+      '<p class="book-note">Vuelve al índice e inténtalo de nuevo.</p>' +
+      '<div class="book-page-nav"><span class="book-pill is-ghost" aria-hidden="true"></span>' +
+      '<button class="book-pill is-primary" data-action="open-index" data-direction="backward" type="button">Índice</button>' +
+      '<span class="book-pill is-ghost" aria-hidden="true"></span></div>';
   }
 
   function turnTo(view, direction){
-    endFlip(true);
-
     const dir = direction === 'backward' ? 'backward' : 'forward';
+
+    // BLOQUEO: no se ejecuta una navegación mientras otra sigue animando.
+    // Se guarda la última petición para no perder el gesto del lector.
+    if(isPageTurning){ queuedTurn = { view:view, direction:dir }; return; }
+
     const single = singlePageMQ.matches;          // móvil / pantallas muy bajas
-    const next = buildView(view);
+    let next;
+    try{
+      next = buildView(view);
+    } catch(err){
+      showRenderError(err);
+      return;
+    }
+
+    isPageTurning = true;
+    setNavBusy(true);
 
     const now = (window.performance && performance.now) ? performance.now() : Date.now();
     if(now - lastSoundAt > 90){ lastSoundAt = now; PageSound.play(reduceMotion ? 0.5 : 1); }
 
     let land;
     if(dir === 'forward'){
-      pageFlipFront.innerHTML = bookPageRight.innerHTML;      // la mitad que se abandona
-      pageFlipBack.innerHTML  = single ? '' : next.left;      // su reverso = nueva mitad izquierda
-      applyView(view, { right: next.right });                 // queda tapada por la hoja
+      pageFlipFront.innerHTML = bookPageRight.innerHTML;   // la derecha que se abandona
+      pageFlipBack.innerHTML  = single ? '' : next.left;   // su reverso = nueva izquierda
+      applyView(view, { right: next.right });              // tapada por la hoja a 0°
       land = function(){ bookPageLeft.innerHTML = next.left; };
     } else {
-      pageFlipFront.innerHTML = next.right;                   // la mitad que llega
+      pageFlipFront.innerHTML = next.right;                // la derecha que llega
+      // el dorso replica la izquierda que YA está debajo: al levantarse la
+      // hoja no descubre ningún contenido nuevo en el lado equivocado
       pageFlipBack.innerHTML  = single ? '' : bookPageLeft.innerHTML;
-      applyView(view, single ? null : { left: next.left });
+      applyView(view, null);                               // solo estado, sin contenido
       land = function(){
-        bookPageRight.innerHTML = next.right;
-        if(single) bookPageLeft.innerHTML = next.left;
+        bookPageRight.innerHTML = next.right;              // ya visible en la cara frontal
+        bookPageLeft.innerHTML  = next.left;
+        // la lámina izquierda se asienta con un fundido corto para que el
+        // cambio no se perciba como un salto al terminar el giro
+        bookPageLeft.classList.remove('is-settling');
+        void bookPageLeft.offsetWidth;
+        bookPageLeft.classList.add('is-settling');
       };
     }
 
+    const sheet = pageFlip.querySelector('.page-flip-sheet');
     pageFlip.classList.remove('is-active','is-forward','is-backward');
-    void pageFlip.offsetWidth;                                // reinicia las animaciones CSS
+    void pageFlip.offsetWidth;                             // reinicia las animaciones CSS
     pageFlip.classList.add('is-active', dir === 'forward' ? 'is-forward' : 'is-backward');
 
-    const state = { land:land, timer:0, onEnd:null };
-    state.onEnd = function(e){ if(e.target === pageFlip) endFlip(true); };
-    pageFlip.addEventListener('animationend', state.onEnd);
+    const state = { land:land, timer:0, onEnd:null, sheet:sheet };
+    // el final autorizado es el de la animación de GIRO (la hoja), no un
+    // temporizador: así CSS y JS no pueden desincronizarse
+    state.onEnd = function(e){ if(e.target === sheet) endFlip(true); };
+    sheet.addEventListener('animationend', state.onEnd);
     // red de seguridad por si animationend no llega (pestaña en segundo plano)
-    state.timer = window.setTimeout(function(){ endFlip(true); }, FLIP_MS + 120);
+    state.timer = window.setTimeout(function(){ endFlip(true); }, flipDurationMs() + 140);
     flip = state;
   }
 
@@ -1746,6 +2302,7 @@
 
   function closeBook(){
     clearOpeningTimers();
+    queuedTurn = null;          // al cerrar se descarta cualquier giro pedido
     endFlip(true);
     book.classList.remove('is-open');
     document.body.classList.remove('book-modal-open');
