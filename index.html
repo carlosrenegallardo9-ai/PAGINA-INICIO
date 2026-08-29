@@ -4551,6 +4551,52 @@ window.initHScroll=function(rowEl){
       render(null);
     }
   }
+  const NAV_INTENTS = [
+    {
+      keywords: ["historia del espacio", "historia espacial", "historia de la exploración", "hitos espaciales", "exploración espacial"],
+      label: "Ver la historia de la exploración espacial",
+      go: () => document.getElementById("hitosEspaciales")?.scrollIntoView({ behavior: "smooth" }),
+    },
+    {
+      keywords: ["cohete", "cohetes", "rocket", "simulador de vuelo", "lanzar un cohete"],
+      label: "Ir al simulador de cohetes",
+      go: () => document.getElementById("rocket-tbox")?.scrollIntoView({ behavior: "smooth" }),
+    },
+    {
+      keywords: ["comunidad", "publicar una foto", "hacer una pregunta a otros"],
+      label: "Ir a la Comunidad",
+      go: () => document.querySelector("[data-open-comunidad]")?.click(),
+    },
+    {
+      keywords: ["ruta estelar", "curso", "cursos", "lecciones", "aprender astronomía"],
+      label: "Ir a la Ruta Estelar",
+      go: () => document.querySelector("[data-open-ruta]")?.click(),
+    },
+    {
+      keywords: ["buscador celeste", "apuntar al cielo", "realidad aumentada", "ver el cielo real", "ubicar un planeta"],
+      label: "Abrir el Buscador Celeste",
+      go: () => document.querySelector("[data-open-sky]")?.click(),
+    },
+    {
+      keywords: ["eclipse", "lluvia de estrellas", "calendario astronómico", "bitácora celeste", "próximos eventos"],
+      label: "Ver la Bitácora Celeste",
+      go: () => document.querySelector("[data-open-bitacora]")?.click(),
+    },
+    {
+      keywords: ["cielos ancestrales", "mitología", "cosmovisión", "culturas antiguas", "astronomía maya"],
+      label: "Ir a Cielos Ancestrales",
+      go: () => document.querySelector("[data-open-ancestral]")?.click(),
+    },
+    {
+      keywords: ["biblia", "aprendiendo con jesús", "dorado celestial", "creación y ciencia"],
+      label: "Abrir Dorado Celestial",
+      go: () => document.getElementById("dorado")?.scrollIntoView({ behavior: "smooth" }),
+    },
+  ];
+  function matchNavIntent(text) {
+    const t = (text || "").toLowerCase();
+    return NAV_INTENTS.find((intent) => intent.keywords.some((k) => t.includes(k))) || null;
+  }
   async function y(e) {
     const w = document.createElement("div");
     ((w.className = "ai-msg from-ai ai-typing"),
@@ -4578,6 +4624,14 @@ window.initHScroll=function(rowEl){
         sessionHistory.push({ role: "user", text: e });
         sessionHistory.push({ role: "model", text: j.reply });
         if (sessionHistory.length > 20) sessionHistory.splice(0, sessionHistory.length - 20);
+        const navIntent = matchNavIntent(e);
+        if (navIntent) {
+          d([
+            { label: navIntent.label, action: () => { navIntent.go(); f(); } },
+            { label: "Seguir preguntando", action: () => f() },
+          ]);
+          return;
+        }
       } else {
         c(
           "No pude conectarme con la IA en este momento. Intenta de nuevo en unos segundos.",
